@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "dataset": "China Post postage data",
   "scope": "international",
   "origin": "CN",
@@ -7,6 +7,7 @@
   "excludedDestinations": ["CN", "HK", "MO", "TW"],
   "files": {
     "services": "./services.json",
+    "notices": "./notices.json",
     "airLetterZones": "./zones/air-letter.json",
     "airLetterRates": "./rates/air-letter.json"
   },
