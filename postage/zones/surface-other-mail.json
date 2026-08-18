@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "zoneSetId": "INTL_SURFACE_OTHER_MAIL_DEFAULT",
+  "scope": "international",
+  "transport": "SURFACE",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "appliesToMailTypes": [
+    "POSTCARD",
+    "PRINTED_MATTER",
+    "LITERATURE_FOR_BLIND",
+    "SMALL_PACKET",
+    "PRINTED_MATTER_BAG"
+  ],
+  "zones": [
+    {
+      "id": "SURFACE_OTHER_ZONE_DEFAULT",
+      "nameZh": "普通国际资费",
+      "ruleZh": "水陆路明信片、印刷品、盲人邮件、小包和印刷品专袋适用统一普通国际资费",
+      "isDefault": true,
+      "mappingStatus": "default"
+    }
+  ],
+  "notes": [
+    "按用户提供的中国邮政水陆路函件资费表录入。",
+    "表下方27个路向优惠价仅明确适用于水陆路信函，不扩展到其他邮件种类。",
+    "本分区仅用于资费计算，不代表所有目的地当前均可实际寄达。",
+    "国际数据不包含中国大陆、香港、澳门、台湾。"
+  ]
+}
