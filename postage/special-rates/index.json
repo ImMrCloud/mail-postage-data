@@ -1,25 +1,12 @@
 {
-  "schemaVersion": 10,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 11,
+  "standardVersion": "1.4.0",
   "dataset": "China Post special business rates",
   "currency": "CNY",
   "notices": "./notices.json",
   "scopes": {
-    "international": {
-      "status": "active",
-      "destinationIndependent": true,
-      "rateFile": "./international.json"
-    },
-    "domestic": {
-      "status": "active",
-      "destinationIndependent": true,
-      "rateFile": "./domestic.json"
-    },
-    "hong-kong-macau-taiwan": {
-      "status": "active",
-      "destinationIndependent": false,
-      "destinations": ["HK", "MO", "TW"],
-      "rateFile": "./hong-kong-macau-taiwan.json"
-    }
+    "international": {"status":"active","destinationIndependent":true,"rateFile":"./international.json"},
+    "domestic": {"status":"active","destinationIndependent":true,"rateFile":"./domestic.json"},
+    "hong-kong-macau-taiwan": {"status":"active","destinationIndependent":false,"destinations":["HK","MO","TW"],"rateFile":"./hong-kong-macau-taiwan.json"}
   }
 }
