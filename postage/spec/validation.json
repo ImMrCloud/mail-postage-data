@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 4,
+  "standardVersion": "1.3.0",
   "purpose": "定义 App、脚本或 CI 在读取邮资数据前应执行的跨文件一致性检查。",
   "checks": [
     {"id":"INDEX-FILE-EXISTS","severity":"error","rule":"postage/index.json files 中的每个相对路径必须存在且可解析为 JSON。"},
@@ -27,10 +27,11 @@
     {"id":"DOMESTIC-UNPOPULATED-NO-FALLBACK","severity":"error","rule":"unpopulatedOrigins 中的起寄省没有价格时，消费者必须返回无资费数据，不得套用其他起寄省价格。"},
     {"id":"DOMESTIC-HOMETOWN-DESTINATION-INDEPENDENT","severity":"error","rule":"家乡包裹贴必须作为 delivery service 且 destinationIndependent=true，不得放入 special-rates。"},
     {"id":"DOMESTIC-HOMETOWN-INCLUSIVE-TIERS","severity":"error","rule":"家乡包裹贴重量档必须为 <=1kg、>1kg<=3kg、>3kg<=5kg、>5kg<=10kg，10kg必须可匹配19元档。"},
-    {"id":"ORDINARY-PARCEL-DISCOUNT-SCOPE","severity":"error","rule":"普通包裹 discounts.appliesToServiceId 必须为 DOMESTIC_ORDINARY_PARCEL；优惠不得自动应用到家乡包裹贴或其他 service。"},
+    {"id":"ORDINARY-PARCEL-DISCOUNT-SCOPE","severity":"error","rule":"普通包裹 discounts.appliesToServiceIds 必须且只能包含 DOMESTIC_ORDINARY_PARCEL；excludedServiceIds 必须包含 DOMESTIC_HOMETOWN_PARCEL_STICKER。"},
+    {"id":"ORDINARY-PARCEL-DISCOUNT-CREDENTIALS","severity":"error","rule":"8折凭证必须包含 STUDENT_ID、TEACHER_ID、DISCOUNT_CARD 且 multiplier=0.8；7折凭证必须包含 DISABILITY_CERTIFICATE、MILITARY_OFFICER_ID、POLICE_OFFICER_ID、CIVILIAN_PERSONNEL_ID、SOLDIER_ID、VETERAN_PREFERENCE_CERTIFICATE 且 multiplier=0.7。"},
     {"id":"DISCOUNT-MULTIPLIER-RANGE","severity":"error","rule":"status=active 且 pricing.type=multiplier 的优惠 multiplier 必须大于0。"},
-    {"id":"DISCOUNT-PENDING-NO-PRICE","severity":"error","rule":"status=rate-pending 的优惠凭证必须 pricing=null，消费者不得用于计算。"},
-    {"id":"DISCOUNT-NO-AUTO-STACK","severity":"error","rule":"combinationPolicy=unspecified 时，消费者不得自动叠加多个优惠凭证。"},
+    {"id":"DISCOUNT-NO-STACK","severity":"error","rule":"普通包裹 discounts.combinationPolicy 必须为 single 且 maxCredentialsPerShipment=1；消费者必须拒绝对同一件包裹同时应用两个及以上优惠凭证。"},
+    {"id":"DISCOUNT-HOMETOWN-EXCLUDED","severity":"error","rule":"DOMESTIC_HOMETOWN_PARCEL_STICKER 不得应用普通包裹任何学生证、教师证、优惠卡、残疾证、军官证、警官证、文职人员证、士兵证或退役军人优待证折扣。"},
     {"id":"SPECIAL-SCOPE-KEY","severity":"error","rule":"special-rates/index.json scopes 的 key 必须与对应 rateFile 内 scope 完全一致。"},
     {"id":"SPECIAL-DESTINATION-INDEPENDENCE","severity":"error","rule":"若某 special scope 存在 destination-specific rate、serviceRestriction 或启用 notice，则 destinationIndependent 不得为 true。"},
     {"id":"SPECIAL-RATE-ID-UNIQUE","severity":"error","rule":"同一个 special rate 文件内 rates[].id 必须唯一。"},
@@ -51,7 +52,8 @@
     "若 service.regionRegistry 存在，先加载行政区注册表并解析 originRegionId/destinationRegionId。",
     "DOMESTIC_ORDINARY_PARCEL 应先读取 ordinary-parcel/index.json，再按 originRegionId 加载 originFiles 中对应分省文件。",
     "根据 destinationRegionId 匹配唯一 routeGroup，再按总重量选择唯一 weightBand 计算邮资。",
-    "若选择普通包裹优惠凭证，仅对已计算的普通包裹寄递资费应用明确 multiplier；rate-pending 凭证不可计算。",
+    "若选择普通包裹优惠凭证，只允许选择一个 status=active 的凭证，对已计算的普通包裹寄递资费应用对应 multiplier。",
+    "若 serviceId=DOMESTIC_HOMETOWN_PARCEL_STICKER，必须忽略并拒绝所有普通包裹优惠凭证。",
     "根据 scope 加载 special-rates/index.json 及对应特别业务资费。",
     "加载 general notices 与 special-rate notices，并按 spec/notices.json 匹配。",
     "执行本文件中 severity=error 的校验；失败时不得静默计算错误邮资。"
