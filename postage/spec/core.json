@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "standardVersion": "1.4.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
@@ -16,11 +16,7 @@
     "generalNotices": "postage/notices.json",
     "domesticRegionRegistry": "postage/domestic/provinces.json",
     "ordinaryParcelIndex": "postage/rates/domestic/ordinary-parcel/index.json",
-    "deliveryRates": {
-      "domestic": "postage/rates/domestic/",
-      "hong-kong-macau-taiwan": "postage/rates/hong-kong-macau-taiwan/",
-      "international": "postage/rates/international/"
-    },
+    "deliveryRates": {"domestic":"postage/rates/domestic/","hong-kong-macau-taiwan":"postage/rates/hong-kong-macau-taiwan/","international":"postage/rates/international/"},
     "internationalZones": "postage/zones/",
     "specialRates": "postage/special-rates/",
     "specification": "postage/spec/"
@@ -42,27 +38,33 @@
     "index": "postage/rates/domestic/ordinary-parcel/index.json",
     "routeGroups": "每个起寄省文件使用 routeGroups[] 聚合同价寄达省；同一 destinationRegionId 必须且只能出现一次。",
     "weightBands": "先按重量选择唯一 weightBand，再按 routeGroup 取得 basePrice/incrementPrice。",
-    "discountScope": "优惠只适用于 DOMESTIC_ORDINARY_PARCEL，并排除 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
-    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1，不允许叠加。",
     "volumetricWeight": "尺寸完整时体积重量kg=长cm×宽cm×高cm÷6000；实重与体积重分别按同一路向计算，展示两项结果并采用资费较高者。",
-    "specialServices": "普通包裹可使用 REGISTRATION_FEE 与 ADVICE_OF_DELIVERY_FEE；回执依赖挂号。"
+    "registrationIncluded": "DOMESTIC_ORDINARY_PARCEL 基础寄递资费已包含挂号属性，不另收 REGISTRATION_FEE。",
+    "adviceOfDelivery": "普通包裹可附回执，且其挂号前提由基础寄递服务自身满足，因此不另加挂号费。",
+    "insurance": "普通包裹可保价且可与回执同时办理；当前若未提供包裹保价费率，只公示能力，不得套用函件保价费率。",
+    "discountScope": "8折/7折优惠仅作用于最终采用的普通包裹基础寄递资费，不作用于回执费、保价费等 special 费用。",
+    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1，不允许叠加。"
+  },
+  "hometownParcelRules": {
+    "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
+    "insurance": "可办理保价；若未提供独立保价费率，仅公示能力。",
+    "adviceOfDelivery": "不可办理回执。",
+    "ordinaryDiscountsExcluded": true,
+    "volumetricWeightExcluded": true
   },
   "specialServiceRules": {
     "spec": "postage/spec/special-services.json",
     "selectionMode": ["selectable","display-only"],
+    "applicabilityFields": ["applicableCategories","applicableMailTypes","applicableServiceIds","excludedServiceIds"],
     "dependencyFields": ["requiresRateIds","includesRateIds","excludesRateIds"],
     "displayOnlyRule": "selection.mode=display-only 的项目只公示，不得作为交寄计费选项。",
-    "requiresRule": "requiresRateIds 必须递归满足，可由消费者自动补入并向用户说明。",
+    "requiresRule": "requiresRateIds 必须递归满足；若基础服务自身声明已满足该能力，可不另计对应费用。",
     "includesRule": "includesRateIds 已包含在当前收费中，不得重复计收。",
     "excludesRule": "excludesRateIds 同时存在时必须拒绝组合。"
   },
   "serviceRules": {
     "requiredFields": ["id","scope","rateCategory","mailType","rateFile"],
-    "conditionalFields": {
-      "transport": "国际 AIR / SAL / SURFACE 服务必须提供。",
-      "zoneFile": "需要按国际目的地分区的服务必须提供。",
-      "regionRegistry": "需要按国内行政区路由的服务必须提供。"
-    },
+    "conditionalFields": {"transport":"国际 AIR / SAL / SURFACE 服务必须提供。","zoneFile":"需要按国际目的地分区的服务必须提供。","regionRegistry":"需要按国内行政区路由的服务必须提供。"},
     "idPrefixes": {"domestic":"DOMESTIC_","hong-kong-macau-taiwan":"HMT_","international":"INTL_"}
   },
   "mailTypeRules": {
@@ -71,12 +73,11 @@
     "specialCategoryIds": ["LETTER_POST","PARCEL"]
   },
   "specialApplicabilityRules": {
-    "applicableCategories": "业务大类，例如 LETTER_POST、PARCEL。",
+    "applicableCategories": "业务大类。",
     "applicableMailTypes": "具体邮件类型。",
-    "combination": "applicableCategories 与 applicableMailTypes 同时存在时取 OR；conditions 作为 AND 附加条件。"
+    "applicableServiceIds": "具体寄递服务。",
+    "excludedServiceIds": "明确排除服务，优先于适用集合。",
+    "combination": "applicableCategories、applicableMailTypes、applicableServiceIds 按 OR 判断；conditions 作为 AND 附加条件。"
   },
-  "versioning": {
-    "schemaVersion": "单个文件结构发生不兼容或显著扩展时递增整数。",
-    "standardVersion": "postage/spec 规范版本，使用 semver。"
-  }
+  "versioning": {"schemaVersion":"单个文件结构发生不兼容或显著扩展时递增整数。","standardVersion":"postage/spec 规范版本，使用 semver。"}
 }
