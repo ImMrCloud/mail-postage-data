@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "standardVersion": "1.1.0",
+  "schemaVersion": 3,
+  "standardVersion": "1.2.0",
   "currency": "CNY",
   "defaultWeightUnit": "g",
   "roundingValues": {
@@ -44,7 +44,7 @@
       "constraints": ["basicPostageExempt 必须为 true。"]
     },
     "weight_tiers": {
-      "description": "按重量落入单一阶梯，直接采用该阶梯固定价格。支持闭区间或严格小于边界。",
+      "description": "按重量落入单一阶梯，直接采用该阶梯固定价格。支持闭区间或严格边界。",
       "required": ["tiers"],
       "tierBoundaryFields": ["minWeight", "minWeightExclusive", "maxWeight", "maxWeightExclusive"],
       "tierValueFields": ["price"],
@@ -59,18 +59,31 @@
       "exampleNote": "国内信函 120g：前100g按5个20g单位计费，再对101-120g按1个100g续重单位计费。"
     },
     "weight_band_base_plus_increment_by_route": {
-      "description": "先根据包裹总重量选择一个且仅一个重量档，再根据起寄行政区和寄达行政区取得该档首重价与续重价。不同重量档之间不累计。",
-      "requiredTopLevel": ["weightBands", "origins", "regionRegistry"],
+      "description": "兼容旧版普通包裹单文件结构：先按总重量选择唯一档位，再直接按起寄省/寄达省路由取得首重价和续重价。",
+      "status": "legacy-compatible",
+      "formula": "band=唯一匹配总重量的 weightBand; route=origins[originRegionId].routes[destinationRegionId][band.id]; total = weight<=band.baseWeight ? route.basePrice : route.basePrice + ceil((weight-band.baseWeight)/band.incrementWeight)*route.incrementPrice"
+    },
+    "weight_band_base_plus_increment_by_route_group": {
+      "description": "普通包裹当前标准结构：先按总重量选择唯一重量档，再按起寄省文件中的 routeGroup 找到寄达省，对该组使用首重价和续重价。不同重量档之间不累计。",
+      "requiredTopLevel": ["weightBands", "originFiles", "regionRegistry"],
       "weightBandRequired": ["id", "baseWeight", "incrementWeight", "rounding"],
-      "weightBandBoundaryFields": ["minWeight", "minWeightExclusive", "maxWeight", "maxWeightExclusive"],
-      "routeRequired": ["basePrice", "incrementPrice"],
-      "formula": "band=唯一匹配总重量的 weightBand; route=origins[originRegionId].routes[destinationRegionId][band.id]; total = weight<=band.baseWeight ? route.basePrice : route.basePrice + ceil((weight-band.baseWeight)/band.incrementWeight)*route.incrementPrice",
+      "originFileRequired": ["originRegionId", "routeGroups"],
+      "routeGroupRequired": ["id", "destinations", "prices"],
+      "routePriceRequired": ["basePrice", "incrementPrice"],
+      "formula": "band=唯一匹配总重量的 weightBand; originFile=originFiles[originRegionId]; group=唯一满足 destinationRegionId in group.destinations 的 routeGroup; route=group.prices[band.id]; total = weight<=band.baseWeight ? route.basePrice : route.basePrice + ceil((weight-band.baseWeight)/band.incrementWeight)*route.incrementPrice",
       "constraints": [
         "必须先按总重量选择档位；不得把 <=10kg、>10kg<=20kg、>20kg<=50kg 三档累计计算。",
+        "每个已激活起寄省文件中，同一 destinationRegionId 必须且只能出现在一个 routeGroup。",
         "originRegionId 和 destinationRegionId 必须存在于 regionRegistry。",
-        "若 originRegionId 未录入或 status!=active，不得回退到其他起寄省资费。",
+        "若 originRegionId 未录入，不得回退到其他起寄省资费。",
         "若目标路向缺失，应返回无资费数据而不是猜测。"
       ]
+    },
+    "multiplier": {
+      "description": "对已计算出的基础金额应用乘数折扣。",
+      "required": ["multiplier"],
+      "formula": "discountedTotal = originalTotal * multiplier",
+      "constraints": ["multiplier 必须大于0。", "仅在所属 service 明确声明的 discounts 中应用。", "若 combinationPolicy=unspecified，不得自动叠加多个 multiplier。"]
     },
     "value_increment": {
       "description": "按声明价值/保价金额向上取整到金额计费单位。",
@@ -96,16 +109,18 @@
     "serviceSpecific": "rates[].pricing.type，例如国际信函。",
     "aggregatePricingType": "mailTypes[mailType].pricingType，例如航空其他函件、港澳台和国内基础资费。",
     "aggregatePricingObject": "ratesByMailType[mailType].pricing.type 或 ratesByMailType[mailType].zones[zoneId].type，例如 SAL 其他函件。",
-    "domesticRoutePricing": "文件顶层 pricingType + weightBands + origins，例如邮政普通包裹。",
+    "domesticRoutePricing": "普通包裹 index 顶层 pricingType + weightBands + originFiles，分省文件使用 routeGroups。",
+    "discountPricing": "discounts.credentials[].pricing.type=multiplier。",
     "specialRates": "rates[].pricing.type，特别业务统一使用此布局。"
   },
   "canonicalRulesForNewData": [
     "特别业务必须使用 rates[].pricing.type。",
     "不分 zone 的聚合基础资费文件优先使用 mailTypes[mailType].pricingType。",
-    "按国内省际路由的资费应使用 regionRegistry + originRegionId + destinationRegionId 结构。",
+    "按国内省际路由的普通包裹应使用 ordinary-parcel/index.json + originFiles + routeGroups。",
     "按 zone 聚合的新增基础资费可以沿用现有文件布局，但同一文件内部必须保持一致。",
     "不得用字段缺失来暗示免费；免费必须显式 type/pricingType=free 且 price=0。",
-    "涉及不足计费单位时必须显式 rounding=ceil。"
+    "涉及不足计费单位时必须显式 rounding=ceil。",
+    "优惠折扣必须声明适用 service；未给出折扣值时使用 status=rate-pending 且 pricing=null，不得猜测。"
   ],
   "inputValidation": {
     "weight": "必须为大于 0 的数值，单位采用文件 weightUnit。",
@@ -113,6 +128,7 @@
     "locality": "使用 flat_by_locality 或 tiered_incremental 时必须提供有效 locality。",
     "zoneId": "使用 zoneVariant 时必须先由 serviceId + destination 在对应 zoneFile 中解析。",
     "originRegionId": "使用国内省际路由资费时必须提供且存在于 regionRegistry。",
-    "destinationRegionId": "使用国内省际路由资费时必须提供且存在于 regionRegistry。"
+    "destinationRegionId": "使用国内省际路由资费时必须提供且存在于 regionRegistry。",
+    "discountCredential": "只有 status=active 且 pricing 非 null 的凭证可用于计算。"
   }
 }
