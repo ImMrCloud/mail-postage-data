@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scope": "domestic",
+  "currency": "CNY",
+  "weightUnit": "g",
+  "status": "placeholder",
+  "mailTypes": {},
+  "notes": [
+    "预留给国内基本资费。",
+    "待取得国内资费表后补充。"
+  ]
+}
