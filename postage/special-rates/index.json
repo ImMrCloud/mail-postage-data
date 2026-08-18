@@ -1,8 +1,9 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "dataset": "China Post special business rates",
   "currency": "CNY",
   "destinationIndependent": true,
+  "notices": "./notices.json",
   "scopes": {
     "international": {
       "status": "active",
