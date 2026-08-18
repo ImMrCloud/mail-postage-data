@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 4,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 5,
+  "standardVersion": "1.4.0",
   "dataset": "China Post postage data specification",
   "status": "active",
   "appliesTo": ["domestic", "hong-kong-macau-taiwan", "international"],
@@ -8,41 +8,31 @@
     "core": "./core.json",
     "pricing": "./pricing.json",
     "notices": "./notices.json",
-    "validation": "./validation.json"
+    "validation": "./validation.json",
+    "specialServices": "./special-services.json"
   },
   "principles": [
     "postage/index.json 是数据集总入口。",
     "services.json 是寄递服务注册表。",
-    "rateCategory=delivery 表示基础寄递资费；rateCategory=special 表示可叠加的特别业务资费。",
+    "rateCategory=delivery 表示基础寄递资费；rateCategory=special 表示特别业务资费。",
     "scope 统一使用 domestic、hong-kong-macau-taiwan、international。",
     "国内存在省际差异的寄递服务必须通过 province region registry 使用 originRegionId + destinationRegionId 路由。",
     "普通包裹按起寄省拆分路向组文件，未录入起寄省不得回退到其他省价格。",
-    "普通包裹优惠在基础寄递资费计算完成后按凭证 multiplier 应用，且不得自动扩展到其他寄件方式。",
-    "普通包裹每件最多使用一种优惠凭证，所有优惠均不得叠加。",
+    "普通包裹优惠一次只能使用一种，不得叠加，也不得用于家乡包裹贴。",
+    "特别业务必须区分 selectable 与 display-only，并按 requires/includes/excludes 关系处理依赖、包含与互斥。",
+    "普通包裹可选输入体积尺寸，按长×宽×高÷6000计算体积重量，并分别展示实重资费和泡重资费，以较高资费作为应计寄递资费。",
     "国际目的地优先使用 ISO 3166-1 alpha-2；特殊邮政目的地使用 countryData.json 中的自定义 locale。",
     "所有不足计费单位按一个完整计费单位计算时使用 rounding=ceil。",
     "App 必须忽略 enabled=false 的 notice 示例记录。"
   ],
   "changes": {
-    "1.1.0": [
-      "新增中国大陆省级行政区注册表规则。",
-      "新增按起寄省+寄达省路由的普通包裹资费结构。",
-      "新增 weight_band_base_plus_increment_by_route 计费类型。",
-      "weight_tiers 支持 maxWeightExclusive/minWeight，用于严格重量边界。",
-      "家乡包裹贴定义为独立 delivery service，而非 special rate。"
-    ],
-    "1.2.0": [
-      "普通包裹改为按起寄省拆分 routeGroups 文件，并由 ordinary-parcel/index.json 统一索引。",
-      "新增 weight_band_base_plus_increment_by_route_group 计费类型。",
-      "新增 multiplier 折扣类型，仅在明确声明的 service 内应用。",
-      "家乡包裹贴重量边界调整为 <=1kg、>1kg<=3kg、>3kg<=5kg、>5kg<=10kg。",
-      "普通包裹新增浙江、江苏、广东、河北、山东、北京六个起寄省市数据。"
-    ],
-    "1.3.0": [
-      "普通包裹优惠凭证完善为学生证、教师证、优惠卡8折，以及残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证7折。",
-      "新增 discounts.appliesToServiceIds 与 excludedServiceIds，用于明确优惠适用和排除的寄件方式。",
-      "普通包裹优惠 combinationPolicy=single，maxCredentialsPerShipment=1，明确所有优惠不得叠加。",
-      "普通包裹优惠明确排除 DOMESTIC_HOMETOWN_PARCEL_STICKER。"
+    "1.4.0": [
+      "新增特别业务 selection.mode/phase/chargedTo 字段。",
+      "新增 dependencies.requiresRateIds/includesRateIds/excludesRateIds。",
+      "存局候领、撤回改址、进口欠资、逾期保管和海关验关等非交寄费用改为 display-only。",
+      "回执与保价的挂号依赖、国内约投与保价互斥、国际/港澳台保价手续费包含挂号等规则机器化。",
+      "邮政普通包裹支持回执。",
+      "普通包裹新增可选体积重量计算规则：长×宽×高÷6000。"
     ]
   }
 }
