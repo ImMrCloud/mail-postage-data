@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 4,
+  "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
@@ -10,15 +10,15 @@
   "destinationIndependent": true,
   "pricingType": "weight_tiers",
   "tiers": [
-    {"minWeightExclusive": 0, "maxWeight": 1000, "price": 4.0},
-    {"minWeightExclusive": 1000, "maxWeight": 3000, "price": 6.0},
-    {"minWeightExclusive": 3000, "maxWeight": 5000, "price": 11.0},
-    {"minWeightExclusive": 5000, "maxWeight": 10000, "price": 19.0}
+    {"minWeightExclusive":0,"maxWeight":1000,"price":4.0},
+    {"minWeightExclusive":1000,"maxWeight":3000,"price":6.0},
+    {"minWeightExclusive":3000,"maxWeight":5000,"price":11.0},
+    {"minWeightExclusive":5000,"maxWeight":10000,"price":19.0}
   ],
   "notes": [
     "家乡包裹贴作为独立国内寄件方式维护。",
     "资费不区分地区。",
-    "重量边界统一按小于等于处理：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。",
-    "普通包裹优惠凭证不适用于家乡包裹贴。"
+    "重量边界：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。",
+    "普通包裹优惠和普通包裹体积重规则均不适用于家乡包裹贴。"
   ]
 }
