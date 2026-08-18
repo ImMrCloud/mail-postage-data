@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "zoneSetId": "INTL_AIR_OTHER_MAIL_3_ZONE",
+  "scope": "international",
+  "transport": "AIR",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "appliesToMailTypes": [
+    "POSTCARD",
+    "AEROGRAMME",
+    "PRINTED_MATTER",
+    "LITERATURE_FOR_BLIND",
+    "SMALL_PACKET",
+    "PRINTED_MATTER_BAG"
+  ],
+  "zones": [
+    {
+      "id": "AIR_OTHER_ZONE_1",
+      "nameZh": "第一组",
+      "countries": ["AE", "OM", "PK", "BH", "PH", "GE", "KH", "QA", "KW", "LA", "MV", "MY", "BD", "MM", "NP", "LK", "TH", "BN", "SG", "IN", "ID"],
+      "mappingStatus": "explicit",
+      "sourceRuleZh": "阿联酋、阿曼、巴基斯坦、巴林、菲律宾、格鲁吉亚、柬埔寨、卡塔尔、科威特、老挝、马尔代夫、马来西亚、孟加拉国、缅甸、尼泊尔、斯里兰卡、泰国、文莱、新加坡、印度、印度尼西亚"
+    },
+    {
+      "id": "AIR_OTHER_ZONE_2",
+      "nameZh": "第二组",
+      "countries": ["AZ", "KP", "KZ", "KR", "KG", "MN", "JP", "TJ", "TR", "TM", "UZ", "IQ", "JO", "VN", "AL", "IE", "EE", "AT", "BY", "BG", "BE", "IS", "PL", "DK", "DE", "FR", "FI", "NL", "CZ", "HR", "LV", "LT", "LU", "RO", "MT", "MD", "NO", "PT", "SE", "RS", "SK", "SI", "UA", "ES", "GR", "HU", "IT", "GB", "CA", "US", "AU", "NZ"],
+      "mappingStatus": "explicit",
+      "sourceRuleZh": "阿塞拜疆、朝鲜、哈萨克斯坦、韩国、吉尔吉斯斯坦、蒙古、日本、塔吉克斯坦、土耳其、土库曼斯坦、乌兹别克斯坦、伊拉克、约旦、越南、阿尔巴尼亚、爱尔兰、爱沙尼亚、奥地利、白俄罗斯、保加利亚、比利时、冰岛、波兰、丹麦、德国、法国、芬兰、荷兰、捷克、克罗地亚、拉脱维亚、立陶宛、卢森堡、罗马尼亚、马耳他、摩尔多瓦、挪威、葡萄牙、瑞典、塞尔维亚、斯洛伐克、斯洛文尼亚、乌克兰、西班牙、希腊、匈牙利、意大利、英国、加拿大、美国、澳大利亚、新西兰"
+    },
+    {
+      "id": "AIR_OTHER_ZONE_3",
+      "nameZh": "第三组",
+      "countries": ["AD", "AF", "AG", "AI", "AM", "AO", "AQ", "AR", "AS", "AW", "AX", "BA", "BB", "BF", "BI", "BJ", "BL", "BM", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BZ", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "DJ", "DM", "DO", "DZ", "EC", "EG", "EH", "ER", "ET", "FJ", "FK", "FM", "FO", "GA", "GD", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GS", "GT", "GU", "GW", "GY", "HM", "HN", "HT", "IL", "IM", "IO", "IR", "JE", "JM", "KE", "KI", "KM", "KN", "KY", "LB", "LC", "LI", "LR", "LS", "LY", "MA", "MC", "ME", "MF", "MG", "MH", "MK", "ML", "MP", "MQ", "MR", "MS", "MU", "MW", "MX", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NR", "NU", "PA", "PE", "PF", "PG", "PM", "PN", "PR", "PS", "PW", "PY", "RE", "RU", "RW", "SA", "SB", "SC", "SD", "SH", "SJ", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TK", "TL", "TN", "TO", "TT", "TV", "TZ", "UG", "UM", "UY", "VA", "VC", "VE", "VG", "VI", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"],
+      "mappingStatus": "derived",
+      "sourceRuleZh": "其他国家和地区",
+      "mappingBasis": "ISO 3166-1 destinations not listed in group 1 or group 2, excluding CN/HK/MO/TW"
+    }
+  ],
+  "notes": [
+    "第一组和第二组按资费表逐项转为 ISO 3166-1 alpha-2 代码。",
+    "第三组按原表“其他国家和地区”展开为其余 ISO 3166-1 目的地。",
+    "ISO 列入第三组仅表示按该资费表分组逻辑归类，不代表当前一定可收寄或可通邮；实际服务状态可通过 notices.json 单独覆盖。"
+  ]
+}
