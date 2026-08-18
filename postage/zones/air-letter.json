@@ -1,7 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "serviceId": "INTL_AIR_LETTER",
+  "mailType": "LETTER",
   "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "mappingBasis": {
+    "tariffTable": "中国邮政国际函件资费表（用户提供图片）",
+    "geography": "UN M49 geographic regions",
+    "method": "第一组按资费表明确列举；第二至第四组按资费表地域描述，并使用 UN M49 地域归属展开为 ISO 3166-1 alpha-2 国家/地区代码。",
+    "postalAvailabilityVerified": false
+  },
   "zones": [
     {
       "id": "AIR_LETTER_ZONE_1",
@@ -14,27 +21,33 @@
       "id": "AIR_LETTER_ZONE_2",
       "nameZh": "第二组",
       "ruleZh": "其他亚洲国家或地区",
-      "countries": [],
-      "mappingStatus": "rule-only"
+      "countries": ["AF", "AM", "AZ", "BH", "BD", "BT", "BN", "KH", "CY", "GE", "IN", "ID", "IR", "IQ", "IL", "JO", "KW", "LA", "LB", "MY", "MV", "MM", "NP", "OM", "PK", "PS", "PH", "QA", "SA", "SG", "LK", "SY", "TH", "TL", "TR", "AE", "YE"],
+      "mappingStatus": "derived-from-region"
     },
     {
       "id": "AIR_LETTER_ZONE_3",
       "nameZh": "第三组",
       "ruleZh": "欧洲各国或地区、美国、加拿大、澳大利亚、新西兰",
-      "countries": ["US", "CA", "AU", "NZ"],
-      "mappingStatus": "partial"
+      "countries": ["AX", "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CZ", "DK", "EE", "FO", "FI", "FR", "DE", "GI", "GR", "GG", "VA", "HU", "IS", "IE", "IM", "IT", "JE", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL", "MK", "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SJ", "SE", "CH", "UA", "GB", "US", "CA", "AU", "NZ"],
+      "mappingStatus": "derived-from-region"
     },
     {
       "id": "AIR_LETTER_ZONE_4",
       "nameZh": "第四组",
       "ruleZh": "美洲其他国家或地区、非洲各国或地区、大洋洲其他国家或地区",
-      "countries": [],
-      "mappingStatus": "rule-only"
+      "countries": ["AI", "AG", "AR", "AW", "BS", "BB", "BZ", "BM", "BO", "BQ", "BV", "BR", "VG", "KY", "CL", "CO", "CR", "CU", "CW", "DM", "DO", "EC", "SV", "FK", "GF", "GL", "GD", "GP", "GT", "GY", "HT", "HN", "JM", "MQ", "MX", "MS", "NI", "PA", "PY", "PE", "PR", "BL", "KN", "LC", "MF", "PM", "VC", "GS", "SR", "SX", "TT", "TC", "VI", "UY", "VE", "DZ", "AO", "BJ", "BW", "BF", "BI", "CV", "CM", "CF", "TD", "KM", "CG", "CD", "CI", "DJ", "EG", "GQ", "ER", "SZ", "ET", "TF", "GA", "GM", "GH", "GN", "GW", "IO", "KE", "LS", "LR", "LY", "MG", "MW", "ML", "MR", "MU", "YT", "MA", "MZ", "NA", "NE", "NG", "RE", "RW", "SH", "ST", "SN", "SC", "SL", "SO", "ZA", "SS", "SD", "TZ", "TG", "TN", "UG", "EH", "ZM", "ZW", "AS", "CX", "CC", "CK", "FJ", "PF", "GU", "HM", "KI", "MH", "FM", "NR", "NC", "NU", "NF", "MP", "PW", "PG", "PN", "WS", "SB", "TK", "TO", "TV", "UM", "VU", "WF"],
+      "mappingStatus": "derived-from-region"
+    }
+  ],
+  "unassignedDestinations": [
+    {
+      "country": "AQ",
+      "reasonZh": "南极洲不在原资费表列出的亚洲、欧洲、美洲、非洲或大洋洲分组描述中，因此暂不自动归组。"
     }
   ],
   "notes": [
-    "第一组国家来自资费表中的明确列举。",
-    "第二至第四组原表主要按地域描述；逐国 ISO 映射尚未完全展开，避免在缺少官方逐国清单时引入错误。",
-    "国际数据不包含中国大陆、香港、澳门、台湾。"
+    "国际数据不包含中国大陆、香港、澳门、台湾。",
+    "地域展开用于数据工程和 App 查询，不代表已逐一核实这些国家或地区当前均可由中国邮政按该业务寄达。",
+    "实际可寄达性、禁限寄要求和临时停运信息应通过 notices.json 或后续官方资料单独维护。"
   ]
 }
