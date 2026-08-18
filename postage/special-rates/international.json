@@ -1,101 +1,49 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
+  "standardVersion": "1.4.0",
   "scope": "international",
   "rateCategory": "special",
   "category": "special-business-rates",
   "currency": "CNY",
   "destinationIndependent": true,
   "rates": [
+    {"id":"INTERNATIONAL_REPLY_COUPON","nameZh":"出售国际回信券","selection":{"mode":"display-only","phase":"other","chargedTo":"customer"},"pricing":{"type":"flat","unit":"coupon","price":12.0}},
+    {"id":"REGISTRATION_FEE","nameZh":"挂号费","selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"item","price":16.0}},
+    {"id":"PRINTED_MATTER_BAG_REGISTRATION_FEE","nameZh":"印刷品专袋挂号费","applicableMailTypes":["PRINTED_MATTER_BAG"],"selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"bag","price":80.0}},
     {
-      "id": "INTERNATIONAL_REPLY_COUPON",
-      "nameZh": "出售国际回信券",
-      "pricing": {"type": "flat", "unit": "coupon", "price": 12.0}
+      "id":"INSURED_LETTER_INSURANCE_FEE","nameZh":"保价函件保价费","applicableCategories":["LETTER_POST"],
+      "selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies":{"requiresRateIds":["INSURED_LETTER_HANDLING_FEE"]},
+      "pricing":{"type":"value_increment","valueIncrement":100,"incrementPrice":1.0,"rounding":"ceil"},
+      "noteZh":"选择保价函件保价费时必须同时使用保价函件手续费。"
     },
     {
-      "id": "REGISTRATION_FEE",
-      "nameZh": "挂号费",
-      "pricing": {"type": "flat", "unit": "item", "price": 16.0}
+      "id":"INSURED_LETTER_HANDLING_FEE","nameZh":"保价函件手续费","applicableCategories":["LETTER_POST"],
+      "selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies":{"includesRateIds":["REGISTRATION_FEE"]},
+      "pricing":{"type":"flat","unit":"item","price":18.0},
+      "noteZh":"18元手续费中包括16元挂号费和2元保价手续费；选择本项时不得重复计收挂号费。"
     },
     {
-      "id": "PRINTED_MATTER_BAG_REGISTRATION_FEE",
-      "nameZh": "印刷品专袋挂号费",
-      "pricing": {"type": "flat", "unit": "bag", "price": 80.0}
+      "id":"ADVICE_OF_DELIVERY_FEE","nameZh":"回执费",
+      "selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies":{"requiresRateIds":["REGISTRATION_FEE"]},
+      "pricing":{"type":"flat","unit":"item","price":5.0},
+      "noteZh":"回执必须以挂号邮件为基础。"
     },
-    {
-      "id": "INSURED_LETTER_INSURANCE_FEE",
-      "nameZh": "保价函件保价费",
-      "applicableCategories": ["LETTER_POST"],
-      "pricing": {"type": "value_increment", "valueIncrement": 100, "incrementPrice": 1.0, "rounding": "ceil"}
-    },
-    {
-      "id": "INSURED_LETTER_HANDLING_FEE",
-      "nameZh": "保价函件手续费",
-      "applicableCategories": ["LETTER_POST"],
-      "pricing": {"type": "flat", "unit": "item", "price": 18.0},
-      "noteZh": "原表脚注：18元手续费中包括16元挂号费和2元保价手续费。"
-    },
-    {
-      "id": "ADVICE_OF_DELIVERY_FEE",
-      "nameZh": "回执费",
-      "pricing": {"type": "flat", "unit": "item", "price": 5.0}
-    },
-    {
-      "id": "WITHDRAW_OR_CHANGE_ADDRESSEE_FEE",
-      "nameZh": "撤回或修改收件人名址申请费",
-      "pricing": {"type": "flat", "unit": "item", "price": 10.0}
-    },
-    {
-      "id": "INBOUND_POSTAGE_DUE_HANDLING_FEE",
-      "nameZh": "进口欠资函件处理费",
-      "applicableCategories": ["LETTER_POST"],
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
-    },
-    {
-      "id": "POSTE_RESTANTE_FEE",
-      "nameZh": "存局候领费",
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
-    },
-    {
-      "id": "OVERDUE_STORAGE_FEE",
-      "nameZh": "逾期保管费",
-      "pricing": {"type": "external_rule", "unit": "item_per_day", "ruleRefZh": "执行国内业务的相关规定"}
-    },
-    {
-      "id": "CUSTOMS_PRESENTATION_FEE_INBOUND_TAXABLE_ITEM",
-      "nameZh": "送交海关验关费（进口纳税包裹、保价函件、印刷品、小包）",
-      "applicableCategories": ["PARCEL", "LETTER_POST"],
-      "conditions": ["inbound", "taxable", "customs-presentation-required"],
-      "pricing": {"type": "flat", "unit": "item", "price": 8.0}
-    },
-    {
-      "id": "CUSTOMS_PRESENTATION_FEE_INBOUND_PRINTED_MATTER_BAG",
-      "nameZh": "送交海关验关费（进口纳税印刷品专袋）",
-      "applicableMailTypes": ["PRINTED_MATTER_BAG"],
-      "conditions": ["inbound", "taxable", "customs-presentation-required"],
-      "pricing": {"type": "flat", "unit": "bag", "price": 40.0}
-    },
-    {
-      "id": "CUSTOMS_PRESENTATION_FEE_OUTBOUND_PARCEL_NON_CUSTOMS_OFFICE",
-      "nameZh": "送交海关验关费（非验关局收寄的出口包裹）",
-      "applicableCategories": ["PARCEL"],
-      "conditions": ["outbound", "accepted-at-non-customs-office", "customs-presentation-required"],
-      "pricing": {"type": "flat", "unit": "item", "price": 8.0}
-    },
-    {
-      "id": "INSURED_PARCEL_INSURANCE_FEE",
-      "nameZh": "保价包裹保价费",
-      "applicableCategories": ["PARCEL"],
-      "pricing": {"type": "value_increment", "valueIncrement": 100, "incrementPrice": 1.0, "rounding": "ceil"}
-    },
-    {
-      "id": "INSURED_PARCEL_HANDLING_FEE",
-      "nameZh": "保价包裹手续费",
-      "applicableCategories": ["PARCEL"],
-      "pricing": {"type": "flat", "unit": "item", "price": 8.0}
-    }
+    {"id":"WITHDRAW_OR_CHANGE_ADDRESSEE_FEE","nameZh":"撤回或修改收件人名址申请费","selection":{"mode":"display-only","phase":"post-acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"item","price":10.0}},
+    {"id":"INBOUND_POSTAGE_DUE_HANDLING_FEE","nameZh":"进口欠资函件处理费","applicableCategories":["LETTER_POST"],"selection":{"mode":"display-only","phase":"inbound","chargedTo":"recipient"},"pricing":{"type":"flat","unit":"item","price":3.0}},
+    {"id":"POSTE_RESTANTE_FEE","nameZh":"存局候领费","selection":{"mode":"display-only","phase":"delivery","chargedTo":"recipient"},"pricing":{"type":"flat","unit":"item","price":3.0}},
+    {"id":"OVERDUE_STORAGE_FEE","nameZh":"逾期保管费","selection":{"mode":"display-only","phase":"delivery","chargedTo":"recipient"},"pricing":{"type":"external_rule","unit":"item_per_day","ruleRefZh":"执行国内业务的相关规定"}},
+    {"id":"CUSTOMS_PRESENTATION_FEE_INBOUND_TAXABLE_ITEM","nameZh":"送交海关验关费（进口纳税包裹、保价函件、印刷品、小包）","applicableCategories":["PARCEL","LETTER_POST"],"conditions":["inbound","taxable","customs-presentation-required"],"selection":{"mode":"display-only","phase":"inbound","chargedTo":"recipient"},"pricing":{"type":"flat","unit":"item","price":8.0}},
+    {"id":"CUSTOMS_PRESENTATION_FEE_INBOUND_PRINTED_MATTER_BAG","nameZh":"送交海关验关费（进口纳税印刷品专袋）","applicableMailTypes":["PRINTED_MATTER_BAG"],"conditions":["inbound","taxable","customs-presentation-required"],"selection":{"mode":"display-only","phase":"inbound","chargedTo":"recipient"},"pricing":{"type":"flat","unit":"bag","price":40.0}},
+    {"id":"CUSTOMS_PRESENTATION_FEE_OUTBOUND_PARCEL_NON_CUSTOMS_OFFICE","nameZh":"送交海关验关费（非验关局收寄的出口包裹）","applicableCategories":["PARCEL"],"conditions":["outbound","accepted-at-non-customs-office","customs-presentation-required"],"selection":{"mode":"display-only","phase":"post-acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"item","price":8.0}},
+    {"id":"INSURED_PARCEL_INSURANCE_FEE","nameZh":"保价包裹保价费","applicableCategories":["PARCEL"],"selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"value_increment","valueIncrement":100,"incrementPrice":1.0,"rounding":"ceil"}},
+    {"id":"INSURED_PARCEL_HANDLING_FEE","nameZh":"保价包裹手续费","applicableCategories":["PARCEL"],"selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"item","price":8.0}}
   ],
-  "notes": [
-    "本文件完整记录用户提供的国际特别业务资费表，不按国家、locale 或 zoneId 区分。",
-    "函件、小包、印刷品专袋和包裹相关特别业务费用统一维护在本文件中。"
+  "notes":[
+    "寄件计算界面只允许选择 selection.mode=selectable 的项目。",
+    "保价函件保价费必须与保价函件手续费同时使用；保价函件手续费已包含挂号费，不得重复计收。",
+    "撤回改址、进口欠资、存局候领、逾期保管和海关验关等费用仅公示，不作为寄件时可选项目。"
   ]
 }
