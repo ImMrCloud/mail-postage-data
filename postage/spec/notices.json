@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 4,
+  "standardVersion": "1.3.0",
   "generalNotices": {
     "file": "../notices.json",
     "purpose": "维护禁限寄、暂停服务、海关、地址、包装、时效或其他不属于价格的数据。",
