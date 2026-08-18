@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.0.0",
+  "generalNotices": {
+    "file": "../notices.json",
+    "purpose": "维护禁限寄、暂停服务、海关、地址、包装、时效或其他不属于价格的数据。",
+    "matchFields": ["scope.destination", "scope.serviceId", "scope.mailType"],
+    "nullSemantics": "某一 scope 字段为 null 表示该层不限定。",
+    "requiredFields": ["enabled", "id", "scope", "type", "severity", "title", "message"],
+    "consumerRule": "enabled=false 的记录必须忽略。"
+  },
+  "specialRateNotices": {
+    "file": "../special-rates/notices.json",
+    "purpose": "维护特别业务资费相关的业务可用性、限制、计费说明和自定义提示。",
+    "matchFields": ["scope.rateScope", "scope.destination", "scope.specialRateId"],
+    "scopeValues": ["international", "domestic", "hong-kong-macau-taiwan"],
+    "consumerRule": "先匹配 rateScope，再匹配 destination 和 specialRateId；enabled=false 的 examples 不参与实际业务判断。"
+  },
+  "metadataFields": {
+    "available": "布尔值；明确业务是否可用。",
+    "applicableDestinations": "可选目的地数组；规则仅适用于这些目的地。",
+    "excludedDestinations": "可选目的地数组；明确排除这些目的地。",
+    "mailTypes": "可选邮件类型数组。",
+    "conditions": "可选附加条件数组，例如 inbound、taxable、insured。"
+  },
+  "destinationFilterAlgorithm": [
+    "若 scope.destination 非 null，则当前 destination 必须与其完全匹配。",
+    "若 metadata.applicableDestinations 为数组且非空，则 destination 必须在数组中。",
+    "若 destination 位于 metadata.excludedDestinations，则规则最终不适用或业务不可用，排除规则优先于适用集合。",
+    "international 自定义邮政目的地可使用 countryData.json 的 locale。"
+  ],
+  "priorityRules": [
+    "更精确的规则优先：同时指定 destination + service/specialRateId 的规则优先于只指定其中一项的规则。",
+    "restriction/error 不应被更宽泛的 info 覆盖。",
+    "若同等精确度规则冲突，App 应采用更严格的 available=false / restriction，并记录数据冲突供维护。",
+    "effectiveFrom/effectiveTo 存在时，仅在有效期内应用。"
+  ],
+  "taiwanAdviceOfDelivery": {
+    "authoritativeLocation": "../special-rates/notices.json",
+    "rateScope": "hong-kong-macau-taiwan",
+    "destination": "TW",
+    "specialRateId": "ADVICE_OF_DELIVERY_FEE",
+    "requiredOutcome": "available=false；寄往台湾的附回执函件暂不收寄。"
+  }
+}
