@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "standardVersion": "1.0.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
@@ -66,12 +66,24 @@
     "specialCategoryIds": ["LETTER_POST", "PARCEL"],
     "note": "specialCategoryIds 用于特别业务 applicableCategories，不等同于 services.json 的 mailType。"
   },
+  "specialRateApplicability": {
+    "applicableCategories": "可选业务大类数组，例如 LETTER_POST、PARCEL。",
+    "applicableMailTypes": "可选具体邮件类型数组，值应来自 services.json mailTypes[].id。",
+    "conditions": "可选附加条件数组，例如 inbound、outbound、taxable、duty-free、insured。",
+    "applicableDestinations": "可选目的地数组，仅这些目的地适用。",
+    "excludedDestinations": "可选目的地数组，这些目的地明确排除。",
+    "categoryAndMailTypeCombination": "applicableCategories 与 applicableMailTypes 表示可适用对象的并集（OR）。邮件只要匹配任意一个声明的大类或具体 mailType，即通过对象类型筛选。",
+    "conditionsCombination": "conditions 与对象类型筛选、目的地筛选之间使用 AND；所有声明的 conditions 均应满足。",
+    "destinationCombination": "若存在 applicableDestinations，目的地必须在其中；若同时命中 excludedDestinations，则排除优先。",
+    "noApplicabilityFields": "若 applicableCategories、applicableMailTypes、applicableDestinations、excludedDestinations 均未提供，则该特别资费在其 scope 内不因这些维度额外受限。"
+  },
   "indexRules": {
     "postageIndex": [
       "必须声明 schemaVersion、dataset、scope、origin、currency。",
       "activeScopes 只列实际已有可用数据的 scope。",
       "files 中的相对路径均以 postage/index.json 所在目录为基准。",
-      "rateCategories 至少包含 delivery 与 special。"
+      "rateCategories 至少包含 delivery 与 special。",
+      "standardVersion 应与 postage/spec/index.json standardVersion 一致。"
     ],
     "specialRatesIndex": [
       "scopes 的 key 必须直接使用规范 scope 值，不使用 CamelCase 别名。",
