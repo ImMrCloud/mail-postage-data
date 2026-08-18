@@ -17,7 +17,9 @@
     "salOtherMailZones": "./zones/sal-other-mail.json",
     "salOtherMailRates": "./rates/sal-other-mail.json",
     "surfaceLetterZones": "./zones/surface-letter.json",
-    "surfaceLetterRates": "./rates/surface-letter.json"
+    "surfaceLetterRates": "./rates/surface-letter.json",
+    "surfaceOtherMailZones": "./zones/surface-other-mail.json",
+    "surfaceOtherMailRates": "./rates/surface-other-mail.json"
   },
   "currentServices": [
     "INTL_AIR_LETTER",
@@ -33,6 +35,11 @@
     "INTL_SAL_LITERATURE_FOR_BLIND",
     "INTL_SAL_SMALL_PACKET",
     "INTL_SAL_PRINTED_MATTER_BAG",
-    "INTL_SURFACE_LETTER"
+    "INTL_SURFACE_LETTER",
+    "INTL_SURFACE_POSTCARD",
+    "INTL_SURFACE_PRINTED_MATTER",
+    "INTL_SURFACE_LITERATURE_FOR_BLIND",
+    "INTL_SURFACE_SMALL_PACKET",
+    "INTL_SURFACE_PRINTED_MATTER_BAG"
   ]
 }
