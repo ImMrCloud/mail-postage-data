@@ -1,9 +1,11 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "dataset": "China Post postage data",
   "scope": "multi-scope",
   "origin": "CN",
   "currency": "CNY",
+  "rateCategories": ["delivery", "special"],
+  "activeScopes": ["domestic", "hong-kong-macau-taiwan", "international"],
   "internationalExcludedDestinations": ["CN", "HK", "MO", "TW"],
   "files": {
     "services": "./services.json",
@@ -25,6 +27,12 @@
     "specialRates": "./special-rates/index.json"
   },
   "currentServices": [
+    "DOMESTIC_LETTER",
+    "DOMESTIC_POSTCARD",
+    "DOMESTIC_PRINTED_MATTER",
+    "DOMESTIC_LETTER_SHEET",
+    "DOMESTIC_MILITARY_FREE_LETTER",
+    "DOMESTIC_LITERATURE_FOR_BLIND",
     "INTL_AIR_LETTER",
     "INTL_AIR_POSTCARD",
     "INTL_AIR_AEROGRAMME",
