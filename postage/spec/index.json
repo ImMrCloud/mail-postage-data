@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.0.0",
+  "dataset": "China Post postage data specification",
+  "status": "active",
+  "appliesTo": ["domestic", "hong-kong-macau-taiwan", "international"],
+  "files": {
+    "core": "./core.json",
+    "pricing": "./pricing.json",
+    "notices": "./notices.json",
+    "validation": "./validation.json"
+  },
+  "principles": [
+    "postage/index.json 是数据集总入口。",
+    "services.json 是寄递服务注册表。",
+    "rateCategory=delivery 表示基础寄递资费；rateCategory=special 表示可叠加的特别业务资费。",
+    "scope 统一使用 domestic、hong-kong-macau-taiwan、international。",
+    "国际目的地优先使用 ISO 3166-1 alpha-2；特殊邮政目的地使用 countryData.json 中的自定义 locale。",
+    "所有不足计费单位按一个完整计费单位计算时使用 rounding=ceil。",
+    "App 必须忽略 enabled=false 的 notice 示例记录。"
+  ]
+}
