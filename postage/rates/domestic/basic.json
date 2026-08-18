@@ -1,12 +1,84 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "domestic",
+  "rateCategory": "delivery",
   "currency": "CNY",
   "weightUnit": "g",
-  "status": "placeholder",
-  "mailTypes": {},
+  "localityTypes": [
+    {"id": "LOCAL", "nameZh": "本埠", "nameEn": "Local"},
+    {"id": "NON_LOCAL", "nameZh": "外埠", "nameEn": "Non-local"}
+  ],
+  "mailTypes": {
+    "LETTER": {
+      "pricingType": "tiered_incremental",
+      "maxWeight": 2000,
+      "rounding": "ceil",
+      "tiers": [
+        {
+          "fromWeightExclusive": 0,
+          "toWeight": 100,
+          "incrementWeight": 20,
+          "prices": {"LOCAL": 0.8, "NON_LOCAL": 1.2}
+        },
+        {
+          "fromWeightExclusive": 100,
+          "toWeight": 2000,
+          "incrementWeight": 100,
+          "prices": {"LOCAL": 1.2, "NON_LOCAL": 2.0}
+        }
+      ],
+      "noteZh": "首重100克内每重20克计费；超过100克至2000克部分每重100克计费，不足计费单位按一个计费单位计算。"
+    },
+    "POSTCARD": {
+      "pricingType": "flat",
+      "price": 0.8,
+      "per": "piece",
+      "sameForAllLocalities": true
+    },
+    "PRINTED_MATTER": {
+      "pricingType": "tiered_incremental",
+      "maxWeight": 35000,
+      "rounding": "ceil",
+      "tiers": [
+        {
+          "fromWeightExclusive": 0,
+          "toWeight": 100,
+          "incrementWeight": 100,
+          "prices": {"LOCAL": 0.8, "NON_LOCAL": 1.2}
+        },
+        {
+          "fromWeightExclusive": 100,
+          "toWeight": 35000,
+          "incrementWeight": 100,
+          "prices": {"LOCAL": 0.2, "NON_LOCAL": 0.4}
+        }
+      ],
+      "noteZh": "首重100克按一个100克计费单位计算；超过100克至35000克部分每重100克计费，不足100克按100克计算。"
+    },
+    "LETTER_SHEET": {
+      "pricingType": "flat_by_locality",
+      "per": "piece",
+      "prices": {"LOCAL": 0.8, "NON_LOCAL": 1.2},
+      "nameZh": "邮简"
+    },
+    "MILITARY_FREE_LETTER": {
+      "pricingType": "free",
+      "price": 0,
+      "maxWeight": 20,
+      "nameZh": "义务兵免费信函",
+      "noteZh": "每件重量不超过20克，免费。"
+    },
+    "LITERATURE_FOR_BLIND": {
+      "pricingType": "free",
+      "price": 0,
+      "basicPostageExempt": true,
+      "deliveryMethod": "ordinary-mail",
+      "noteZh": "盲人读物按平常邮件寄递，基本资费免费。"
+    }
+  },
   "notes": [
-    "预留给国内基本资费。",
-    "待取得国内资费表后补充。"
+    "本文件仅记录国内函件寄递基本资费，不包含挂号、约投、回执、保价、存局候领、撤回或改址等特别业务资费。",
+    "本埠与外埠资费按原表分别记录；明信片原表为统一每件0.80元。",
+    "所有不足计费单位的重量均按一个完整计费单位计算。"
   ]
 }
