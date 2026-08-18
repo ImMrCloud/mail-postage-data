@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "description": "特别业务资费相关的服务限制和提示。",
+  "supportedTypes": ["restriction", "warning", "info", "custom"],
+  "supportedSeverities": ["info", "warning", "error"],
+  "notices": [
+    {
+      "enabled": true,
+      "id": "HMT-TW-ADVICE-OF-DELIVERY-UNAVAILABLE",
+      "scope": {
+        "rateScope": "hong-kong-macau-taiwan",
+        "destination": "TW",
+        "specialRateId": "ADVICE_OF_DELIVERY_FEE"
+      },
+      "type": "restriction",
+      "severity": "warning",
+      "title": "台湾暂不提供回执业务",
+      "message": "暂不收寄寄往台湾的附回执函件。港澳台回执费3.00元/件仅适用于香港和澳门，不适用于台湾。",
+      "sourceNote": "港澳台特别业务资费表脚注：暂不收寄寄往台湾的附回执函件。",
+      "tags": ["hong-kong-macau-taiwan", "TW", "advice-of-delivery", "special-rates"],
+      "metadata": {
+        "available": false,
+        "applicableDestinations": ["HK", "MO"],
+        "excludedDestinations": ["TW"]
+      }
+    }
+  ]
+}
