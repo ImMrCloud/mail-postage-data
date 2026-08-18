@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "description": "按目的地、运输方式、函件类型维护禁限寄、服务、海关或自定义提示。App 应忽略 enabled=false 的记录。",
+  "supportedTypes": ["prohibition", "restriction", "service", "customs", "warning", "info", "custom"],
+  "supportedSeverities": ["info", "warning", "error"],
+  "notices": [],
+  "fieldGuide": {
+    "scope.destination": "ISO 3166-1 alpha-2；为 null 时表示所有国际目的地。",
+    "scope.serviceId": "例如 INTL_AIR_LETTER；为 null 时适用于所有运输方式/服务。",
+    "scope.mailType": "例如 LETTER；为 null 时适用于该服务下所有函件类型。",
+    "type": "提示类型，可使用 custom 写任意自定义提示。",
+    "severity": "info / warning / error；可用于 App 决定展示样式。",
+    "title": "短标题。",
+    "message": "给用户展示的自由文本，可填写任何自定义说明。",
+    "prohibitedItems": "可选字符串数组，用于结构化列出禁止物品。",
+    "restrictedItems": "可选字符串数组，用于结构化列出限制物品。",
+    "source": "可选资料来源说明或 URL。",
+    "effectiveFrom": "可选 YYYY-MM-DD。",
+    "effectiveTo": "可选 YYYY-MM-DD；null 表示未指定结束日期。",
+    "tags": "可选自定义标签数组。",
+    "metadata": "可选自由对象，留给未来或 App 自定义字段。"
+  },
+  "example": {
+    "enabled": false,
+    "id": "EXAMPLE-JP-AIR-LETTER-001",
+    "scope": {
+      "destination": "JP",
+      "serviceId": "INTL_AIR_LETTER",
+      "mailType": "LETTER"
+    },
+    "type": "custom",
+    "severity": "warning",
+    "title": "示例提示",
+    "message": "这里可以填写寄往日本的航空信函特别提示；此示例不代表真实邮政限制。",
+    "prohibitedItems": [],
+    "restrictedItems": [],
+    "source": null,
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "tags": ["example"],
+    "metadata": {}
+  }
+}
