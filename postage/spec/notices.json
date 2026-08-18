@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "standardVersion": "1.4.0",
+  "standardVersion": "1.5.0",
   "generalNotices": {
     "file": "../notices.json",
     "purpose": "维护禁限寄、暂停服务、海关、地址、包装、时效或其他不属于价格的数据。",
@@ -17,32 +17,19 @@
     "consumerRule": "先匹配 rateScope，再匹配 destination 和 specialRateId；enabled=false 的 examples 不参与实际业务判断。"
   },
   "metadataFields": {
-    "available": "布尔值；明确业务是否可用。",
-    "applicableDestinations": "可选目的地数组；规则仅适用于这些目的地。",
-    "excludedDestinations": "可选目的地数组；明确排除这些目的地。",
-    "mailTypes": "可选具体邮件类型数组。",
-    "applicableCategories": "可选特别业务大类数组，例如 LETTER_POST、PARCEL。",
-    "applicableServiceIds": "可选具体寄递服务数组。",
-    "excludedServiceIds": "可选明确排除的寄递服务数组，优先于适用集合。",
-    "conditions": "可选附加条件数组，例如 inbound、taxable、insured。"
+    "available": "明确业务是否可用。",
+    "applicableDestinations": "可选目的地数组。",
+    "excludedDestinations": "明确排除目的地。",
+    "mailTypes": "具体邮件类型数组。",
+    "applicableCategories": "特别业务大类数组。",
+    "applicableServiceIds": "具体寄递服务数组。",
+    "excludedServiceIds": "明确排除的寄递服务数组，优先于适用集合。",
+    "conditions": "附加条件数组。"
   },
   "specialApplicabilityAlgorithm": [
-    "applicableCategories、applicableMailTypes/metadata.mailTypes、applicableServiceIds 是不同层级。",
-    "这些适用集合同时存在时按 OR 并集判断；excludedServiceIds 优先排除。",
+    "applicableCategories、applicableMailTypes、applicableServiceIds 同时存在时按 OR；excludedServiceIds 优先排除。",
     "conditions 在适用对象匹配之后按 AND 附加判断。",
-    "PARCEL 可作为特别业务 category；在 services.json 中 PARCEL 也可作为 mailType，消费者必须按字段位置区分语义。"
-  ],
-  "destinationFilterAlgorithm": [
-    "若 scope.destination 非 null，则当前 destination 必须与其完全匹配。",
-    "若 metadata.applicableDestinations 为数组且非空，则 destination 必须在数组中。",
-    "若 destination 位于 metadata.excludedDestinations，则规则最终不适用或业务不可用，排除规则优先于适用集合。",
-    "international 自定义邮政目的地可使用 countryData.json 的 locale。"
-  ],
-  "priorityRules": [
-    "更精确的规则优先：同时指定 destination + service/specialRateId 的规则优先于只指定其中一项的规则。",
-    "restriction/error 不应被更宽泛的 info 覆盖。",
-    "若同等精确度规则冲突，App 应采用更严格的 available=false / restriction，并记录数据冲突供维护。",
-    "effectiveFrom/effectiveTo 存在时，仅在有效期内应用。"
+    "selection.mode=display-only 的资费即使匹配 notice，也只公示，不进入寄件计算。"
   ],
   "taiwanAdviceOfDelivery": {
     "authoritativeLocation": "../special-rates/notices.json",
