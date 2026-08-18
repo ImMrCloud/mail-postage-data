@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 3,
+  "standardVersion": "1.3.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
@@ -18,6 +18,7 @@
   "notes": [
     "家乡包裹贴作为独立国内寄件方式维护。",
     "资费不区分地区。",
-    "重量边界统一按小于等于处理：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。"
+    "重量边界统一按小于等于处理：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。",
+    "普通包裹优惠凭证不适用于家乡包裹贴。"
   ]
 }
