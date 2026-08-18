@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "dataset": "China Post postage data",
   "scope": "international",
   "origin": "CN",
@@ -11,7 +11,11 @@
     "airLetterZones": "./zones/air-letter.json",
     "airLetterRates": "./rates/air-letter.json",
     "airOtherMailZones": "./zones/air-other-mail.json",
-    "airOtherMailRates": "./rates/air-other-mail.json"
+    "airOtherMailRates": "./rates/air-other-mail.json",
+    "salLetterZones": "./zones/sal-letter.json",
+    "salLetterRates": "./rates/sal-letter.json",
+    "salOtherMailZones": "./zones/sal-other-mail.json",
+    "salOtherMailRates": "./rates/sal-other-mail.json"
   },
   "currentServices": [
     "INTL_AIR_LETTER",
@@ -20,6 +24,12 @@
     "INTL_AIR_PRINTED_MATTER",
     "INTL_AIR_LITERATURE_FOR_BLIND",
     "INTL_AIR_SMALL_PACKET",
-    "INTL_AIR_PRINTED_MATTER_BAG"
+    "INTL_AIR_PRINTED_MATTER_BAG",
+    "INTL_SAL_LETTER",
+    "INTL_SAL_POSTCARD",
+    "INTL_SAL_PRINTED_MATTER",
+    "INTL_SAL_LITERATURE_FOR_BLIND",
+    "INTL_SAL_SMALL_PACKET",
+    "INTL_SAL_PRINTED_MATTER_BAG"
   ]
 }
