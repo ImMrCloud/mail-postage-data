@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "standardVersion": "1.0.0",
+  "standardVersion": "1.1.0",
   "generalNotices": {
     "file": "../notices.json",
     "purpose": "维护禁限寄、暂停服务、海关、地址、包装、时效或其他不属于价格的数据。",
@@ -20,22 +20,21 @@
     "available": "布尔值；明确业务是否可用。",
     "applicableDestinations": "可选目的地数组；规则仅适用于这些目的地。",
     "excludedDestinations": "可选目的地数组；明确排除这些目的地。",
-    "mailTypes": "可选具体邮件类型数组；值必须来自 services.json mailTypes[].id。",
-    "applicableCategories": "可选业务大类数组；当前规范业务大类为 LETTER_POST、PARCEL。不得把 PARCEL 填入 mailTypes。",
+    "mailTypes": "可选具体邮件类型数组。",
+    "applicableCategories": "可选特别业务大类数组，例如 LETTER_POST、PARCEL。",
     "conditions": "可选附加条件数组，例如 inbound、taxable、insured。"
   },
+  "specialApplicabilityAlgorithm": [
+    "applicableCategories 与 applicableMailTypes/metadata.mailTypes 是不同层级。",
+    "若特别业务资费同时声明 applicableCategories 与 applicableMailTypes，则两者按 OR 并集判断适用对象。",
+    "conditions 在适用对象匹配之后按 AND 附加判断。",
+    "PARCEL 可作为特别业务 category；在 services.json 中 PARCEL 也可作为 mailType，但消费者必须按字段位置区分语义。"
+  ],
   "destinationFilterAlgorithm": [
     "若 scope.destination 非 null，则当前 destination 必须与其完全匹配。",
     "若 metadata.applicableDestinations 为数组且非空，则 destination 必须在数组中。",
     "若 destination 位于 metadata.excludedDestinations，则规则最终不适用或业务不可用，排除规则优先于适用集合。",
     "international 自定义邮政目的地可使用 countryData.json 的 locale。"
-  ],
-  "objectFilterAlgorithm": [
-    "若 metadata.mailTypes 与 metadata.applicableCategories 均未提供，则 notice 不按邮件对象类型额外筛选。",
-    "若只提供 mailTypes，则当前具体 mailType 必须匹配其中之一。",
-    "若只提供 applicableCategories，则当前对象所属业务大类必须匹配其中之一。",
-    "若两者同时存在，则两组取并集（OR）；匹配任意一组即可通过对象类型筛选。",
-    "conditions 与目的地/对象类型筛选使用 AND。"
   ],
   "priorityRules": [
     "更精确的规则优先：同时指定 destination + service/specialRateId 的规则优先于只指定其中一项的规则。",
