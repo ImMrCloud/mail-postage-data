@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.0.0",
+  "currency": "CNY",
+  "defaultWeightUnit": "g",
+  "roundingValues": {
+    "ceil": "不足一个计费单位按一个完整计费单位计算。"
+  },
+  "supportedTypes": {
+    "flat": {
+      "description": "固定每件、每袋、每枚等资费。",
+      "required": ["price"],
+      "optional": ["unit", "per", "sameForAllZones", "sameForAllLocalities"],
+      "formula": "total = price"
+    },
+    "flat_by_locality": {
+      "description": "按本埠/外埠等 locality 选择固定价格。",
+      "required": ["prices"],
+      "pricesShape": {"LOCAL": "number", "NON_LOCAL": "number"},
+      "formula": "total = prices[locality]"
+    },
+    "free": {
+      "description": "资费免收。",
+      "required": ["price"],
+      "constraints": ["price 必须为 0。"],
+      "formula": "total = 0"
+    },
+    "base_plus_increment": {
+      "description": "首重/基础重量固定价，超过后按续重单位向上取整累加。",
+      "required": ["baseWeight", "basePrice", "incrementWeight", "incrementPrice", "rounding"],
+      "formula": "weight <= baseWeight ? basePrice : basePrice + ceil((weight-baseWeight)/incrementWeight)*incrementPrice",
+      "zoneVariant": "若价格随 zone 不同，可将 basePrice/incrementWeight/incrementPrice 放入 zones[zoneId]；baseWeight 与 rounding 可放在 mailType 级共享。"
+    },
+    "surcharge_per_increment": {
+      "description": "无基础价格，只按重量计费单位收取附加费。",
+      "required": ["incrementWeight", "incrementPrice", "rounding"],
+      "formula": "total = ceil(weight/incrementWeight)*incrementPrice"
+    },
+    "air_surcharge_only": {
+      "description": "盲人邮件等基本邮资免收，仅收航空运费。",
+      "required": ["basicPostageExempt", "incrementWeight", "rounding"],
+      "zoneRequired": ["incrementPrice"],
+      "formula": "total = ceil(weight/incrementWeight)*zones[zoneId].incrementPrice",
+      "constraints": ["basicPostageExempt 必须为 true。"]
+    },
+    "weight_tiers": {
+      "description": "按重量落入单一阶梯，直接采用该阶梯固定价格。",
+      "required": ["tiers"],
+      "tierFields": ["minWeightExclusive", "maxWeight", "price"],
+      "formula": "选择满足 (minWeightExclusive 缺省或 weight>minWeightExclusive) 且 weight<=maxWeight 的唯一 tier，total=tier.price",
+      "constraints": ["tiers 不应重叠，且应覆盖声明的有效重量范围。"]
+    },
+    "tiered_incremental": {
+      "description": "分阶段累计计费；每个阶段按自身计费重量单位和本埠/外埠单价累计。",
+      "required": ["tiers", "rounding"],
+      "tierFields": ["fromWeightExclusive", "toWeight", "incrementWeight", "prices"],
+      "formula": "对 weight 覆盖到的每个 tier，计算该 tier 内实际重量；units=ceil(tierWeight/incrementWeight)，subtotal=units*prices[locality]；total 为各 tier subtotal 之和。",
+      "exampleNote": "国内信函 120g：前100g按5个20g单位计费，再对101-120g按1个100g续重单位计费。"
+    },
+    "value_increment": {
+      "description": "按声明价值/保价金额向上取整到金额计费单位。",
+      "required": ["valueIncrement", "incrementPrice", "rounding"],
+      "formula": "total = ceil(declaredValue/valueIncrement)*incrementPrice"
+    },
+    "value_increment_with_minimum": {
+      "description": "按声明价值计费，并设置最低收费及可选最高保价金额。",
+      "required": ["valueIncrement", "incrementPrice", "rounding", "minimumPrice"],
+      "optional": ["maximumInsuredValue"],
+      "formula": "raw=ceil(declaredValue/valueIncrement)*incrementPrice; total=max(minimumPrice,raw)",
+      "constraints": ["若提供 maximumInsuredValue，则 declaredValue 不得超过该值。"]
+    },
+    "external_rule": {
+      "description": "金额不能由当前数据文件独立计算，需引用其他业务规定。",
+      "required": ["ruleRefZh"],
+      "optional": ["unit"],
+      "formula": null,
+      "consumerBehavior": "App 不得自行猜测金额，应显示 ruleRefZh 或按外部规则模块处理。"
+    }
+  },
+  "acceptedLayouts": {
+    "serviceSpecific": "rates[].pricing.type，例如国际信函。",
+    "aggregatePricingType": "mailTypes[mailType].pricingType，例如航空其他函件、港澳台和国内基础资费。",
+    "aggregatePricingObject": "ratesByMailType[mailType].pricing.type 或 ratesByMailType[mailType].zones[zoneId].type，例如 SAL 其他函件。",
+    "specialRates": "rates[].pricing.type，特别业务统一使用此布局。"
+  },
+  "canonicalRulesForNewData": [
+    "特别业务必须使用 rates[].pricing.type。",
+    "不分 zone 的聚合基础资费文件优先使用 mailTypes[mailType].pricingType。",
+    "按 zone 聚合的新增基础资费可以沿用现有文件布局，但同一文件内部必须保持一致。",
+    "不得用字段缺失来暗示免费；免费必须显式 type/pricingType=free 且 price=0。",
+    "涉及不足计费单位时必须显式 rounding=ceil。"
+  ],
+  "inputValidation": {
+    "weight": "必须为大于 0 的数值，单位采用文件 weightUnit。",
+    "declaredValue": "涉及保价时必须为非负数值，单位 CNY。",
+    "locality": "使用 flat_by_locality 或 tiered_incremental 时必须提供有效 locality。",
+    "zoneId": "使用 zoneVariant 时必须先由 serviceId + destination 在对应 zoneFile 中解析。"
+  }
+}
