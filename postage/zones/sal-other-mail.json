@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "zoneSetId": "SAL_OTHER_MAIL_3_ZONE",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "usedByMailTypes": ["PRINTED_MATTER", "LITERATURE_FOR_BLIND", "SMALL_PACKET", "PRINTED_MATTER_BAG"],
+  "zones": [
+    {
+      "id": "SAL_OTHER_ZONE_1",
+      "nameZh": "第一组",
+      "countries": ["GE"],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SAL_OTHER_ZONE_2",
+      "nameZh": "第二组",
+      "countries": [
+        "AZ","KR","JP","AL","IE","EE","AT","BY","BG","BE","IS","PL","DK","DE","FR","FI","NL","CZ","HR","LV","LT","LU","RO","MT","MD","NO","PT","SE","RS","SK","SI","UA","ES","GR","HU","IT","GB","CA","US","AU"
+      ],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SAL_OTHER_ZONE_3",
+      "nameZh": "第三组",
+      "countries": [
+        "RU","KM","ST","LS","AI","PY","BR","BM","PR","BO","GL","VI","PM","AD","BA","FO","VA","ME","LI","MK","MC","CH","SM","GI","CY","AM"
+      ],
+      "postalDestinations": [
+        {"id":"SH-ASCENSION","nameZh":"阿松森岛（阿森松岛）","parentCountry":"SH"},
+        {"id":"PT-AZORES","nameZh":"亚速尔群岛","parentCountry":"PT"},
+        {"id":"PT-MADEIRA","nameZh":"马德拉群岛","parentCountry":"PT"},
+        {"id":"SH-TRISTAN-DA-CUNHA","nameZh":"特里斯坦-达库尼亚群岛","parentCountry":"SH"}
+      ],
+      "mappingStatus": "explicit-with-postal-territories"
+    }
+  ],
+  "notes": [
+    "分组按用户提供的 SAL 资费表逐项录入，不与航空函件的三组或四组分组共用。",
+    "明信片在原表中为每件统一 4.50 元，因此不依赖这套三组分组。",
+    "部分岛屿/邮政目的地使用自定义 postalDestinations 标识，以避免与其主权国家的其他资费组冲突。"
+  ]
+}
