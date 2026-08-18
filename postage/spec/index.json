@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "standardVersion": "1.4.0",
   "dataset": "China Post postage data specification",
   "status": "active",
@@ -19,8 +19,10 @@
     "国内存在省际差异的寄递服务必须通过 province region registry 使用 originRegionId + destinationRegionId 路由。",
     "普通包裹按起寄省拆分路向组文件，未录入起寄省不得回退到其他省价格。",
     "普通包裹优惠一次只能使用一种，不得叠加，也不得用于家乡包裹贴。",
+    "普通包裹8折/7折只作用于基础寄递资费；回执、保价等特别业务费用按原价另加。",
+    "普通包裹基础寄递资费已包含挂号属性，附回执时不另选或另收挂号费。",
     "特别业务必须区分 selectable 与 display-only，并按 requires/includes/excludes 关系处理依赖、包含与互斥。",
-    "普通包裹可选输入体积尺寸，按长×宽×高÷6000计算体积重量，并分别展示实重资费和泡重资费，以较高资费作为应计寄递资费。",
+    "普通包裹可选输入体积尺寸，按长×宽×高÷6000计算体积重量，并分别展示实重资费和泡重资费，以较高资费作为应计基础寄递资费。",
     "国际目的地优先使用 ISO 3166-1 alpha-2；特殊邮政目的地使用 countryData.json 中的自定义 locale。",
     "所有不足计费单位按一个完整计费单位计算时使用 rounding=ceil。",
     "App 必须忽略 enabled=false 的 notice 示例记录。"
@@ -28,11 +30,13 @@
   "changes": {
     "1.4.0": [
       "新增特别业务 selection.mode/phase/chargedTo 字段。",
-      "新增 dependencies.requiresRateIds/includesRateIds/excludesRateIds。",
+      "新增 applicableServiceIds/excludedServiceIds 与 dependencies.requiresRateIds/includesRateIds/excludesRateIds。",
       "存局候领、撤回改址、进口欠资、逾期保管和海关验关等非交寄费用改为 display-only。",
       "回执与保价的挂号依赖、国内约投与保价互斥、国际/港澳台保价手续费包含挂号等规则机器化。",
-      "邮政普通包裹支持回执。",
-      "普通包裹新增可选体积重量计算规则：长×宽×高÷6000。"
+      "普通包裹基础寄递资费已含挂号属性，回执不另收挂号费；普通包裹可同时办理保价和回执。",
+      "家乡包裹贴可保价但不可回执；国内包裹保价费率未提供时不得套用函件保价费率。",
+      "普通包裹新增可选体积重量计算规则：长×宽×高÷6000。",
+      "普通包裹优惠仅作用于基础寄递资费，特别业务费用不参与折扣。"
     ]
   }
 }
