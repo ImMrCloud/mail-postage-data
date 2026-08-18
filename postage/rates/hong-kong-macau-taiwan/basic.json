@@ -1,6 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "hong-kong-macau-taiwan",
+  "rateCategory": "delivery",
   "destinations": ["HK", "MO", "TW"],
   "currency": "CNY",
   "weightUnit": "g",
@@ -58,7 +59,7 @@
     }
   },
   "notes": [
-    "本文件记录寄往香港、澳门、台湾的基本资费。",
+    "本文件记录寄往香港、澳门、台湾的寄递基本资费。",
     "信函采用分段重量阶梯计费。",
     "所有“每续重X克或其零数”均使用向上取整。"
   ]
