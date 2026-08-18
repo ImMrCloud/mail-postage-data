@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "scope": "hong-kong-macau-taiwan",
+  "category": "special-business-rates",
+  "currency": "CNY",
+  "destinationIndependent": true,
+  "destinations": ["HK", "MO", "TW"],
+  "status": "placeholder",
+  "rates": [],
+  "notes": [
+    "预留给香港、澳门、台湾特别业务资费，包含函件、包裹及其他可叠加特殊业务费用。",
+    "待取得对应资费表后按 international.json 的结构补充。"
+  ]
+}
