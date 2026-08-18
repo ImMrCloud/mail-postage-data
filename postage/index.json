@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "dataset": "China Post postage data",
+  "scope": "international",
+  "origin": "CN",
+  "currency": "CNY",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "files": {
+    "services": "./services.json",
+    "airLetterZones": "./zones/air-letter.json",
+    "airLetterRates": "./rates/air-letter.json"
+  },
+  "currentServices": ["INTL_AIR_LETTER"]
+}
