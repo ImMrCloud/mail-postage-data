@@ -1,28 +1,18 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "transportMethods": [
-    {
-      "id": "AIR",
-      "nameZh": "航空",
-      "nameEn": "Air"
-    },
-    {
-      "id": "SAL",
-      "nameZh": "空运水陆路（SAL）",
-      "nameEn": "Surface Air Lifted"
-    },
-    {
-      "id": "SURFACE",
-      "nameZh": "水陆路",
-      "nameEn": "Surface"
-    }
+    {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
+    {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
+    {"id": "SURFACE", "nameZh": "水陆路", "nameEn": "Surface"}
   ],
   "mailTypes": [
-    {
-      "id": "LETTER",
-      "nameZh": "信函",
-      "nameEn": "Letter"
-    }
+    {"id": "LETTER", "nameZh": "信函", "nameEn": "Letter"},
+    {"id": "POSTCARD", "nameZh": "明信片", "nameEn": "Postcard"},
+    {"id": "AEROGRAMME", "nameZh": "航空邮简", "nameEn": "Aerogramme"},
+    {"id": "PRINTED_MATTER", "nameZh": "印刷品", "nameEn": "Printed matter"},
+    {"id": "LITERATURE_FOR_BLIND", "nameZh": "盲人邮件", "nameEn": "Literature for the blind"},
+    {"id": "SMALL_PACKET", "nameZh": "小包", "nameEn": "Small packet"},
+    {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"}
   ],
   "services": [
     {
@@ -32,6 +22,54 @@
       "mailType": "LETTER",
       "zoneFile": "./zones/air-letter.json",
       "rateFile": "./rates/air-letter.json"
+    },
+    {
+      "id": "INTL_AIR_POSTCARD",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "POSTCARD",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
+    },
+    {
+      "id": "INTL_AIR_AEROGRAMME",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "AEROGRAMME",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
+    },
+    {
+      "id": "INTL_AIR_PRINTED_MATTER",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "PRINTED_MATTER",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
+    },
+    {
+      "id": "INTL_AIR_LITERATURE_FOR_BLIND",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "LITERATURE_FOR_BLIND",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
+    },
+    {
+      "id": "INTL_AIR_SMALL_PACKET",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "SMALL_PACKET",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
+    },
+    {
+      "id": "INTL_AIR_PRINTED_MATTER_BAG",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "PRINTED_MATTER_BAG",
+      "zoneFile": "./zones/air-other-mail.json",
+      "rateFile": "./rates/air-other-mail.json"
     }
   ]
 }
