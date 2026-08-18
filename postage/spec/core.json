@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "standardVersion": "1.0.0",
+  "standardVersion": "1.1.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
     "hong-kong-macau-taiwan": "中国大陆寄往香港、澳门、台湾。",
@@ -14,6 +14,7 @@
     "datasetIndex": "postage/index.json",
     "serviceRegistry": "postage/services.json",
     "generalNotices": "postage/notices.json",
+    "domesticRegionRegistry": "postage/domestic/provinces.json",
     "deliveryRates": {
       "domestic": "postage/rates/domestic/",
       "hong-kong-macau-taiwan": "postage/rates/hong-kong-macau-taiwan/",
@@ -29,61 +30,50 @@
       "customPostalDestination": "当 ISO2 无法准确表达独立邮政路向时，使用 countryData.json 中的自定义 locale，例如 PT-AZORES、PT-MADEIRA、SH-ASCENSION。",
       "excluded": ["CN", "HK", "MO", "TW"]
     },
-    "hong-kong-macau-taiwan": {
-      "allowed": ["HK", "MO", "TW"]
-    },
+    "hong-kong-macau-taiwan": {"allowed": ["HK", "MO", "TW"]},
     "domestic": {
-      "destination": null,
-      "note": "国内资费通常不以国家代码区分；如未来需要省市级差异，应新增专门字段，不复用国际 ISO destination。"
+      "defaultDestination": null,
+      "provinceRouting": "存在省际差异时使用 originRegionId + destinationRegionId，不复用国际 destination 字段。"
     }
+  },
+  "domesticProvinceRules": {
+    "registry": "postage/domestic/provinces.json",
+    "idStandard": "ISO 3166-2:CN",
+    "mainlandCount": 31,
+    "excludedFromRegistry": ["HK", "MO", "TW"],
+    "requiredRegionFields": ["id", "gb2260Prefix", "nameZh", "shortNameZh", "type"],
+    "routeKeyRule": "所有国内省际差异资费中的 origin/destination key 必须存在于省级行政区注册表。",
+    "missingOriginRule": "若起寄省未录入资费，消费者必须返回无资费数据，不得回退到其他省价格。",
+    "sameProvinceAllowed": true
   },
   "serviceRules": {
     "requiredFields": ["id", "scope", "rateCategory", "mailType", "rateFile"],
     "conditionalFields": {
       "transport": "国际 AIR / SAL / SURFACE 服务必须提供；国内和港澳台无运输方式分组时可省略。",
-      "zoneFile": "需要按目的地分区的服务必须提供；不分区的国内和港澳台基础资费可省略。"
+      "zoneFile": "需要按国际目的地分区的服务必须提供。",
+      "regionRegistry": "需要按国内行政区路由的服务必须提供。",
+      "routeDimension": "按省际路由时应声明 province-to-province。"
     },
-    "idPrefixes": {
-      "domestic": "DOMESTIC_",
-      "hong-kong-macau-taiwan": "HMT_",
-      "international": "INTL_"
-    },
+    "idPrefixes": {"domestic":"DOMESTIC_","hong-kong-macau-taiwan":"HMT_","international":"INTL_"},
     "currentServicesRule": "postage/index.json 的 currentServices 必须与 services.json 中当前可用寄递服务 id 一一对应，不得引用不存在的服务。"
   },
   "mailTypeRules": {
     "registry": "所有 services[].mailType 必须先在 services.json 的 mailTypes 中注册。",
-    "currentIds": [
-      "LETTER",
-      "POSTCARD",
-      "AEROGRAMME",
-      "PRINTED_MATTER",
-      "LETTER_SHEET",
-      "MILITARY_FREE_LETTER",
-      "LITERATURE_FOR_BLIND",
-      "SMALL_PACKET",
-      "PRINTED_MATTER_BAG"
-    ],
+    "currentIds": ["LETTER","POSTCARD","AEROGRAMME","PRINTED_MATTER","LETTER_SHEET","MILITARY_FREE_LETTER","LITERATURE_FOR_BLIND","SMALL_PACKET","PRINTED_MATTER_BAG","PARCEL"],
     "specialCategoryIds": ["LETTER_POST", "PARCEL"],
-    "note": "specialCategoryIds 用于特别业务 applicableCategories，不等同于 services.json 的 mailType。"
+    "note": "services mailType=PARCEL 与 special applicableCategories=PARCEL 字符串相同，但语义位置不同：前者是寄件种类，后者是特别业务大类筛选。"
   },
-  "specialRateApplicability": {
-    "applicableCategories": "可选业务大类数组，例如 LETTER_POST、PARCEL。",
-    "applicableMailTypes": "可选具体邮件类型数组，值应来自 services.json mailTypes[].id。",
-    "conditions": "可选附加条件数组，例如 inbound、outbound、taxable、duty-free、insured。",
-    "applicableDestinations": "可选目的地数组，仅这些目的地适用。",
-    "excludedDestinations": "可选目的地数组，这些目的地明确排除。",
-    "categoryAndMailTypeCombination": "applicableCategories 与 applicableMailTypes 表示可适用对象的并集（OR）。邮件只要匹配任意一个声明的大类或具体 mailType，即通过对象类型筛选。",
-    "conditionsCombination": "conditions 与对象类型筛选、目的地筛选之间使用 AND；所有声明的 conditions 均应满足。",
-    "destinationCombination": "若存在 applicableDestinations，目的地必须在其中；若同时命中 excludedDestinations，则排除优先。",
-    "noApplicabilityFields": "若 applicableCategories、applicableMailTypes、applicableDestinations、excludedDestinations 均未提供，则该特别资费在其 scope 内不因这些维度额外受限。"
+  "specialApplicabilityRules": {
+    "applicableCategories": "业务大类，例如 LETTER_POST、PARCEL。",
+    "applicableMailTypes": "具体邮件类型，例如 PRINTED_MATTER_BAG、SMALL_PACKET。",
+    "combination": "applicableCategories 与 applicableMailTypes 同时存在时取 OR 并集；conditions 再作为 AND 附加条件。"
   },
   "indexRules": {
     "postageIndex": [
-      "必须声明 schemaVersion、dataset、scope、origin、currency。",
+      "必须声明 schemaVersion、dataset、scope、origin、currency、standardVersion。",
       "activeScopes 只列实际已有可用数据的 scope。",
       "files 中的相对路径均以 postage/index.json 所在目录为基准。",
-      "rateCategories 至少包含 delivery 与 special。",
-      "standardVersion 应与 postage/spec/index.json standardVersion 一致。"
+      "rateCategories 至少包含 delivery 与 special。"
     ],
     "specialRatesIndex": [
       "scopes 的 key 必须直接使用规范 scope 值，不使用 CamelCase 别名。",
