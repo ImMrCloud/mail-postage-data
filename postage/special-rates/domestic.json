@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "special",
@@ -10,9 +10,10 @@
     {
       "id": "REGISTRATION_FEE",
       "nameZh": "挂号费",
-      "applicableCategories": ["LETTER_POST", "PARCEL"],
+      "applicableCategories": ["LETTER_POST"],
       "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+      "pricing": {"type":"flat","unit":"item","price":3.0},
+      "noteZh": "普通包裹基础寄递资费已包含挂号属性，不另收本项。"
     },
     {
       "id": "APPOINTED_DELIVERY_FEE",
@@ -20,17 +21,19 @@
       "applicableMailTypes": ["LETTER"],
       "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "dependencies": {"excludesRateIds":["INSURANCE_FEE_RECORDED_LETTER"]},
-      "pricing": {"type": "flat", "unit": "item", "price": 2.0},
+      "pricing": {"type":"flat","unit":"item","price":2.0},
       "noteZh": "仅适用于国内信函；不能与保价费同时使用。"
     },
     {
       "id": "ADVICE_OF_DELIVERY_FEE",
       "nameZh": "回执",
-      "applicableCategories": ["LETTER_POST", "PARCEL"],
+      "applicableCategories": ["LETTER_POST"],
+      "applicableServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
+      "excludedServiceIds": ["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
       "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "dependencies": {"requiresRateIds":["REGISTRATION_FEE"]},
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0},
-      "noteZh": "回执必须以挂号邮件为基础；邮政普通包裹可附回执。"
+      "pricing": {"type":"flat","unit":"item","price":3.0},
+      "noteZh": "函件办理回执要求挂号；普通包裹基础资费已包含挂号属性，因此普通包裹附回执时不另选、不另收挂号费。家乡包裹贴不可办理回执。"
     },
     {
       "id": "INSURANCE_FEE_RECORDED_LETTER",
@@ -39,32 +42,33 @@
       "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "dependencies": {"requiresRateIds":["REGISTRATION_FEE"],"excludesRateIds":["APPOINTED_DELIVERY_FEE"]},
       "pricing": {
-        "type": "value_increment_with_minimum",
-        "valueIncrement": 1,
-        "incrementPrice": 0.01,
-        "rounding": "ceil",
-        "minimumPrice": 1.0,
-        "maximumInsuredValue": 100000.0
+        "type":"value_increment_with_minimum",
+        "valueIncrement":1,
+        "incrementPrice":0.01,
+        "rounding":"ceil",
+        "minimumPrice":1.0,
+        "maximumInsuredValue":100000.0
       },
-      "noteZh": "保价给据信函必须挂号；每保1元或其零数收0.01元，最低1.00元，最高保价金额100000.00元；不能与约投同时使用。"
+      "noteZh": "保价给据信函必须挂号；每保1元或其零数收0.01元，最低1.00元，最高保价金额100000.00元；不能与约投同时使用。该费率不得套用于国内包裹保价。"
     },
     {
       "id": "POSTE_RESTANTE_HANDLING_FEE",
       "nameZh": "存局候领手续费",
       "selection": {"mode":"display-only","phase":"delivery","chargedTo":"recipient"},
-      "pricing": {"type": "flat", "unit": "item", "price": 1.0},
+      "pricing": {"type":"flat","unit":"item","price":1.0},
       "noteZh": "由收件人承担，仅公示，不作为寄件时可选项目。"
     },
     {
       "id": "WITHDRAW_OR_CHANGE_ADDRESSEE_FEE",
       "nameZh": "撤回邮件或更改收件人名址手续费",
       "selection": {"mode":"display-only","phase":"post-acceptance","chargedTo":"sender"},
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0},
+      "pricing": {"type":"flat","unit":"item","price":3.0},
       "noteZh": "属于交寄后的申请手续费，仅公示，不作为寄件时可选项目。"
     }
   ],
   "notes": [
     "selection.mode=selectable 的项目才可在交寄计费界面选择；display-only 仅用于公示。",
-    "dependencies.requiresRateIds 表示必须同时满足的业务；dependencies.excludesRateIds 表示互斥业务。"
+    "applicableCategories/applicableMailTypes 与 applicableServiceIds 按 OR 判断适用对象；excludedServiceIds 优先排除。",
+    "普通包裹基础资费已包含挂号属性，普通包裹附回执不另收挂号费。"
   ]
 }
