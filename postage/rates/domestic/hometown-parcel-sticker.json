@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "delivery",
@@ -15,10 +15,16 @@
     {"minWeightExclusive":3000,"maxWeight":5000,"price":11.0},
     {"minWeightExclusive":5000,"maxWeight":10000,"price":19.0}
   ],
+  "serviceCapabilities": {
+    "insurance": {"available": true, "pricingStatus": "not-provided"},
+    "adviceOfDelivery": {"available": false}
+  },
   "notes": [
     "家乡包裹贴作为独立国内寄件方式维护。",
     "资费不区分地区。",
     "重量边界：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。",
+    "家乡包裹贴可办理保价，但不能办理回执。",
+    "当前数据未提供国内家乡包裹贴保价费率，因此保价能力仅公示，不参与自动计算。",
     "普通包裹优惠和普通包裹体积重规则均不适用于家乡包裹贴。"
   ]
 }
