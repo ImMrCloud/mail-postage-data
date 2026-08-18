@@ -21,14 +21,14 @@
       "id": "AIR_LETTER_ZONE_2",
       "nameZh": "第二组",
       "ruleZh": "其他亚洲国家或地区",
-      "countries": ["AF", "AM", "AZ", "BH", "BD", "BT", "BN", "KH", "CY", "GE", "IN", "ID", "IR", "IQ", "IL", "JO", "KW", "LA", "LB", "MY", "MV", "MM", "NP", "OM", "PK", "PS", "PH", "QA", "SA", "SG", "LK", "SY", "TH", "TL", "TR", "AE", "YE"],
+      "countries": ["AF", "AM", "AZ", "BH", "BD", "BT", "BN", "KH", "CY", "GE", "IN", "ID", "IR", "IQ", "IL", "JO", "KW", "LA", "LB", "MY", "MV", "MM", "NP", "OM", "PK", "PS", "PH", "QA", "RU", "SA", "SG", "LK", "SY", "TH", "TL", "TR", "AE", "YE"],
       "mappingStatus": "derived-from-region"
     },
     {
       "id": "AIR_LETTER_ZONE_3",
       "nameZh": "第三组",
       "ruleZh": "欧洲各国或地区、美国、加拿大、澳大利亚、新西兰",
-      "countries": ["AX", "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CZ", "DK", "EE", "FO", "FI", "FR", "DE", "GI", "GR", "GG", "VA", "HU", "IS", "IE", "IM", "IT", "JE", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL", "MK", "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SJ", "SE", "CH", "UA", "GB", "US", "CA", "AU", "NZ"],
+      "countries": ["AX", "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CZ", "DK", "EE", "FO", "FI", "FR", "DE", "GI", "GR", "GG", "VA", "HU", "IS", "IE", "IM", "IT", "JE", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL", "MK", "NO", "PL", "PT", "RO", "SM", "RS", "SK", "SI", "ES", "SJ", "SE", "CH", "UA", "GB", "US", "CA", "AU", "NZ"],
       "mappingStatus": "derived-from-region"
     },
     {
