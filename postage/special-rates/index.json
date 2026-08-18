@@ -13,7 +13,7 @@
       "rateFile": "./domestic.json"
     },
     "HongKongMacauTaiwan": {
-      "status": "placeholder",
+      "status": "active",
       "destinations": ["HK", "MO", "TW"],
       "rateFile": "./hong-kong-macau-taiwan.json"
     }
