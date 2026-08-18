@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scope": "domestic",
+  "category": "letter-post-special-rates",
+  "currency": "CNY",
+  "destinationIndependent": true,
+  "status": "placeholder",
+  "rates": [],
+  "notes": [
+    "预留给国内函件特殊业务资费。",
+    "待取得对应资费表后按 international-letter.json 的结构补充。"
+  ]
+}
