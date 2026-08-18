@@ -1,41 +1,35 @@
 {
-  "schemaVersion": 2,
-  "standardVersion": "1.4.0",
-  "purpose": "定义特别业务在寄件计算界面的可选性、收费对象、业务阶段、适用服务、依赖、包含与互斥关系。",
+  "schemaVersion": 3,
+  "standardVersion": "1.5.0",
+  "purpose": "定义特别业务在寄件界面的可选性、适用范围、正向依赖、替代关系与反向级联取消。",
   "selection": {
-    "mode": {"selectable":"可在交寄计费时由用户选择并参与计算。","display-only":"仅公示，不得作为交寄时的计算选项。"},
-    "phase": ["acceptance","post-acceptance","delivery","inbound","other"],
-    "chargedTo": ["sender","recipient","customer"]
-  },
-  "applicability": {
-    "applicableCategories": "业务大类匹配。",
-    "applicableMailTypes": "具体邮件类型匹配。",
-    "applicableServiceIds": "指定具体寄递服务匹配；与 category/mailType 条件按 OR 判断。",
-    "excludedServiceIds": "指定必须排除的寄递服务；排除优先于适用条件。"
+    "mode": {"selectable":"可勾选并参与寄件计算。","display-only":"仅公示，不得渲染为可勾选控件。"},
+    "displayOrder": {"last":"仅公示项目统一排在可选项目之后。"}
   },
   "dependencies": {
-    "requiresRateIds": "选择当前业务时必须满足的特别业务 ID；若基础寄递服务自身已声明满足该业务能力，可视为依赖已满足而不另计费。",
-    "includesRateIds": "当前资费已经包含的特别业务 ID；不得再次重复计收。",
-    "excludesRateIds": "与当前业务互斥的特别业务 ID；同时选择时必须拒绝计算。"
+    "requiresRateIds": "当前项目要求全部存在的业务；勾选当前项时自动勾选依赖项。",
+    "requiresAnyRateIds": "至少一个业务存在即可满足依赖。",
+    "includesRateIds": "当前费用已包含这些业务费用，不得重复计费。",
+    "replacesRateIds": "当前业务替代这些独立收费项；勾选当前项时取消被替代项并禁止重复选择。",
+    "excludesRateIds": "互斥业务，不能同时选中。"
   },
-  "requiredRules": [
-    "国内函件、国际和港澳台回执要求挂号；台湾回执继续不可用。",
-    "DOMESTIC_ORDINARY_PARCEL 的基础寄递资费已包含挂号属性，因此普通包裹附回执时无需另选或另收 REGISTRATION_FEE。",
-    "DOMESTIC_HOMETOWN_PARCEL_STICKER 可办理保价但不可办理回执。",
-    "普通包裹可办理保价与回执，二者不互斥。",
-    "当前未提供国内包裹保价费率时，只公示保价能力，不得套用函件保价费率。",
-    "国内保价给据信函要求挂号，且与约投互斥。",
-    "国内约投仅适用于 LETTER。",
-    "国际和港澳台保价函件保价费要求 INSURED_LETTER_HANDLING_FEE；该手续费包含 REGISTRATION_FEE，因此不得重复计收挂号费。",
-    "存局候领由收件人承担，并为 display-only。",
-    "撤回/修改收件人名址、进口欠资、逾期保管、海关查验等非交寄时费用为 display-only。"
+  "stateTransitions": [
+    "勾选带 requiresRateIds 的项目时，自动勾选所有依赖。",
+    "勾选带 replacesRateIds 的项目时，自动取消被替代项目，并在替代项目有效期间禁用其复选框。",
+    "取消某项目时，递归取消所有以它作为唯一 requiresRateIds 依赖的项目。",
+    "取消某项目时，对 requiresAnyRateIds 依赖重新求值；若没有任何替代依赖仍被选中，则取消依赖该条件的项目。",
+    "国际/港澳台：勾选 INSURED_LETTER_INSURANCE_FEE 自动勾选 INSURED_LETTER_HANDLING_FEE，并取消 REGISTRATION_FEE。",
+    "国际/港澳台：取消 INSURED_LETTER_HANDLING_FEE 必须取消 INSURED_LETTER_INSURANCE_FEE；若 ADVICE_OF_DELIVERY_FEE 同时存在且没有 REGISTRATION_FEE，则回执也取消。",
+    "国际/港澳台：已选回执+挂号后再选保价，自动取消挂号，勾选保价手续费，保留回执。",
+    "函件：取消 REGISTRATION_FEE 时，所有仅靠独立挂号满足前提的回执/保价业务级联取消。",
+    "普通包裹：基础资费自带挂号，因此回执无需 REGISTRATION_FEE。"
   ],
-  "consumerAlgorithm": [
-    "只把 selection.mode=selectable 的项目渲染为可操作控件；display-only 以资费公示形式展示。",
-    "先按 serviceId/mailType/category 过滤适用项目，再应用 excludedServiceIds。",
-    "递归应用 requiresRateIds；若基础寄递服务声明 registrationIncludedInDeliveryPostage 或等价能力，则对应挂号依赖视为已满足且不另计费。",
-    "若依赖链中出现 includesRateIds，删除已被包含的重复计费项。",
-    "若最终集合中存在任意 excludesRateIds 冲突，拒绝计算并提示互斥原因。",
-    "所有自动补入、能力满足和自动去重都应在结果明细中向用户说明。"
+  "requiredRules": [
+    "国内 display-only：存局候领、撤回/修改收件人名址。",
+    "国际/港澳台 display-only：出售国际回信券、撤回/修改收件人名址、进口欠资、存局候领、逾期保管、海关查验。",
+    "display-only 项目必须置于列表底部且没有 checkbox。",
+    "保价函件只允许 mailType=LETTER，最高保价金额20000元。",
+    "普通包裹和家乡包裹贴保价费为保价金额1%，最高100000元。",
+    "普通包裹不提供存局候领；家乡包裹贴不可回执。"
   ]
 }
