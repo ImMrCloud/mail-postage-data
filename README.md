@@ -17,70 +17,96 @@ mail-postage-data/
     ├── notices.json
     ├── zones/
     │   ├── air-letter.json
-    │   └── air-other-mail.json
+    │   ├── air-other-mail.json
+    │   ├── sal-letter.json
+    │   └── sal-other-mail.json
     └── rates/
         ├── air-letter.json
-        └── air-other-mail.json
+        ├── air-other-mail.json
+        ├── sal-letter.json
+        └── sal-other-mail.json
 ```
 
 ## 设计原则
 
-- 国家/地区使用 ISO 3166-1 alpha-2 两位代码，例如 `JP`、`US`、`GB`。
-- 运输方式、函件种类、国家分组、计费规则、目的地提示分离，避免重复数据。
-- **同一国家在不同函件类型中允许属于不同资费组。** 因此“航空信函”和“其他航空函件”分别维护自己的 zone 文件。
+- 国家/地区优先使用 ISO 3166-1 alpha-2 两位代码，例如 `JP`、`US`、`GB`。
+- 对亚速尔群岛、马德拉群岛、阿森松岛等不能仅靠主权国家 ISO 代码表达的邮政目的地，使用 `postalDestinations` 保存独立邮政目的地标识。
+- 运输方式、函件种类、国家分组、计费规则、目的地提示分离。
+- **同一国家在不同运输方式或函件类型中允许属于不同资费组。**
 - 国际数据排除 `CN`、`HK`、`MO`、`TW`。
 - 价格统一使用人民币 `CNY`。
 - “每续重 X 克或其零数”统一以 `rounding: "ceil"` 表示向上取整。
 
-## 当前已录入的航空函件
+## 航空函件 AIR
 
-### 1. 信函
+### 信函
 
-使用独立的四组分组：`postage/zones/air-letter.json`。
+使用 `postage/zones/air-letter.json` + `postage/rates/air-letter.json`，采用四组资费。
 
-- 第一组：20g 以内 5.00 元；超过 20g 每续重 10g 或其零数 1.00 元
-- 第二组：20g 以内 5.50 元；超过 20g 每续重 10g 或其零数 1.50 元
-- 第三组：20g 以内 6.00 元；超过 20g 每续重 10g 或其零数 1.80 元
-- 第四组：20g 以内 7.00 元；超过 20g 每续重 10g 或其零数 2.30 元
+### 其他航空函件
 
-### 2. 其他航空函件
+使用 `postage/zones/air-other-mail.json` + `postage/rates/air-other-mail.json`。
 
-以下类别共用另一套三组分组：`postage/zones/air-other-mail.json`。
+包括：明信片、航空邮简、印刷品、盲人邮件、小包、印刷品专袋。
 
-- 明信片：每件 5.00 元，三组同价
-- 航空邮简：每件 5.50 元，三组同价
-- 印刷品：
-  - 第一组：20g 内 4.50 元；续 10g 2.20 元
-  - 第二组：20g 内 5.00 元；续 10g 2.50 元
-  - 第三组：20g 内 6.00 元；续 10g 2.80 元
-- 盲人邮件：基本资费免收，仅收航空运费；每 10g 分别为 0.60 / 0.80 / 1.00 元
-- 小包：
-  - 第一组：100g 内 25.00 元；续 100g 23.00 元
-  - 第二组：100g 内 30.00 元；续 100g 27.00 元
-  - 第三组：100g 内 35.00 元；续 100g 33.00 元
-- 印刷品专袋：
-  - 第一组：5000g 内 485.00 元；续 1000g 100.00 元
-  - 第二组：5000g 内 610.00 元；续 1000g 120.00 元
-  - 第三组：5000g 内 730.00 元；续 1000g 145.00 元
+## 空运水陆路 SAL
 
-对应价格文件：`postage/rates/air-other-mail.json`。
+SAL 使用与航空函件完全独立的分组文件，App 不应复用 AIR 的 zoneId。
 
-## 三组国家分配
+### 1. SAL 信函
 
-`air-other-mail.json` 按资费表逐项转成 ISO 国家/地区代码。
-
-- 第一组和第二组：按原表明确列出的国家逐项映射。
-- 第三组：原表写作“其他国家和地区”，因此本仓库把除第一、第二组及 `CN/HK/MO/TW` 外的其余 ISO 3166-1 目的地展开到第三组。
-- 这只是资费分组映射，不代表某个目的地当前一定可以收寄。
-
-因此，同一个目的地可能出现：
+文件：
 
 ```text
-JP + LETTER        → air-letter.json 的信函分组
-JP + SMALL_PACKET  → air-other-mail.json 的三组分组
+postage/zones/sal-letter.json
+postage/rates/sal-letter.json
 ```
 
-App 不应只按国家缓存一个全局 `zoneId`，而应按 **serviceId + destination** 查询。
+四组价格：
+
+- 第一组：20g 内 4.50 元；续 10g 0.50 元
+- 第二组：20g 内 5.00 元；续 10g 0.60 元
+- 第三组：20g 内 5.50 元；续 10g 0.70 元
+- 第四组：20g 内 6.50 元；续 10g 0.80 元
+
+国家/地区按资费表逐项录入。例如：
+
+- 第一组：韩国、日本
+- 第二组：塞浦路斯
+- 第三组：欧洲多数国家及美国、加拿大、澳大利亚等
+- 第四组：科摩罗、莱索托、圣多美和普林西比、安圭拉、佛得角、巴西、格陵兰、巴巴多斯、百慕大，以及亚速尔群岛、马德拉群岛、阿森松岛等邮政目的地
+
+### 2. SAL 其他函件
+
+文件：
+
+```text
+postage/zones/sal-other-mail.json
+postage/rates/sal-other-mail.json
+```
+
+这套三组只用于 SAL 的印刷品、盲人邮件、小包、印刷品专袋。
+
+- 第一组：格鲁吉亚
+- 第二组：按原表明确列出的日本、韩国及欧洲、北美、澳大利亚部分目的地
+- 第三组：按原表明确列出的俄罗斯、巴西、玻利维亚、格陵兰、瑞士、塞浦路斯、亚美尼亚等，以及部分特殊邮政目的地
+
+资费：
+
+- 明信片：每件 4.50 元，不分组
+- 印刷品：
+  - 第一组：20g 内 4.00 元；续 10g 1.90 元
+  - 第二组：20g 内 4.50 元；续 10g 2.20 元
+  - 第三组：20g 内 5.00 元；续 10g 2.50 元
+- 盲人邮件：基本资费免收，仅收 SAL 运费；每 10g 分别为 0.30 / 0.30 / 0.40 元
+- 小包：
+  - 第一组：100g 内 22.00 元；续 100g 18.00 元
+  - 第二组：100g 内 27.00 元；续 100g 23.00 元
+  - 第三组：100g 内 32.00 元；续 100g 28.00 元
+- 印刷品专袋：
+  - 第一组：5000g 内 455.00 元；续 1000g 100.00 元
+  - 第二组：5000g 内 600.00 元；续 1000g 120.00 元
+  - 第三组：5000g 内 730.00 元；续 1000g 145.00 元
 
 ## App 读取方式
 
@@ -90,89 +116,81 @@ App 不应只按国家缓存一个全局 `zoneId`，而应按 **serviceId + dest
 postage/index.json
 ```
 
-然后根据 `services.json` 中对应服务找到该服务的：
+然后按 `serviceId` 从 `services.json` 找到该服务对应的 `zoneFile` 和 `rateFile`。
 
-```json
-{
-  "zoneFile": "./zones/...",
-  "rateFile": "./rates/..."
-}
-```
-
-典型流程：
+不要使用类似：
 
 ```text
-用户选择：JP + 航空 + 小包 + 180g
-        ↓
-services.json → INTL_AIR_SMALL_PACKET
-        ↓
-zones/air-other-mail.json → 找 JP 所属组
-        ↓
-rates/air-other-mail.json → SMALL_PACKET 对应组价格
-        ↓
-notices.json → 查询 JP / 该 service / SMALL_PACKET 的提示
-        ↓
-显示最终价格与寄件提醒
+country.zone
+```
+
+而应使用：
+
+```text
+serviceId + destination → zoneId
+```
+
+例如同为日本：
+
+```text
+JP + INTL_AIR_LETTER → AIR 信函分组
+JP + INTL_AIR_SMALL_PACKET → AIR 其他函件分组
+JP + INTL_SAL_LETTER → SAL 信函第一组
+JP + INTL_SAL_SMALL_PACKET → SAL 其他函件第二组
 ```
 
 ### 通用首重 + 续重计算
 
 ```js
-function calculatePostage(weight, baseWeight, basePrice, incrementWeight, incrementPrice) {
-  if (weight <= baseWeight) return basePrice;
+function calculatePostage(weight, pricing) {
+  if (weight <= pricing.baseWeight) return pricing.basePrice;
 
-  return basePrice +
-    Math.ceil((weight - baseWeight) / incrementWeight) * incrementPrice;
+  return pricing.basePrice +
+    Math.ceil((weight - pricing.baseWeight) / pricing.incrementWeight) *
+    pricing.incrementPrice;
 }
 ```
 
-明信片、航空邮简属于 `flat` 固定价格，不需要重量计算。
+固定每件资费使用 `type: "flat"`；盲人邮件使用基本资费免收 + 按重量收运输附加费的独立计价结构。
 
-盲人邮件使用 `air_surcharge_only`：基本资费免收，从实际重量开始按每 10g 或其零数收取航空运费。
+## 特殊邮政目的地
 
-## 目的地提示 / 禁限寄说明
+有些资费表会把某些岛屿或属地作为独立邮政目的地，但它们并没有独立的 ISO 3166-1 国家代码，或者其主权国家本身属于另一资费组。
 
-`postage/notices.json` 用来维护所有不属于“价格”的信息，例如：
-
-- 某国家某类函件禁止寄某种物品
-- 限寄数量、包装或申报要求
-- 暂停收寄或某运输方式不可用
-- 海关、地址、时效等提醒
-- App 自定义提示
-
-示例：
+因此 zone 文件支持：
 
 ```json
 {
-  "enabled": true,
-  "id": "JP-AIR-SMALL-PACKET-001",
-  "scope": {
-    "destination": "JP",
-    "serviceId": "INTL_AIR_SMALL_PACKET",
-    "mailType": "SMALL_PACKET"
-  },
-  "type": "restriction",
-  "severity": "warning",
-  "title": "寄件提醒",
-  "message": "这里填写提示。",
-  "prohibitedItems": [],
-  "restrictedItems": [],
-  "source": null,
-  "effectiveFrom": null,
-  "effectiveTo": null,
-  "tags": ["custom"],
-  "metadata": {}
+  "postalDestinations": [
+    {
+      "id": "PT-AZORES",
+      "nameZh": "亚速尔群岛",
+      "parentCountry": "PT"
+    }
+  ]
 }
 ```
 
-`metadata` 可放任何项目自定义字段，而无需改变资费 JSON 结构。
+App 在目的地选择层可以同时支持普通 ISO 国家代码和这些邮政目的地 ID。
+
+## 目的地提示 / 禁限寄说明
+
+`postage/notices.json` 用来维护所有不属于价格的信息，例如：
+
+- 某国家某类函件禁止或限制寄递某种物品
+- 暂停收寄或某运输方式不可用
+- 海关、地址、包装、时效提醒
+- App 自定义提示
+
+提示可通过 `destination + serviceId + mailType` 精确匹配，也可将某一层设为 `null` 形成更宽泛的规则。
 
 ## 数据维护原则
 
 1. 新运输方式：增加 transport/service。
 2. 新函件类型：增加 mailType/service。
-3. 如果使用新的国家分组：新增独立 zone 文件，不复用不相同的旧分组。
+3. 新的国家分组：新增独立 zone 文件，不强行复用其他运输方式的分组。
 4. 新价格表：新增或更新对应 rate 文件。
-5. 禁限寄、服务暂停、特殊提示：写入 `notices.json`，不要混入价格文件。
+5. 特殊岛屿/属地：优先使用 ISO；无法准确表达时写入 `postalDestinations`。
+6. 禁限寄、暂停服务、特殊提示：写入 `notices.json`，不要混入价格文件。
 
-这样可以保证 App 长期兼容，同时允许后续继续加入 SAL、水陆路、中国大陆境内以及港澳台地区资费。
+这样可以继续扩展水陆路、中国大陆境内以及港澳台地区资费，而不会破坏现有 App 数据结构。
