@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "transportMethods": [
     {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
     {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
@@ -15,61 +15,19 @@
     {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"}
   ],
   "services": [
-    {
-      "id": "INTL_AIR_LETTER",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "LETTER",
-      "zoneFile": "./zones/air-letter.json",
-      "rateFile": "./rates/air-letter.json"
-    },
-    {
-      "id": "INTL_AIR_POSTCARD",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "POSTCARD",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    },
-    {
-      "id": "INTL_AIR_AEROGRAMME",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "AEROGRAMME",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    },
-    {
-      "id": "INTL_AIR_PRINTED_MATTER",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "PRINTED_MATTER",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    },
-    {
-      "id": "INTL_AIR_LITERATURE_FOR_BLIND",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "LITERATURE_FOR_BLIND",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    },
-    {
-      "id": "INTL_AIR_SMALL_PACKET",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "SMALL_PACKET",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    },
-    {
-      "id": "INTL_AIR_PRINTED_MATTER_BAG",
-      "scope": "international",
-      "transport": "AIR",
-      "mailType": "PRINTED_MATTER_BAG",
-      "zoneFile": "./zones/air-other-mail.json",
-      "rateFile": "./rates/air-other-mail.json"
-    }
+    {"id":"INTL_AIR_LETTER","scope":"international","transport":"AIR","mailType":"LETTER","zoneFile":"./zones/air-letter.json","rateFile":"./rates/air-letter.json"},
+    {"id":"INTL_AIR_POSTCARD","scope":"international","transport":"AIR","mailType":"POSTCARD","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+    {"id":"INTL_AIR_AEROGRAMME","scope":"international","transport":"AIR","mailType":"AEROGRAMME","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+    {"id":"INTL_AIR_PRINTED_MATTER","scope":"international","transport":"AIR","mailType":"PRINTED_MATTER","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+    {"id":"INTL_AIR_LITERATURE_FOR_BLIND","scope":"international","transport":"AIR","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+    {"id":"INTL_AIR_SMALL_PACKET","scope":"international","transport":"AIR","mailType":"SMALL_PACKET","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+    {"id":"INTL_AIR_PRINTED_MATTER_BAG","scope":"international","transport":"AIR","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/air-other-mail.json"},
+
+    {"id":"INTL_SAL_LETTER","scope":"international","transport":"SAL","mailType":"LETTER","zoneFile":"./zones/sal-letter.json","rateFile":"./rates/sal-letter.json"},
+    {"id":"INTL_SAL_POSTCARD","scope":"international","transport":"SAL","mailType":"POSTCARD","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
+    {"id":"INTL_SAL_PRINTED_MATTER","scope":"international","transport":"SAL","mailType":"PRINTED_MATTER","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
+    {"id":"INTL_SAL_LITERATURE_FOR_BLIND","scope":"international","transport":"SAL","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
+    {"id":"INTL_SAL_SMALL_PACKET","scope":"international","transport":"SAL","mailType":"SMALL_PACKET","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
+    {"id":"INTL_SAL_PRINTED_MATTER_BAG","scope":"international","transport":"SAL","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"}
   ]
 }
