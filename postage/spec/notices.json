@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 4,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 5,
+  "standardVersion": "1.4.0",
   "generalNotices": {
     "file": "../notices.json",
     "purpose": "维护禁限寄、暂停服务、海关、地址、包装、时效或其他不属于价格的数据。",
@@ -22,13 +22,15 @@
     "excludedDestinations": "可选目的地数组；明确排除这些目的地。",
     "mailTypes": "可选具体邮件类型数组。",
     "applicableCategories": "可选特别业务大类数组，例如 LETTER_POST、PARCEL。",
+    "applicableServiceIds": "可选具体寄递服务数组。",
+    "excludedServiceIds": "可选明确排除的寄递服务数组，优先于适用集合。",
     "conditions": "可选附加条件数组，例如 inbound、taxable、insured。"
   },
   "specialApplicabilityAlgorithm": [
-    "applicableCategories 与 applicableMailTypes/metadata.mailTypes 是不同层级。",
-    "若特别业务资费同时声明 applicableCategories 与 applicableMailTypes，则两者按 OR 并集判断适用对象。",
+    "applicableCategories、applicableMailTypes/metadata.mailTypes、applicableServiceIds 是不同层级。",
+    "这些适用集合同时存在时按 OR 并集判断；excludedServiceIds 优先排除。",
     "conditions 在适用对象匹配之后按 AND 附加判断。",
-    "PARCEL 可作为特别业务 category；在 services.json 中 PARCEL 也可作为 mailType，但消费者必须按字段位置区分语义。"
+    "PARCEL 可作为特别业务 category；在 services.json 中 PARCEL 也可作为 mailType，消费者必须按字段位置区分语义。"
   ],
   "destinationFilterAlgorithm": [
     "若 scope.destination 非 null，则当前 destination 必须与其完全匹配。",
