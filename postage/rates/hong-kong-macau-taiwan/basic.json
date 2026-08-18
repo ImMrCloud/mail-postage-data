@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "scope": "hong-kong-macau-taiwan",
+  "destinations": ["HK", "MO", "TW"],
+  "currency": "CNY",
+  "weightUnit": "g",
+  "mailTypes": {
+    "LETTER": {
+      "pricingType": "weight_tiers",
+      "tiers": [
+        {"maxWeight": 20, "price": 1.5},
+        {"minWeightExclusive": 20, "maxWeight": 50, "price": 2.8},
+        {"minWeightExclusive": 50, "maxWeight": 100, "price": 4.0},
+        {"minWeightExclusive": 100, "maxWeight": 250, "price": 8.5},
+        {"minWeightExclusive": 250, "maxWeight": 500, "price": 16.7},
+        {"minWeightExclusive": 500, "maxWeight": 1000, "price": 31.7},
+        {"minWeightExclusive": 1000, "maxWeight": 2000, "price": 55.8}
+      ]
+    },
+    "POSTCARD": {
+      "pricingType": "flat",
+      "price": 3.5,
+      "per": "piece"
+    },
+    "AEROGRAMME": {
+      "pricingType": "flat",
+      "price": 1.8,
+      "per": "piece"
+    },
+    "PRINTED_MATTER": {
+      "pricingType": "base_plus_increment",
+      "baseWeight": 20,
+      "basePrice": 3.5,
+      "incrementWeight": 10,
+      "incrementPrice": 1.3,
+      "rounding": "ceil"
+    },
+    "LITERATURE_FOR_BLIND": {
+      "pricingType": "free",
+      "price": 0,
+      "basicPostageExempt": true
+    },
+    "SMALL_PACKET": {
+      "pricingType": "base_plus_increment",
+      "baseWeight": 100,
+      "basePrice": 15.0,
+      "incrementWeight": 100,
+      "incrementPrice": 13.0,
+      "rounding": "ceil"
+    },
+    "PRINTED_MATTER_BAG": {
+      "pricingType": "base_plus_increment",
+      "baseWeight": 5000,
+      "basePrice": 180.0,
+      "incrementWeight": 1000,
+      "incrementPrice": 45.0,
+      "rounding": "ceil"
+    }
+  },
+  "notes": [
+    "本文件记录寄往香港、澳门、台湾的基本资费。",
+    "信函采用分段重量阶梯计费。",
+    "所有“每续重X克或其零数”均使用向上取整。"
+  ]
+}
