@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 1,
-  "description": "特别业务资费相关的服务限制和提示。",
-  "supportedTypes": ["restriction", "warning", "info", "custom"],
+  "schemaVersion": 2,
+  "description": "按资费范围、目的地和特别业务资费项目维护限制、服务、计费说明或自定义提示。App 应忽略 enabled=false 的记录。",
+  "supportedRateScopes": ["international", "domestic", "hong-kong-macau-taiwan"],
+  "supportedTypes": ["restriction", "service", "pricing", "warning", "info", "custom"],
   "supportedSeverities": ["info", "warning", "error"],
   "notices": [
     {
@@ -16,7 +17,9 @@
       "severity": "warning",
       "title": "台湾暂不提供回执业务",
       "message": "暂不收寄寄往台湾的附回执函件。港澳台回执费3.00元/件仅适用于香港和澳门，不适用于台湾。",
-      "sourceNote": "港澳台特别业务资费表脚注：暂不收寄寄往台湾的附回执函件。",
+      "source": "港澳台特别业务资费表脚注：暂不收寄寄往台湾的附回执函件。",
+      "effectiveFrom": null,
+      "effectiveTo": null,
       "tags": ["hong-kong-macau-taiwan", "TW", "advice-of-delivery", "special-rates"],
       "metadata": {
         "available": false,
@@ -24,5 +27,97 @@
         "excludedDestinations": ["TW"]
       }
     }
-  ]
+  ],
+  "fieldGuide": {
+    "enabled": "布尔值。false 表示仅作为示例或暂不启用，App 应忽略。",
+    "id": "notice 的稳定唯一 ID，建议包含资费范围、目的地和特别业务项目。",
+    "scope.rateScope": "特别业务资费范围：international、domestic、hong-kong-macau-taiwan；为 null 时表示所有范围。",
+    "scope.destination": "目的地代码。international 可使用 ISO 3166-1 alpha-2 或 countryData.json 中的自定义 locale；hong-kong-macau-taiwan 使用 HK、MO、TW；domestic 通常为 null。",
+    "scope.specialRateId": "特别业务资费项目 ID，必须与对应资费文件中的 rates[].id 对应；为 null 时表示该范围内所有特别业务项目。",
+    "type": "提示类型。restriction 表示不可用或受限；service 表示业务可用性；pricing 表示计费说明；warning / info / custom 可用于其他提示。",
+    "severity": "info / warning / error；可用于 App 决定展示样式和优先级。",
+    "title": "给用户展示的短标题。",
+    "message": "给用户展示的详细说明，可描述服务限制、计费规则、例外或适用条件。",
+    "source": "可选资料来源说明或 URL。",
+    "effectiveFrom": "可选 YYYY-MM-DD。",
+    "effectiveTo": "可选 YYYY-MM-DD；null 表示未指定结束日期。",
+    "tags": "可选自定义标签数组，用于搜索、过滤或分类。",
+    "metadata": "可选自由对象，可保存 available、applicableDestinations、excludedDestinations、mailTypes、conditions 等 App 自定义字段。"
+  },
+  "examples": {
+    "international": {
+      "enabled": false,
+      "id": "EXAMPLE-INTL-SPECIAL-RATE-001",
+      "scope": {
+        "rateScope": "international",
+        "destination": "JP",
+        "specialRateId": "REGISTRATION_FEE"
+      },
+      "type": "custom",
+      "severity": "info",
+      "title": "国际特别业务示例",
+      "message": "这里可以填写寄往某一国际目的地时，某个特别业务资费项目的适用条件、暂停说明或其他提示；此示例不代表真实邮政限制。",
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "international", "special-rates"],
+      "metadata": {
+        "available": true
+      }
+    },
+    "internationalAllDestinations": {
+      "enabled": false,
+      "id": "EXAMPLE-INTL-SPECIAL-RATE-ALL-DESTINATIONS",
+      "scope": {
+        "rateScope": "international",
+        "destination": null,
+        "specialRateId": "INSURED_PARCEL_INSURANCE_FEE"
+      },
+      "type": "pricing",
+      "severity": "info",
+      "title": "国际通用计费说明示例",
+      "message": "这里可以填写对所有国际目的地都适用的特别业务计费说明；此示例不代表额外收费或真实限制。",
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "international", "pricing"],
+      "metadata": {}
+    },
+    "hongKongMacauTaiwan": {
+      "enabled": false,
+      "id": "EXAMPLE-HMT-SPECIAL-RATE-001",
+      "scope": {
+        "rateScope": "hong-kong-macau-taiwan",
+        "destination": "HK",
+        "specialRateId": "REGISTRATION_FEE"
+      },
+      "type": "custom",
+      "severity": "info",
+      "title": "港澳台特别业务示例",
+      "message": "这里可以填写香港、澳门或台湾某一特别业务项目的提示；此示例不代表真实邮政限制。",
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "hong-kong-macau-taiwan", "special-rates"],
+      "metadata": {}
+    },
+    "domestic": {
+      "enabled": false,
+      "id": "EXAMPLE-DOMESTIC-SPECIAL-RATE-001",
+      "scope": {
+        "rateScope": "domestic",
+        "destination": null,
+        "specialRateId": null
+      },
+      "type": "custom",
+      "severity": "info",
+      "title": "国内特别业务示例",
+      "message": "这里可以填写国内特别业务资费或业务限制提示；此示例不代表真实邮政限制。",
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "domestic", "special-rates"],
+      "metadata": {}
+    }
+  }
 }
