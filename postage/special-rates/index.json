@@ -1,21 +1,21 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "dataset": "China Post special business rates",
   "currency": "CNY",
   "destinationIndependent": true,
   "scopes": {
     "international": {
       "status": "active",
-      "letterPost": "./international-letter.json"
+      "rateFile": "./international.json"
     },
     "domestic": {
       "status": "placeholder",
-      "letterPost": "./domestic-letter.json"
+      "rateFile": "./domestic.json"
     },
     "HongKongMacauTaiwan": {
       "status": "placeholder",
       "destinations": ["HK", "MO", "TW"],
-      "letterPost": "./hong-kong-macau-taiwan-letter.json"
+      "rateFile": "./hong-kong-macau-taiwan.json"
     }
   }
 }
