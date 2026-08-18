@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 4,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 5,
+  "standardVersion": "1.4.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
     "hong-kong-macau-taiwan": "中国大陆寄往香港、澳门、台湾。",
@@ -8,7 +8,7 @@
   },
   "rateCategories": {
     "delivery": "基础寄递资费。计算邮费主体时使用。",
-    "special": "特别业务资费。通常在基础寄递资费之外按所选业务叠加。"
+    "special": "特别业务资费。按 selection 与 dependencies 规则决定是否可在交寄时选择及如何组合。"
   },
   "pathRules": {
     "datasetIndex": "postage/index.json",
@@ -26,74 +26,57 @@
     "specification": "postage/spec/"
   },
   "destinationRules": {
-    "international": {
-      "preferred": "ISO 3166-1 alpha-2",
-      "customPostalDestination": "当 ISO2 无法准确表达独立邮政路向时，使用 countryData.json 中的自定义 locale，例如 PT-AZORES、PT-MADEIRA、SH-ASCENSION。",
-      "excluded": ["CN", "HK", "MO", "TW"]
-    },
-    "hong-kong-macau-taiwan": {"allowed": ["HK", "MO", "TW"]},
-    "domestic": {
-      "defaultDestination": null,
-      "provinceRouting": "存在省际差异时使用 originRegionId + destinationRegionId，不复用国际 destination 字段。"
-    }
+    "international": {"preferred":"ISO 3166-1 alpha-2","customPostalDestination":"当 ISO2 无法准确表达独立邮政路向时，使用 countryData.json 中的自定义 locale。","excluded":["CN","HK","MO","TW"]},
+    "hong-kong-macau-taiwan": {"allowed":["HK","MO","TW"]},
+    "domestic": {"defaultDestination":null,"provinceRouting":"存在省际差异时使用 originRegionId + destinationRegionId。"}
   },
   "domesticProvinceRules": {
     "registry": "postage/domestic/provinces.json",
     "idStandard": "ISO 3166-2:CN",
     "mainlandCount": 31,
-    "excludedFromRegistry": ["HK", "MO", "TW"],
-    "requiredRegionFields": ["id", "gb2260Prefix", "nameZh", "shortNameZh", "type"],
-    "routeKeyRule": "所有国内省际差异资费中的 origin/destination key 必须存在于省级行政区注册表。",
-    "missingOriginRule": "若起寄省未录入资费，消费者必须返回无资费数据，不得回退到其他省价格。",
-    "sameProvinceAllowed": true
+    "excludedFromRegistry": ["HK","MO","TW"],
+    "requiredRegionFields": ["id","gb2260Prefix","nameZh","shortNameZh","type"],
+    "missingOriginRule": "若起寄省未录入资费，消费者必须返回无资费数据，不得回退到其他省价格。"
   },
   "ordinaryParcelRules": {
     "index": "postage/rates/domestic/ordinary-parcel/index.json",
-    "originFiles": "originFiles 的 key 是起寄省 CN-XX，value 是相对于普通包裹 index 的分省资费文件。",
-    "routeGroups": "每个起寄省文件使用 routeGroups[] 聚合同价寄达省；一个 destinationRegionId 必须且只能出现在一个 routeGroup。",
-    "weightBands": "重量档由普通包裹 index 统一定义，分省文件只提供各 routeGroup 在每个 band 的 basePrice 和 incrementPrice。",
-    "discountScope": "discounts.appliesToServiceIds 必须限定优惠仅用于 DOMESTIC_ORDINARY_PARCEL；excludedServiceIds 必须明确排除 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
-    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1 时，每件普通包裹最多使用一种优惠凭证，不允许叠加。",
-    "activeDiscountOnly": "只有 status=active 且 pricing.type=multiplier 的凭证可用于计算。"
+    "routeGroups": "每个起寄省文件使用 routeGroups[] 聚合同价寄达省；同一 destinationRegionId 必须且只能出现一次。",
+    "weightBands": "先按重量选择唯一 weightBand，再按 routeGroup 取得 basePrice/incrementPrice。",
+    "discountScope": "优惠只适用于 DOMESTIC_ORDINARY_PARCEL，并排除 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
+    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1，不允许叠加。",
+    "volumetricWeight": "尺寸完整时体积重量kg=长cm×宽cm×高cm÷6000；实重与体积重分别按同一路向计算，展示两项结果并采用资费较高者。",
+    "specialServices": "普通包裹可使用 REGISTRATION_FEE 与 ADVICE_OF_DELIVERY_FEE；回执依赖挂号。"
+  },
+  "specialServiceRules": {
+    "spec": "postage/spec/special-services.json",
+    "selectionMode": ["selectable","display-only"],
+    "dependencyFields": ["requiresRateIds","includesRateIds","excludesRateIds"],
+    "displayOnlyRule": "selection.mode=display-only 的项目只公示，不得作为交寄计费选项。",
+    "requiresRule": "requiresRateIds 必须递归满足，可由消费者自动补入并向用户说明。",
+    "includesRule": "includesRateIds 已包含在当前收费中，不得重复计收。",
+    "excludesRule": "excludesRateIds 同时存在时必须拒绝组合。"
   },
   "serviceRules": {
-    "requiredFields": ["id", "scope", "rateCategory", "mailType", "rateFile"],
+    "requiredFields": ["id","scope","rateCategory","mailType","rateFile"],
     "conditionalFields": {
-      "transport": "国际 AIR / SAL / SURFACE 服务必须提供；国内和港澳台无运输方式分组时可省略。",
+      "transport": "国际 AIR / SAL / SURFACE 服务必须提供。",
       "zoneFile": "需要按国际目的地分区的服务必须提供。",
-      "regionRegistry": "需要按国内行政区路由的服务必须提供。",
-      "routeDimension": "按省际路由时应声明 province-to-province。"
+      "regionRegistry": "需要按国内行政区路由的服务必须提供。"
     },
-    "idPrefixes": {"domestic":"DOMESTIC_","hong-kong-macau-taiwan":"HMT_","international":"INTL_"},
-    "currentServicesRule": "postage/index.json 的 currentServices 必须与 services.json 中当前可用寄递服务 id 一一对应，不得引用不存在的服务。"
+    "idPrefixes": {"domestic":"DOMESTIC_","hong-kong-macau-taiwan":"HMT_","international":"INTL_"}
   },
   "mailTypeRules": {
     "registry": "所有 services[].mailType 必须先在 services.json 的 mailTypes 中注册。",
     "currentIds": ["LETTER","POSTCARD","AEROGRAMME","PRINTED_MATTER","LETTER_SHEET","MILITARY_FREE_LETTER","LITERATURE_FOR_BLIND","SMALL_PACKET","PRINTED_MATTER_BAG","PARCEL"],
-    "specialCategoryIds": ["LETTER_POST", "PARCEL"],
-    "note": "services mailType=PARCEL 与 special applicableCategories=PARCEL 字符串相同，但语义位置不同：前者是寄件种类，后者是特别业务大类筛选。"
+    "specialCategoryIds": ["LETTER_POST","PARCEL"]
   },
   "specialApplicabilityRules": {
     "applicableCategories": "业务大类，例如 LETTER_POST、PARCEL。",
-    "applicableMailTypes": "具体邮件类型，例如 PRINTED_MATTER_BAG、SMALL_PACKET。",
-    "combination": "applicableCategories 与 applicableMailTypes 同时存在时取 OR 并集；conditions 再作为 AND 附加条件。"
-  },
-  "indexRules": {
-    "postageIndex": [
-      "必须声明 schemaVersion、dataset、scope、origin、currency、standardVersion。",
-      "activeScopes 只列实际已有可用数据的 scope。",
-      "files 中的相对路径均以 postage/index.json 所在目录为基准。",
-      "rateCategories 至少包含 delivery 与 special。"
-    ],
-    "specialRatesIndex": [
-      "scopes 的 key 必须直接使用规范 scope 值，不使用 CamelCase 别名。",
-      "每个 scope 必须声明 status、destinationIndependent、rateFile。",
-      "存在目的地例外时 destinationIndependent 必须为 false。"
-    ]
+    "applicableMailTypes": "具体邮件类型。",
+    "combination": "applicableCategories 与 applicableMailTypes 同时存在时取 OR；conditions 作为 AND 附加条件。"
   },
   "versioning": {
     "schemaVersion": "单个文件结构发生不兼容或显著扩展时递增整数。",
-    "standardVersion": "postage/spec 规范版本，使用 semver。",
-    "compatibility": "消费者不得仅凭 schemaVersion 推断其他文件结构；应以对应 spec 和文件自身字段为准。"
+    "standardVersion": "postage/spec 规范版本，使用 semver。"
   }
 }
