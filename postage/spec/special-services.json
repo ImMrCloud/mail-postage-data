@@ -1,34 +1,41 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "standardVersion": "1.4.0",
-  "purpose": "定义特别业务在寄件计算界面的可选性、收费对象、业务阶段、依赖、包含与互斥关系。",
+  "purpose": "定义特别业务在寄件计算界面的可选性、收费对象、业务阶段、适用服务、依赖、包含与互斥关系。",
   "selection": {
-    "mode": {
-      "selectable": "可在交寄计费时由用户选择并参与计算。",
-      "display-only": "仅公示，不得作为交寄时的计算选项。"
-    },
-    "phase": ["acceptance", "post-acceptance", "delivery", "inbound", "other"],
-    "chargedTo": ["sender", "recipient", "customer"]
+    "mode": {"selectable":"可在交寄计费时由用户选择并参与计算。","display-only":"仅公示，不得作为交寄时的计算选项。"},
+    "phase": ["acceptance","post-acceptance","delivery","inbound","other"],
+    "chargedTo": ["sender","recipient","customer"]
+  },
+  "applicability": {
+    "applicableCategories": "业务大类匹配。",
+    "applicableMailTypes": "具体邮件类型匹配。",
+    "applicableServiceIds": "指定具体寄递服务匹配；与 category/mailType 条件按 OR 判断。",
+    "excludedServiceIds": "指定必须排除的寄递服务；排除优先于适用条件。"
   },
   "dependencies": {
-    "requiresRateIds": "选择当前业务时必须同时满足的特别业务 ID。消费者可自动补入所需业务，但必须向用户展示。",
+    "requiresRateIds": "选择当前业务时必须满足的特别业务 ID；若基础寄递服务自身已声明满足该业务能力，可视为依赖已满足而不另计费。",
     "includesRateIds": "当前资费已经包含的特别业务 ID；不得再次重复计收。",
     "excludesRateIds": "与当前业务互斥的特别业务 ID；同时选择时必须拒绝计算。"
   },
   "requiredRules": [
-    "国内、国际和港澳台回执均要求挂号；台湾回执继续不可用。",
+    "国内函件、国际和港澳台回执要求挂号；台湾回执继续不可用。",
+    "DOMESTIC_ORDINARY_PARCEL 的基础寄递资费已包含挂号属性，因此普通包裹附回执时无需另选或另收 REGISTRATION_FEE。",
+    "DOMESTIC_HOMETOWN_PARCEL_STICKER 可办理保价但不可办理回执。",
+    "普通包裹可办理保价与回执，二者不互斥。",
+    "当前未提供国内包裹保价费率时，只公示保价能力，不得套用函件保价费率。",
     "国内保价给据信函要求挂号，且与约投互斥。",
     "国内约投仅适用于 LETTER。",
     "国际和港澳台保价函件保价费要求 INSURED_LETTER_HANDLING_FEE；该手续费包含 REGISTRATION_FEE，因此不得重复计收挂号费。",
     "存局候领由收件人承担，并为 display-only。",
-    "撤回/修改收件人名址、进口欠资、逾期保管、海关查验等非交寄时费用为 display-only。",
-    "邮政普通包裹可使用回执；回执仍要求挂号。"
+    "撤回/修改收件人名址、进口欠资、逾期保管、海关查验等非交寄时费用为 display-only。"
   ],
   "consumerAlgorithm": [
     "只把 selection.mode=selectable 的项目渲染为可操作控件；display-only 以资费公示形式展示。",
-    "应用 requiresRateIds，并递归解析依赖。",
+    "先按 serviceId/mailType/category 过滤适用项目，再应用 excludedServiceIds。",
+    "递归应用 requiresRateIds；若基础寄递服务声明 registrationIncludedInDeliveryPostage 或等价能力，则对应挂号依赖视为已满足且不另计费。",
     "若依赖链中出现 includesRateIds，删除已被包含的重复计费项。",
     "若最终集合中存在任意 excludesRateIds 冲突，拒绝计算并提示互斥原因。",
-    "所有自动补入和自动去重都应在结果明细中向用户说明。"
+    "所有自动补入、能力满足和自动去重都应在结果明细中向用户说明。"
   ]
 }
