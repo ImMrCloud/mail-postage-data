@@ -1,83 +1,46 @@
 {
-  "schemaVersion": 6,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 7,
+  "standardVersion": "1.5.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
     "hong-kong-macau-taiwan": "中国大陆寄往香港、澳门、台湾。",
     "international": "中国大陆寄往国际目的地；排除 CN、HK、MO、TW。"
   },
   "rateCategories": {
-    "delivery": "基础寄递资费。计算邮费主体时使用。",
-    "special": "特别业务资费。按 selection 与 dependencies 规则决定是否可在交寄时选择及如何组合。"
-  },
-  "pathRules": {
-    "datasetIndex": "postage/index.json",
-    "serviceRegistry": "postage/services.json",
-    "generalNotices": "postage/notices.json",
-    "domesticRegionRegistry": "postage/domestic/provinces.json",
-    "ordinaryParcelIndex": "postage/rates/domestic/ordinary-parcel/index.json",
-    "deliveryRates": {"domestic":"postage/rates/domestic/","hong-kong-macau-taiwan":"postage/rates/hong-kong-macau-taiwan/","international":"postage/rates/international/"},
-    "internationalZones": "postage/zones/",
-    "specialRates": "postage/special-rates/",
-    "specification": "postage/spec/"
-  },
-  "destinationRules": {
-    "international": {"preferred":"ISO 3166-1 alpha-2","customPostalDestination":"当 ISO2 无法准确表达独立邮政路向时，使用 countryData.json 中的自定义 locale。","excluded":["CN","HK","MO","TW"]},
-    "hong-kong-macau-taiwan": {"allowed":["HK","MO","TW"]},
-    "domestic": {"defaultDestination":null,"provinceRouting":"存在省际差异时使用 originRegionId + destinationRegionId。"}
-  },
-  "domesticProvinceRules": {
-    "registry": "postage/domestic/provinces.json",
-    "idStandard": "ISO 3166-2:CN",
-    "mainlandCount": 31,
-    "excludedFromRegistry": ["HK","MO","TW"],
-    "requiredRegionFields": ["id","gb2260Prefix","nameZh","shortNameZh","type"],
-    "missingOriginRule": "若起寄省未录入资费，消费者必须返回无资费数据，不得回退到其他省价格。"
+    "delivery": "基础寄递资费。",
+    "special": "特别业务资费；按 selection/applicability/dependencies 决定展示、选择和组合。"
   },
   "ordinaryParcelRules": {
-    "index": "postage/rates/domestic/ordinary-parcel/index.json",
-    "routeGroups": "每个起寄省文件使用 routeGroups[] 聚合同价寄达省；同一 destinationRegionId 必须且只能出现一次。",
-    "weightBands": "先按重量选择唯一 weightBand，再按 routeGroup 取得 basePrice/incrementPrice。",
-    "volumetricWeight": "尺寸完整时体积重量kg=长cm×宽cm×高cm÷6000；实重与体积重分别按同一路向计算，展示两项结果并采用资费较高者。",
-    "registrationIncluded": "DOMESTIC_ORDINARY_PARCEL 基础寄递资费已包含挂号属性，不另收 REGISTRATION_FEE。",
-    "adviceOfDelivery": "普通包裹可附回执，且其挂号前提由基础寄递服务自身满足，因此不另加挂号费。",
-    "insurance": "普通包裹可保价且可与回执同时办理；当前若未提供包裹保价费率，只公示能力，不得套用函件保价费率。",
-    "discountScope": "8折/7折优惠仅作用于最终采用的普通包裹基础寄递资费，不作用于回执费、保价费等 special 费用。",
-    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1，不允许叠加。"
+    "registrationIncluded": "DOMESTIC_ORDINARY_PARCEL 基础资费已包含挂号属性，不另收 REGISTRATION_FEE。",
+    "adviceOfDelivery": "普通包裹可附回执，不另收挂号费。",
+    "insurance": "普通包裹可保价，费率为声明价值1%，最高100000元；可与回执同时办理。",
+    "discountScope": "8折/7折只作用于基础寄递资费，所有 special 费用按原价另加。",
+    "volumetricWeight": "尺寸完整时体积重量kg=长cm×宽cm×高cm÷6000，实重/泡重分别计算并取较高基础资费。",
+    "missingOriginRule": "未录入起寄省不得回退到其他省资费。"
   },
   "hometownParcelRules": {
-    "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
-    "insurance": "可办理保价；若未提供独立保价费率，仅公示能力。",
+    "insurance": "可保价，费率为声明价值1%，最高100000元。",
     "adviceOfDelivery": "不可办理回执。",
     "ordinaryDiscountsExcluded": true,
     "volumetricWeightExcluded": true
   },
+  "letterInsuranceRules": {
+    "mailType": "LETTER",
+    "maximumInsuredValue": 20000,
+    "domestic": "国内信函保价要求 REGISTRATION_FEE。",
+    "internationalAndHmt": "国际/港澳台保价要求 INSURED_LETTER_HANDLING_FEE，该手续费替代独立 REGISTRATION_FEE。"
+  },
   "specialServiceRules": {
     "spec": "postage/spec/special-services.json",
-    "selectionMode": ["selectable","display-only"],
+    "selectionModes": ["selectable","display-only"],
     "applicabilityFields": ["applicableCategories","applicableMailTypes","applicableServiceIds","excludedServiceIds"],
-    "dependencyFields": ["requiresRateIds","includesRateIds","excludesRateIds"],
-    "displayOnlyRule": "selection.mode=display-only 的项目只公示，不得作为交寄计费选项。",
-    "requiresRule": "requiresRateIds 必须递归满足；若基础服务自身声明已满足该能力，可不另计对应费用。",
-    "includesRule": "includesRateIds 已包含在当前收费中，不得重复计收。",
-    "excludesRule": "excludesRateIds 同时存在时必须拒绝组合。"
-  },
-  "serviceRules": {
-    "requiredFields": ["id","scope","rateCategory","mailType","rateFile"],
-    "conditionalFields": {"transport":"国际 AIR / SAL / SURFACE 服务必须提供。","zoneFile":"需要按国际目的地分区的服务必须提供。","regionRegistry":"需要按国内行政区路由的服务必须提供。"},
-    "idPrefixes": {"domestic":"DOMESTIC_","hong-kong-macau-taiwan":"HMT_","international":"INTL_"}
-  },
-  "mailTypeRules": {
-    "registry": "所有 services[].mailType 必须先在 services.json 的 mailTypes 中注册。",
-    "currentIds": ["LETTER","POSTCARD","AEROGRAMME","PRINTED_MATTER","LETTER_SHEET","MILITARY_FREE_LETTER","LITERATURE_FOR_BLIND","SMALL_PACKET","PRINTED_MATTER_BAG","PARCEL"],
-    "specialCategoryIds": ["LETTER_POST","PARCEL"]
+    "dependencyFields": ["requiresRateIds","requiresAnyRateIds","includesRateIds","replacesRateIds","excludesRateIds"],
+    "displayOnly": "只公示，不得有 checkbox，不得参与寄件计算；displayOrder=last 时排在底部。",
+    "cascade": "取消依赖项时必须级联取消所有失去满足条件的依赖业务。",
+    "replacement": "replacesRateIds 表示当前业务替代独立收费项，选中后取消并禁用被替代项。"
   },
   "specialApplicabilityRules": {
-    "applicableCategories": "业务大类。",
-    "applicableMailTypes": "具体邮件类型。",
-    "applicableServiceIds": "具体寄递服务。",
-    "excludedServiceIds": "明确排除服务，优先于适用集合。",
-    "combination": "applicableCategories、applicableMailTypes、applicableServiceIds 按 OR 判断；conditions 作为 AND 附加条件。"
+    "combination": "applicableCategories、applicableMailTypes、applicableServiceIds 按 OR；excludedServiceIds 优先排除；conditions 作为 AND。"
   },
-  "versioning": {"schemaVersion":"单个文件结构发生不兼容或显著扩展时递增整数。","standardVersion":"postage/spec 规范版本，使用 semver。"}
+  "versioning": {"schemaVersion":"单个文件结构版本。","standardVersion":"整体规范版本，使用 semver。"}
 }
