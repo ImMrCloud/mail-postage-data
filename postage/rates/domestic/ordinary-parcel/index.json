@@ -21,9 +21,10 @@
     "CN-GD": "./CN-GD.json",
     "CN-HE": "./CN-HE.json",
     "CN-SD": "./CN-SD.json",
-    "CN-BJ": "./CN-BJ.json"
+    "CN-BJ": "./CN-BJ.json",
+    "CN-JX": "./CN-JX.json"
   },
-  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-JX","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
+  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
   "discounts": {
     "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
     "excludedServiceIds": ["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
