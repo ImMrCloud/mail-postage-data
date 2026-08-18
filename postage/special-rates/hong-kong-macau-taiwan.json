@@ -1,6 +1,7 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "scope": "hong-kong-macau-taiwan",
+  "rateCategory": "special",
   "category": "special-business-rates",
   "currency": "CNY",
   "destinations": ["HK", "MO", "TW"],
