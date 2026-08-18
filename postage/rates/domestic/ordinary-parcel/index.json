@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.2.0",
+  "scope": "domestic",
+  "rateCategory": "delivery",
+  "serviceId": "DOMESTIC_ORDINARY_PARCEL",
+  "mailType": "PARCEL",
+  "currency": "CNY",
+  "weightUnit": "g",
+  "regionRegistry": "../../../domestic/provinces.json",
+  "pricingType": "weight_band_base_plus_increment_by_route_group",
+  "weightBands": [
+    {"id":"UP_TO_10KG","minWeightExclusive":0,"maxWeight":10000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"},
+    {"id":"OVER_10_TO_20KG","minWeightExclusive":10000,"maxWeight":20000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"},
+    {"id":"OVER_20_TO_50KG","minWeightExclusive":20000,"maxWeight":50000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"}
+  ],
+  "originFiles": {
+    "CN-SC": "./CN-SC.json",
+    "CN-ZJ": "./CN-ZJ.json",
+    "CN-JS": "./CN-JS.json",
+    "CN-GD": "./CN-GD.json",
+    "CN-HE": "./CN-HE.json",
+    "CN-SD": "./CN-SD.json",
+    "CN-BJ": "./CN-BJ.json"
+  },
+  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-JX","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
+  "discounts": {
+    "appliesToServiceId": "DOMESTIC_ORDINARY_PARCEL",
+    "applyTo": "calculatedDeliveryPostage",
+    "combinationPolicy": "unspecified",
+    "credentials": [
+      {"id":"DISCOUNT_CARD","nameZh":"优惠卡","status":"active","pricing":{"type":"multiplier","multiplier":0.8},"noteZh":"按普通包裹寄递资费的8折计收。"},
+      {"id":"DISABILITY_CERTIFICATE","nameZh":"残疾证","status":"active","pricing":{"type":"multiplier","multiplier":0.7},"noteZh":"按普通包裹寄递资费的7折计收。"},
+      {"id":"STUDENT_ID","nameZh":"学生证","status":"rate-pending","pricing":null,"noteZh":"已预留学生证优惠凭证类型；当前未提供具体折扣比例，App 不得自行猜测。"}
+    ]
+  },
+  "notes": [
+    "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
+    "折扣仅适用于 DOMESTIC_ORDINARY_PARCEL，不适用于家乡包裹贴或其他寄件方式。",
+    "其他未录入起寄省不得回退到已录入省份价格。"
+  ]
+}
