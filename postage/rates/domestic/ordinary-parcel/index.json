@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 3,
+  "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_ORDINARY_PARCEL",
@@ -14,24 +14,27 @@
     {"id":"OVER_10_TO_20KG","minWeightExclusive":10000,"maxWeight":20000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"},
     {"id":"OVER_20_TO_50KG","minWeightExclusive":20000,"maxWeight":50000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"}
   ],
+  "volumetricWeight": {
+    "optional": true,
+    "dimensionUnit": "cm",
+    "resultUnit": "kg",
+    "divisor": 6000,
+    "formula": "lengthCm * widthCm * heightCm / 6000",
+    "comparisonRule": "higher-postage",
+    "consumerBehavior": "若用户输入完整长宽高，分别使用实际重量和体积重量按同一路向规则计算资费，展示两项结果，并以较高资费作为应计寄递资费；若未输入完整尺寸则仅按实际重量计算。"
+  },
   "originFiles": {
-    "CN-SC": "./CN-SC.json",
-    "CN-ZJ": "./CN-ZJ.json",
-    "CN-JS": "./CN-JS.json",
-    "CN-GD": "./CN-GD.json",
-    "CN-HE": "./CN-HE.json",
-    "CN-SD": "./CN-SD.json",
-    "CN-BJ": "./CN-BJ.json",
-    "CN-JX": "./CN-JX.json"
+    "CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"
   },
   "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
+  "availableSpecialRateIds": ["REGISTRATION_FEE","ADVICE_OF_DELIVERY_FEE"],
   "discounts": {
-    "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
-    "excludedServiceIds": ["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
-    "applyTo": "calculatedDeliveryPostage",
-    "combinationPolicy": "single",
-    "maxCredentialsPerShipment": 1,
-    "credentials": [
+    "appliesToServiceIds":["DOMESTIC_ORDINARY_PARCEL"],
+    "excludedServiceIds":["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
+    "applyTo":"calculatedDeliveryPostage",
+    "combinationPolicy":"single",
+    "maxCredentialsPerShipment":1,
+    "credentials":[
       {"id":"STUDENT_ID","nameZh":"学生证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
       {"id":"TEACHER_ID","nameZh":"教师证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
       {"id":"DISCOUNT_CARD","nameZh":"优惠卡","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
@@ -45,10 +48,9 @@
   },
   "notes": [
     "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
-    "学生证、教师证、优惠卡按普通包裹寄递资费8折计收。",
-    "残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证按普通包裹寄递资费7折计收。",
+    "输入完整长宽高时，体积重量=长×宽×高÷6000（cm→kg），实际重量和体积重量分别计算并采用较高资费。",
+    "邮政普通包裹可选择回执；回执依赖挂号。",
     "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。",
-    "上述优惠仅适用于 DOMESTIC_ORDINARY_PARCEL，明确不得用于 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
-    "其他未录入起寄省不得回退到已录入省份价格。"
+    "普通包裹优惠不得用于家乡包裹贴。"
   ]
 }
