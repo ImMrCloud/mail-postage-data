@@ -1,5 +1,6 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
+  "standardVersion": "1.1.0",
   "transportMethods": [
     {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
     {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
@@ -14,7 +15,8 @@
     {"id": "MILITARY_FREE_LETTER", "nameZh": "义务兵免费信函", "nameEn": "Military free letter"},
     {"id": "LITERATURE_FOR_BLIND", "nameZh": "盲人邮件", "nameEn": "Literature for the blind"},
     {"id": "SMALL_PACKET", "nameZh": "小包", "nameEn": "Small packet"},
-    {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"}
+    {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"},
+    {"id": "PARCEL", "nameZh": "包裹", "nameEn": "Parcel"}
   ],
   "services": [
     {"id":"DOMESTIC_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"LETTER","rateFile":"./rates/domestic/basic.json"},
@@ -23,6 +25,8 @@
     {"id":"DOMESTIC_LETTER_SHEET","scope":"domestic","rateCategory":"delivery","mailType":"LETTER_SHEET","rateFile":"./rates/domestic/basic.json"},
     {"id":"DOMESTIC_MILITARY_FREE_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"MILITARY_FREE_LETTER","rateFile":"./rates/domestic/basic.json"},
     {"id":"DOMESTIC_LITERATURE_FOR_BLIND","scope":"domestic","rateCategory":"delivery","mailType":"LITERATURE_FOR_BLIND","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_ORDINARY_PARCEL","scope":"domestic","rateCategory":"delivery","mailType":"PARCEL","routeDimension":"province-to-province","regionRegistry":"./domestic/provinces.json","rateFile":"./rates/domestic/ordinary-parcel.json"},
+    {"id":"DOMESTIC_HOMETOWN_PARCEL_STICKER","scope":"domestic","rateCategory":"delivery","mailType":"PARCEL","destinationIndependent":true,"rateFile":"./rates/domestic/hometown-parcel-sticker.json"},
 
     {"id":"HMT_LETTER","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"LETTER","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
     {"id":"HMT_POSTCARD","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"POSTCARD","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
