@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "transportMethods": [
     {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
     {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
@@ -24,26 +24,34 @@
     {"id":"DOMESTIC_MILITARY_FREE_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"MILITARY_FREE_LETTER","rateFile":"./rates/domestic/basic.json"},
     {"id":"DOMESTIC_LITERATURE_FOR_BLIND","scope":"domestic","rateCategory":"delivery","mailType":"LITERATURE_FOR_BLIND","rateFile":"./rates/domestic/basic.json"},
 
-    {"id":"INTL_AIR_LETTER","scope":"international","transport":"AIR","mailType":"LETTER","zoneFile":"./zones/air-letter.json","rateFile":"./rates/international/air-letter.json"},
-    {"id":"INTL_AIR_POSTCARD","scope":"international","transport":"AIR","mailType":"POSTCARD","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
-    {"id":"INTL_AIR_AEROGRAMME","scope":"international","transport":"AIR","mailType":"AEROGRAMME","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
-    {"id":"INTL_AIR_PRINTED_MATTER","scope":"international","transport":"AIR","mailType":"PRINTED_MATTER","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
-    {"id":"INTL_AIR_LITERATURE_FOR_BLIND","scope":"international","transport":"AIR","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
-    {"id":"INTL_AIR_SMALL_PACKET","scope":"international","transport":"AIR","mailType":"SMALL_PACKET","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
-    {"id":"INTL_AIR_PRINTED_MATTER_BAG","scope":"international","transport":"AIR","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"HMT_LETTER","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"LETTER","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_POSTCARD","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"POSTCARD","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_AEROGRAMME","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"AEROGRAMME","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_PRINTED_MATTER","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"PRINTED_MATTER","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_LITERATURE_FOR_BLIND","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"LITERATURE_FOR_BLIND","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_SMALL_PACKET","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"SMALL_PACKET","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
+    {"id":"HMT_PRINTED_MATTER_BAG","scope":"hong-kong-macau-taiwan","rateCategory":"delivery","mailType":"PRINTED_MATTER_BAG","rateFile":"./rates/hong-kong-macau-taiwan/basic.json"},
 
-    {"id":"INTL_SAL_LETTER","scope":"international","transport":"SAL","mailType":"LETTER","zoneFile":"./zones/sal-letter.json","rateFile":"./rates/international/sal-letter.json"},
-    {"id":"INTL_SAL_POSTCARD","scope":"international","transport":"SAL","mailType":"POSTCARD","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
-    {"id":"INTL_SAL_PRINTED_MATTER","scope":"international","transport":"SAL","mailType":"PRINTED_MATTER","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
-    {"id":"INTL_SAL_LITERATURE_FOR_BLIND","scope":"international","transport":"SAL","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
-    {"id":"INTL_SAL_SMALL_PACKET","scope":"international","transport":"SAL","mailType":"SMALL_PACKET","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
-    {"id":"INTL_SAL_PRINTED_MATTER_BAG","scope":"international","transport":"SAL","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+    {"id":"INTL_AIR_LETTER","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"LETTER","zoneFile":"./zones/air-letter.json","rateFile":"./rates/international/air-letter.json"},
+    {"id":"INTL_AIR_POSTCARD","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"POSTCARD","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"INTL_AIR_AEROGRAMME","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"AEROGRAMME","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"INTL_AIR_PRINTED_MATTER","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"PRINTED_MATTER","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"INTL_AIR_LITERATURE_FOR_BLIND","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"INTL_AIR_SMALL_PACKET","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"SMALL_PACKET","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
+    {"id":"INTL_AIR_PRINTED_MATTER_BAG","scope":"international","rateCategory":"delivery","transport":"AIR","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
 
-    {"id":"INTL_SURFACE_LETTER","scope":"international","transport":"SURFACE","mailType":"LETTER","zoneFile":"./zones/surface-letter.json","rateFile":"./rates/international/surface-letter.json"},
-    {"id":"INTL_SURFACE_POSTCARD","scope":"international","transport":"SURFACE","mailType":"POSTCARD","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
-    {"id":"INTL_SURFACE_PRINTED_MATTER","scope":"international","transport":"SURFACE","mailType":"PRINTED_MATTER","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
-    {"id":"INTL_SURFACE_LITERATURE_FOR_BLIND","scope":"international","transport":"SURFACE","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
-    {"id":"INTL_SURFACE_SMALL_PACKET","scope":"international","transport":"SURFACE","mailType":"SMALL_PACKET","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
-    {"id":"INTL_SURFACE_PRINTED_MATTER_BAG","scope":"international","transport":"SURFACE","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"}
+    {"id":"INTL_SAL_LETTER","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"LETTER","zoneFile":"./zones/sal-letter.json","rateFile":"./rates/international/sal-letter.json"},
+    {"id":"INTL_SAL_POSTCARD","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"POSTCARD","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+    {"id":"INTL_SAL_PRINTED_MATTER","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"PRINTED_MATTER","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+    {"id":"INTL_SAL_LITERATURE_FOR_BLIND","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+    {"id":"INTL_SAL_SMALL_PACKET","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"SMALL_PACKET","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+    {"id":"INTL_SAL_PRINTED_MATTER_BAG","scope":"international","rateCategory":"delivery","transport":"SAL","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/international/sal-other-mail.json"},
+
+    {"id":"INTL_SURFACE_LETTER","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"LETTER","zoneFile":"./zones/surface-letter.json","rateFile":"./rates/international/surface-letter.json"},
+    {"id":"INTL_SURFACE_POSTCARD","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"POSTCARD","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_PRINTED_MATTER","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"PRINTED_MATTER","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_LITERATURE_FOR_BLIND","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_SMALL_PACKET","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"SMALL_PACKET","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_PRINTED_MATTER_BAG","scope":"international","rateCategory":"delivery","transport":"SURFACE","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/international/surface-other-mail.json"}
   ]
 }
