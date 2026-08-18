@@ -1168,5 +1168,38 @@
     "lat": -11.564831,
     "lng": 29.0459927,
     "emoji": "🇿🇲"
+  },
+  {
+    "code": 351,
+    "tw": "亞速爾群島",
+    "en": "Azores",
+    "locale": "PT-AZORES",
+    "parentLocale": "PT",
+    "zh": "亚速尔群岛",
+    "lat": 37.7412,
+    "lng": -25.6756,
+    "emoji": "🇵🇹"
+  },
+  {
+    "code": 351,
+    "tw": "馬德拉群島",
+    "en": "Madeira",
+    "locale": "PT-MADEIRA",
+    "parentLocale": "PT",
+    "zh": "马德拉群岛",
+    "lat": 32.7607,
+    "lng": -16.9595,
+    "emoji": "🇵🇹"
+  },
+  {
+    "code": 247,
+    "tw": "阿森松島",
+    "en": "Ascension Island",
+    "locale": "SH-ASCENSION",
+    "parentLocale": "SH",
+    "zh": "阿森松岛",
+    "lat": -7.9467,
+    "lng": -14.3559,
+    "emoji": "🇸🇭"
   }
 ]
