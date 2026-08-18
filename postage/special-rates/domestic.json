@@ -1,5 +1,6 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
+  "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "special",
   "category": "special-business-rates",
@@ -9,22 +10,34 @@
     {
       "id": "REGISTRATION_FEE",
       "nameZh": "挂号费",
+      "applicableCategories": ["LETTER_POST", "PARCEL"],
+      "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "pricing": {"type": "flat", "unit": "item", "price": 3.0}
     },
     {
       "id": "APPOINTED_DELIVERY_FEE",
       "nameZh": "约投服务费",
-      "pricing": {"type": "flat", "unit": "item", "price": 2.0}
+      "applicableMailTypes": ["LETTER"],
+      "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies": {"excludesRateIds":["INSURANCE_FEE_RECORDED_LETTER"]},
+      "pricing": {"type": "flat", "unit": "item", "price": 2.0},
+      "noteZh": "仅适用于国内信函；不能与保价费同时使用。"
     },
     {
       "id": "ADVICE_OF_DELIVERY_FEE",
       "nameZh": "回执",
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+      "applicableCategories": ["LETTER_POST", "PARCEL"],
+      "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies": {"requiresRateIds":["REGISTRATION_FEE"]},
+      "pricing": {"type": "flat", "unit": "item", "price": 3.0},
+      "noteZh": "回执必须以挂号邮件为基础；邮政普通包裹可附回执。"
     },
     {
       "id": "INSURANCE_FEE_RECORDED_LETTER",
       "nameZh": "保价费（给据信函）",
       "applicableCategories": ["LETTER_POST"],
+      "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
+      "dependencies": {"requiresRateIds":["REGISTRATION_FEE"],"excludesRateIds":["APPOINTED_DELIVERY_FEE"]},
       "pricing": {
         "type": "value_increment_with_minimum",
         "valueIncrement": 1,
@@ -33,21 +46,25 @@
         "minimumPrice": 1.0,
         "maximumInsuredValue": 100000.0
       },
-      "noteZh": "每保1元或其零数收0.01元；每件最低保价费1.00元；每件最高保价金额100000.00元。"
+      "noteZh": "保价给据信函必须挂号；每保1元或其零数收0.01元，最低1.00元，最高保价金额100000.00元；不能与约投同时使用。"
     },
     {
       "id": "POSTE_RESTANTE_HANDLING_FEE",
       "nameZh": "存局候领手续费",
-      "pricing": {"type": "flat", "unit": "item", "price": 1.0}
+      "selection": {"mode":"display-only","phase":"delivery","chargedTo":"recipient"},
+      "pricing": {"type": "flat", "unit": "item", "price": 1.0},
+      "noteZh": "由收件人承担，仅公示，不作为寄件时可选项目。"
     },
     {
       "id": "WITHDRAW_OR_CHANGE_ADDRESSEE_FEE",
       "nameZh": "撤回邮件或更改收件人名址手续费",
-      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+      "selection": {"mode":"display-only","phase":"post-acceptance","chargedTo":"sender"},
+      "pricing": {"type": "flat", "unit": "item", "price": 3.0},
+      "noteZh": "属于交寄后的申请手续费，仅公示，不作为寄件时可选项目。"
     }
   ],
   "notes": [
-    "本文件仅记录国内函件特别业务资费，可在寄递基本资费之外按业务叠加。",
-    "保价费按保价金额向上取整到1元计费单位，每1元或其零数收0.01元，最低1.00元，最高保价金额100000.00元。"
+    "selection.mode=selectable 的项目才可在交寄计费界面选择；display-only 仅用于公示。",
+    "dependencies.requiresRateIds 表示必须同时满足的业务；dependencies.excludesRateIds 表示互斥业务。"
   ]
 }
