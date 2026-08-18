@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "transportMethods": [
     {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
     {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
@@ -10,11 +10,20 @@
     {"id": "POSTCARD", "nameZh": "明信片", "nameEn": "Postcard"},
     {"id": "AEROGRAMME", "nameZh": "航空邮简", "nameEn": "Aerogramme"},
     {"id": "PRINTED_MATTER", "nameZh": "印刷品", "nameEn": "Printed matter"},
+    {"id": "LETTER_SHEET", "nameZh": "邮简", "nameEn": "Letter sheet"},
+    {"id": "MILITARY_FREE_LETTER", "nameZh": "义务兵免费信函", "nameEn": "Military free letter"},
     {"id": "LITERATURE_FOR_BLIND", "nameZh": "盲人邮件", "nameEn": "Literature for the blind"},
     {"id": "SMALL_PACKET", "nameZh": "小包", "nameEn": "Small packet"},
     {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"}
   ],
   "services": [
+    {"id":"DOMESTIC_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"LETTER","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_POSTCARD","scope":"domestic","rateCategory":"delivery","mailType":"POSTCARD","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_PRINTED_MATTER","scope":"domestic","rateCategory":"delivery","mailType":"PRINTED_MATTER","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_LETTER_SHEET","scope":"domestic","rateCategory":"delivery","mailType":"LETTER_SHEET","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_MILITARY_FREE_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"MILITARY_FREE_LETTER","rateFile":"./rates/domestic/basic.json"},
+    {"id":"DOMESTIC_LITERATURE_FOR_BLIND","scope":"domestic","rateCategory":"delivery","mailType":"LITERATURE_FOR_BLIND","rateFile":"./rates/domestic/basic.json"},
+
     {"id":"INTL_AIR_LETTER","scope":"international","transport":"AIR","mailType":"LETTER","zoneFile":"./zones/air-letter.json","rateFile":"./rates/international/air-letter.json"},
     {"id":"INTL_AIR_POSTCARD","scope":"international","transport":"AIR","mailType":"POSTCARD","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
     {"id":"INTL_AIR_AEROGRAMME","scope":"international","transport":"AIR","mailType":"AEROGRAMME","zoneFile":"./zones/air-other-mail.json","rateFile":"./rates/international/air-other-mail.json"},
