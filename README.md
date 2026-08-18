@@ -62,7 +62,7 @@ App 或维护脚本应首先读取 `postage/index.json`，其中 `files.specific
 当前规范版本：
 
 ```text
-standardVersion = 1.2.0
+standardVersion = 1.3.0
 ```
 
 规范分为：
@@ -168,19 +168,35 @@ CN-BJ 北京
 
 ### 普通包裹优惠凭证
 
-优惠规则仅保存在普通包裹 `index.json` 中，**只适用于 `DOMESTIC_ORDINARY_PARCEL`**。
+优惠规则仅保存在普通包裹 `index.json` 中，**只适用于 `DOMESTIC_ORDINARY_PARCEL`**，并明确排除 `DOMESTIC_HOMETOWN_PARCEL_STICKER`。
 
-当前：
+8 折凭证：
 
 ```text
-优惠卡：8折，multiplier = 0.8
-残疾证：7折，multiplier = 0.7
-学生证：已预留，具体折扣比例待补
+学生证
+教师证
+优惠卡
 ```
 
-优惠在普通包裹基础寄递资费计算完成后应用。
+7 折凭证：
 
-当 `combinationPolicy = unspecified` 时，App 不得自动把多个优惠凭证叠加使用。`status = rate-pending` 或 `pricing = null` 的凭证不得参与价格计算。
+```text
+残疾证
+军官证
+警官证
+文职人员证
+士兵证
+退役军人优待证
+```
+
+优惠在普通包裹基础寄递资费计算完成后应用。规则为：
+
+```text
+combinationPolicy = single
+maxCredentialsPerShipment = 1
+```
+
+即**每件普通包裹最多使用一种优惠凭证，所有优惠不得叠加**。即使寄件人同时持有多个符合条件的证件，也只能选择其中一种用于该件包裹。
 
 ## 家乡包裹贴
 
@@ -207,7 +223,7 @@ postage/rates/domestic/hometown-parcel-sticker.json
 
 10kg 以上当前没有资费数据。
 
-普通包裹的优惠卡、残疾证等折扣不得自动应用到家乡包裹贴。
+普通包裹的学生证、教师证、优惠卡、残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证优惠均**不得用于家乡包裹贴**。
 
 ## 国内函件
 
@@ -264,10 +280,11 @@ external_rule
 4. 若 service 有 `regionRegistry`，先解析国内省级行政区。
 5. 对普通包裹，加载 `ordinary-parcel/index.json` 后再加载对应起寄省文件。
 6. 加载基础寄递资费并计算。
-7. 若普通包裹选择有效优惠凭证，再按 multiplier 应用折扣。
-8. 根据 scope 加载 `special-rates`。
-9. 加载通用 notices 与 special-rates notices。
-10. 按 `spec/validation.json` 校验；出现 error 级问题时不得静默计算错误邮资。
+7. 若普通包裹选择优惠凭证，只允许选择一个有效凭证，再按 multiplier 应用折扣。
+8. 若 service 为 `DOMESTIC_HOMETOWN_PARCEL_STICKER`，不得应用任何普通包裹优惠凭证。
+9. 根据 scope 加载 `special-rates`。
+10. 加载通用 notices 与 special-rates notices。
+11. 按 `spec/validation.json` 校验；出现 error 级问题时不得静默计算错误邮资。
 
 ## 数据维护原则
 
@@ -276,7 +293,7 @@ external_rule
 3. 新增普通包裹起寄省时，新建 `ordinary-parcel/CN-XX.json` 并在 `originFiles` 注册。
 4. 一个起寄省文件内同一寄达省只能出现在一个 `routeGroup`。
 5. 未录入起寄省不得回退到其他省价格。
-6. 新 discount 必须声明适用 service；未知折扣值不得猜测。
+6. 普通包裹优惠必须声明 `appliesToServiceIds` / `excludedServiceIds`；禁止叠加时使用 `combinationPolicy=single` 和 `maxCredentialsPerShipment=1`。
 7. 新 pricing 类型必须先写入 `spec/pricing.json`。
 8. 新增或修改数据后按 `spec/validation.json` 做跨文件校验。
 9. 国际、港澳台、国内三个 scope 互不混用。
