@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 5,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 6,
+  "standardVersion": "1.5.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_ORDINARY_PARCEL",
@@ -25,31 +25,12 @@
   },
   "serviceCapabilities": {
     "registrationIncludedInDeliveryPostage": true,
-    "insurance": {
-      "available": true,
-      "pricingStatus": "not-provided",
-      "conflictsWith": []
-    },
-    "adviceOfDelivery": {
-      "available": true,
-      "rateId": "ADVICE_OF_DELIVERY_FEE",
-      "registrationRequirementSatisfiedByService": true,
-      "requiresRateIds": [],
-      "conflictsWith": []
-    }
+    "insurance": {"available": true, "rateId":"DOMESTIC_PARCEL_INSURANCE_FEE", "maximumInsuredValue":100000.0, "conflictsWith": []},
+    "adviceOfDelivery": {"available": true, "rateId":"ADVICE_OF_DELIVERY_FEE", "registrationRequirementSatisfiedByService": true, "requiresRateIds": [], "conflictsWith": []}
   },
-  "originFiles": {
-    "CN-SC":"./CN-SC.json",
-    "CN-ZJ":"./CN-ZJ.json",
-    "CN-JS":"./CN-JS.json",
-    "CN-GD":"./CN-GD.json",
-    "CN-HE":"./CN-HE.json",
-    "CN-SD":"./CN-SD.json",
-    "CN-BJ":"./CN-BJ.json",
-    "CN-JX":"./CN-JX.json"
-  },
+  "originFiles": {"CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"},
   "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
-  "availableSpecialRateIds": ["ADVICE_OF_DELIVERY_FEE"],
+  "availableSpecialRateIds": ["ADVICE_OF_DELIVERY_FEE","DOMESTIC_PARCEL_INSURANCE_FEE"],
   "discounts": {
     "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
     "excludedServiceIds": ["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
@@ -70,12 +51,9 @@
     ]
   },
   "notes": [
-    "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
-    "输入完整长宽高时，体积重量=长×宽×高÷6000（cm→kg），实际重量和体积重量分别计算并采用较高资费。",
-    "普通包裹基础资费已包含挂号属性，因此附回执时不另选、不另收挂号费。",
-    "普通包裹可办理保价和回执，二者不互斥。",
-    "当前数据未提供国内普通包裹保价费率，因此保价能力仅公示，消费者不得套用函件保价费率自动计算。",
-    "普通包裹8折/7折优惠只作用于基础寄递资费；回执费、保价费等特别业务费用按原价另加，不参与折扣。",
-    "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。"
+    "普通包裹基础资费已包含挂号属性，附回执时不另选、不另收挂号费。",
+    "普通包裹可同时办理保价和回执，两者不冲突。",
+    "普通包裹保价费为保价金额1%，最高保价金额10万元。",
+    "8折/7折优惠只作用于基础寄递资费；回执费、保价费等特别业务费按原价另加，不参与折扣。"
   ]
 }
