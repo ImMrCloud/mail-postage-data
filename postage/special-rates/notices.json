@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "description": "按资费范围、目的地和特别业务资费项目维护限制、服务、计费说明或自定义提示。App 应忽略 enabled=false 的记录。",
   "supportedRateScopes": ["international", "domestic", "hong-kong-macau-taiwan"],
   "supportedTypes": ["restriction", "service", "pricing", "warning", "info", "custom"],
@@ -42,27 +42,34 @@
     "effectiveFrom": "可选 YYYY-MM-DD。",
     "effectiveTo": "可选 YYYY-MM-DD；null 表示未指定结束日期。",
     "tags": "可选自定义标签数组，用于搜索、过滤或分类。",
-    "metadata": "可选自由对象，可保存 available、applicableDestinations、excludedDestinations、mailTypes、conditions 等 App 自定义字段。"
+    "metadata": "可选自由对象，用于保存 App 可直接消费的结构化扩展字段。",
+    "metadata.available": "可选布尔值。明确表示该特别业务在当前 notice 条件下是否可用。false 常用于暂停、禁用或目的地不提供该业务。",
+    "metadata.applicableDestinations": "可选目的地数组。表示该提示或特别业务仅适用于这些目的地。国际范围可使用 ISO2 或自定义 locale；港澳台通常使用 HK、MO、TW。",
+    "metadata.excludedDestinations": "可选目的地数组。表示明确排除这些目的地。若同时存在 applicableDestinations，应先限定适用集合，再排除 excludedDestinations。",
+    "metadata.mailTypes": "可选邮件类型数组，例如 LETTER、PRINTED_MATTER、SMALL_PACKET、PRINTED_MATTER_BAG；用于进一步限定 notice 适用的邮件种类。",
+    "metadata.conditions": "可选条件字符串数组，例如 inbound、taxable、customs-presentation-required；用于描述无法仅靠目的地或资费项目表达的业务条件。"
   },
   "examples": {
     "international": {
       "enabled": false,
-      "id": "EXAMPLE-INTL-SPECIAL-RATE-001",
+      "id": "EXAMPLE-INTL-SPECIAL-RATE-DESTINATION-FILTER",
       "scope": {
         "rateScope": "international",
-        "destination": "JP",
-        "specialRateId": "REGISTRATION_FEE"
+        "destination": null,
+        "specialRateId": "ADVICE_OF_DELIVERY_FEE"
       },
-      "type": "custom",
+      "type": "service",
       "severity": "info",
-      "title": "国际特别业务示例",
-      "message": "这里可以填写寄往某一国际目的地时，某个特别业务资费项目的适用条件、暂停说明或其他提示；此示例不代表真实邮政限制。",
+      "title": "国际目的地适用范围示例",
+      "message": "示例：某特别业务仅对指定国际目的地开放，并明确排除个别目的地。此示例不代表真实邮政限制。",
       "source": null,
       "effectiveFrom": null,
       "effectiveTo": null,
-      "tags": ["example", "international", "special-rates"],
+      "tags": ["example", "international", "destination-filter"],
       "metadata": {
-        "available": true
+        "available": true,
+        "applicableDestinations": ["JP", "KR", "SG", "PT-AZORES"],
+        "excludedDestinations": ["KR"]
       }
     },
     "internationalAllDestinations": {
@@ -81,7 +88,10 @@
       "effectiveFrom": null,
       "effectiveTo": null,
       "tags": ["example", "international", "pricing"],
-      "metadata": {}
+      "metadata": {
+        "conditions": ["insured"],
+        "mailTypes": ["PARCEL"]
+      }
     },
     "hongKongMacauTaiwan": {
       "enabled": false,
@@ -99,7 +109,10 @@
       "effectiveFrom": null,
       "effectiveTo": null,
       "tags": ["example", "hong-kong-macau-taiwan", "special-rates"],
-      "metadata": {}
+      "metadata": {
+        "applicableDestinations": ["HK", "MO"],
+        "excludedDestinations": ["TW"]
+      }
     },
     "domestic": {
       "enabled": false,
