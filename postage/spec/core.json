@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 4,
+  "standardVersion": "1.3.0",
   "scopeValues": {
     "domestic": "中国大陆境内寄递。",
     "hong-kong-macau-taiwan": "中国大陆寄往香港、澳门、台湾。",
@@ -52,9 +52,9 @@
     "originFiles": "originFiles 的 key 是起寄省 CN-XX，value 是相对于普通包裹 index 的分省资费文件。",
     "routeGroups": "每个起寄省文件使用 routeGroups[] 聚合同价寄达省；一个 destinationRegionId 必须且只能出现在一个 routeGroup。",
     "weightBands": "重量档由普通包裹 index 统一定义，分省文件只提供各 routeGroup 在每个 band 的 basePrice 和 incrementPrice。",
-    "discountScope": "discounts 只适用于 DOMESTIC_ORDINARY_PARCEL，除非其他 service 自己明确声明，不得复用。",
-    "discountCombination": "combinationPolicy=unspecified 时，App 不得自动叠加多个优惠凭证。",
-    "pendingDiscount": "status=rate-pending 或 pricing=null 的优惠凭证不可用于计算，只能作为待完善数据展示。"
+    "discountScope": "discounts.appliesToServiceIds 必须限定优惠仅用于 DOMESTIC_ORDINARY_PARCEL；excludedServiceIds 必须明确排除 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
+    "discountCombination": "combinationPolicy=single 且 maxCredentialsPerShipment=1 时，每件普通包裹最多使用一种优惠凭证，不允许叠加。",
+    "activeDiscountOnly": "只有 status=active 且 pricing.type=multiplier 的凭证可用于计算。"
   },
   "serviceRules": {
     "requiredFields": ["id", "scope", "rateCategory", "mailType", "rateFile"],
