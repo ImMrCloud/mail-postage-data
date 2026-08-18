@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "transport": "SAL",
+  "currency": "CNY",
+  "weightUnit": "g",
+  "ratesByMailType": {
+    "POSTCARD": {
+      "pricing": {"type":"flat","unit":"item","price":4.5}
+    },
+    "PRINTED_MATTER": {
+      "zones": {
+        "SAL_OTHER_ZONE_1": {"type":"base_plus_increment","baseWeight":20,"basePrice":4.0,"incrementWeight":10,"incrementPrice":1.9,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_2": {"type":"base_plus_increment","baseWeight":20,"basePrice":4.5,"incrementWeight":10,"incrementPrice":2.2,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_3": {"type":"base_plus_increment","baseWeight":20,"basePrice":5.0,"incrementWeight":10,"incrementPrice":2.5,"rounding":"ceil"}
+      }
+    },
+    "LITERATURE_FOR_BLIND": {
+      "basicPostageExempt": true,
+      "zones": {
+        "SAL_OTHER_ZONE_1": {"type":"surcharge_per_increment","incrementWeight":10,"incrementPrice":0.3,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_2": {"type":"surcharge_per_increment","incrementWeight":10,"incrementPrice":0.3,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_3": {"type":"surcharge_per_increment","incrementWeight":10,"incrementPrice":0.4,"rounding":"ceil"}
+      }
+    },
+    "SMALL_PACKET": {
+      "zones": {
+        "SAL_OTHER_ZONE_1": {"type":"base_plus_increment","baseWeight":100,"basePrice":22.0,"incrementWeight":100,"incrementPrice":18.0,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_2": {"type":"base_plus_increment","baseWeight":100,"basePrice":27.0,"incrementWeight":100,"incrementPrice":23.0,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_3": {"type":"base_plus_increment","baseWeight":100,"basePrice":32.0,"incrementWeight":100,"incrementPrice":28.0,"rounding":"ceil"}
+      }
+    },
+    "PRINTED_MATTER_BAG": {
+      "zones": {
+        "SAL_OTHER_ZONE_1": {"type":"base_plus_increment","baseWeight":5000,"basePrice":455.0,"incrementWeight":1000,"incrementPrice":100.0,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_2": {"type":"base_plus_increment","baseWeight":5000,"basePrice":600.0,"incrementWeight":1000,"incrementPrice":120.0,"rounding":"ceil"},
+        "SAL_OTHER_ZONE_3": {"type":"base_plus_increment","baseWeight":5000,"basePrice":730.0,"incrementWeight":1000,"incrementPrice":145.0,"rounding":"ceil"}
+      }
+    }
+  },
+  "notes": [
+    "SAL 明信片按原表为每件统一 4.50 元。",
+    "盲人邮件基本资费免收，仅按每 10 克或其零数收取 SAL 运费。"
+  ]
+}
