@@ -1,22 +1,13 @@
 {
-  "schemaVersion": 9,
-  "standardVersion": "1.3.0",
+  "schemaVersion": 10,
+  "standardVersion": "1.4.0",
   "transportMethods": [
     {"id": "AIR", "nameZh": "航空", "nameEn": "Air"},
     {"id": "SAL", "nameZh": "空运水陆路（SAL）", "nameEn": "Surface Air Lifted"},
     {"id": "SURFACE", "nameZh": "水陆路", "nameEn": "Surface"}
   ],
   "mailTypes": [
-    {"id": "LETTER", "nameZh": "信函", "nameEn": "Letter"},
-    {"id": "POSTCARD", "nameZh": "明信片", "nameEn": "Postcard"},
-    {"id": "AEROGRAMME", "nameZh": "航空邮简", "nameEn": "Aerogramme"},
-    {"id": "PRINTED_MATTER", "nameZh": "印刷品", "nameEn": "Printed matter"},
-    {"id": "LETTER_SHEET", "nameZh": "邮简", "nameEn": "Letter sheet"},
-    {"id": "MILITARY_FREE_LETTER", "nameZh": "义务兵免费信函", "nameEn": "Military free letter"},
-    {"id": "LITERATURE_FOR_BLIND", "nameZh": "盲人邮件", "nameEn": "Literature for the blind"},
-    {"id": "SMALL_PACKET", "nameZh": "小包", "nameEn": "Small packet"},
-    {"id": "PRINTED_MATTER_BAG", "nameZh": "印刷品专袋", "nameEn": "Printed matter bag"},
-    {"id": "PARCEL", "nameZh": "包裹", "nameEn": "Parcel"}
+    {"id":"LETTER","nameZh":"信函","nameEn":"Letter"},{"id":"POSTCARD","nameZh":"明信片","nameEn":"Postcard"},{"id":"AEROGRAMME","nameZh":"航空邮简","nameEn":"Aerogramme"},{"id":"PRINTED_MATTER","nameZh":"印刷品","nameEn":"Printed matter"},{"id":"LETTER_SHEET","nameZh":"邮简","nameEn":"Letter sheet"},{"id":"MILITARY_FREE_LETTER","nameZh":"义务兵免费信函","nameEn":"Military free letter"},{"id":"LITERATURE_FOR_BLIND","nameZh":"盲人邮件","nameEn":"Literature for the blind"},{"id":"SMALL_PACKET","nameZh":"小包","nameEn":"Small packet"},{"id":"PRINTED_MATTER_BAG","nameZh":"印刷品专袋","nameEn":"Printed matter bag"},{"id":"PARCEL","nameZh":"包裹","nameEn":"Parcel"}
   ],
   "services": [
     {"id":"DOMESTIC_LETTER","scope":"domestic","rateCategory":"delivery","mailType":"LETTER","rateFile":"./rates/domestic/basic.json"},
