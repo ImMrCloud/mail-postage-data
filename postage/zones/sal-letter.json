@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "serviceId": "INTL_SAL_LETTER",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "zones": [
+    {
+      "id": "SAL_LETTER_ZONE_1",
+      "nameZh": "第一组",
+      "countries": ["KR", "JP"],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SAL_LETTER_ZONE_2",
+      "nameZh": "第二组",
+      "countries": ["CY"],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SAL_LETTER_ZONE_3",
+      "nameZh": "第三组",
+      "countries": [
+        "AM","AZ","GE","AL","DE","AD","AT","BY","BE","BA","BG","HR","DK","ES","EE","FO","FI","FR","GI","GB","GR","HU","IE","IS","IT","LV","LI","LT","LU","MK","MT","MD","MC","NO","NL","PL","PT","SM","RO","RU","SK","SI","SE","CH","CZ","UA","VA","RS","ME","US","CA","AU"
+      ],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SAL_LETTER_ZONE_4",
+      "nameZh": "第四组",
+      "countries": ["KM","LS","ST","AI","CV","BR","GL","BB","BM"],
+      "postalDestinations": [
+        {"id":"PT-AZORES","nameZh":"亚速尔群岛","parentCountry":"PT"},
+        {"id":"PT-MADEIRA","nameZh":"马德拉群岛","parentCountry":"PT"},
+        {"id":"SH-ASCENSION","nameZh":"阿松森岛（阿森松岛）","parentCountry":"SH"},
+        {"id":"GP-GUADELOUPE","nameZh":"瓜德罗普","parentCountry":"GP"},
+        {"id":"MQ-MARTINIQUE","nameZh":"马提尼克","parentCountry":"MQ"},
+        {"id":"AN-NETHERLANDS-ANTILLES","nameZh":"荷属安的列斯（历史名称）","parentCountry":null}
+      ],
+      "mappingStatus": "explicit-with-postal-territories"
+    }
+  ],
+  "notes": [
+    "分组按用户提供的中国邮政空运水陆路（SAL）函件资费表逐项录入。",
+    "部分邮政目的地并非独立 ISO 3166-1 国家代码，因此使用 postalDestinations 保存邮政专用标识，并保留 parentCountry。",
+    "荷属安的列斯为历史名称，实际寄达范围应以后续邮政资料进一步拆分核实。",
+    "国际数据不包含中国大陆、香港、澳门、台湾。"
+  ]
+}
