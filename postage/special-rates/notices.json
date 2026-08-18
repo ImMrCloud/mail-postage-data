@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "description": "按资费范围、目的地和特别业务资费项目维护限制、服务、计费说明或自定义提示。App 应忽略 enabled=false 的记录。",
   "supportedRateScopes": ["international", "domestic", "hong-kong-macau-taiwan"],
   "supportedTypes": ["restriction", "service", "pricing", "warning", "info", "custom"],
@@ -33,7 +33,7 @@
     "id": "notice 的稳定唯一 ID，建议包含资费范围、目的地和特别业务项目。",
     "scope.rateScope": "特别业务资费范围：international、domestic、hong-kong-macau-taiwan；为 null 时表示所有范围。",
     "scope.destination": "目的地代码。international 可使用 ISO 3166-1 alpha-2 或 countryData.json 中的自定义 locale；hong-kong-macau-taiwan 使用 HK、MO、TW；domestic 通常为 null。",
-    "scope.specialRateId": "特别业务资费项目 ID，必须与对应资费文件中的 rates[].id 对应；为 null 时表示该范围内所有特别业务项目。",
+    "scope.specialRateId": "特别业务资费项目 ID，必须与对应资费文件中的 rates[].id 对应；为 null 时表示该范围内所有特别业务资费项目。",
     "type": "提示类型。restriction 表示不可用或受限；service 表示业务可用性；pricing 表示计费说明；warning / info / custom 可用于其他提示。",
     "severity": "info / warning / error；可用于 App 决定展示样式和优先级。",
     "title": "给用户展示的短标题。",
@@ -46,7 +46,8 @@
     "metadata.available": "可选布尔值。明确表示该特别业务在当前 notice 条件下是否可用。false 常用于暂停、禁用或目的地不提供该业务。",
     "metadata.applicableDestinations": "可选目的地数组。表示该提示或特别业务仅适用于这些目的地。国际范围可使用 ISO2 或自定义 locale；港澳台通常使用 HK、MO、TW。",
     "metadata.excludedDestinations": "可选目的地数组。表示明确排除这些目的地。若同时存在 applicableDestinations，应先限定适用集合，再排除 excludedDestinations。",
-    "metadata.mailTypes": "可选邮件类型数组，例如 LETTER、PRINTED_MATTER、SMALL_PACKET、PRINTED_MATTER_BAG；用于进一步限定 notice 适用的邮件种类。",
+    "metadata.mailTypes": "可选具体邮件类型数组，值必须来自 services.json 的 mailTypes[].id，例如 LETTER、PRINTED_MATTER、SMALL_PACKET。",
+    "metadata.applicableCategories": "可选业务大类数组，例如 LETTER_POST、PARCEL。业务大类不等同于 mailType，PARCEL 不应写入 metadata.mailTypes。",
     "metadata.conditions": "可选条件字符串数组，例如 inbound、taxable、customs-presentation-required；用于描述无法仅靠目的地或资费项目表达的业务条件。"
   },
   "examples": {
@@ -89,8 +90,8 @@
       "effectiveTo": null,
       "tags": ["example", "international", "pricing"],
       "metadata": {
-        "conditions": ["insured"],
-        "mailTypes": ["PARCEL"]
+        "applicableCategories": ["PARCEL"],
+        "conditions": ["insured"]
       }
     },
     "hongKongMacauTaiwan": {
