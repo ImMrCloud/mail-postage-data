@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "serviceId": "INTL_AIR_LETTER",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "zones": [
+    {
+      "id": "AIR_LETTER_ZONE_1",
+      "nameZh": "第一组",
+      "ruleZh": "部分亚洲邻近国家",
+      "countries": ["KP", "MN", "VN", "JP", "KR", "KZ", "KG", "TJ", "UZ", "TM"],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "AIR_LETTER_ZONE_2",
+      "nameZh": "第二组",
+      "ruleZh": "其他亚洲国家或地区",
+      "countries": [],
+      "mappingStatus": "rule-only"
+    },
+    {
+      "id": "AIR_LETTER_ZONE_3",
+      "nameZh": "第三组",
+      "ruleZh": "欧洲各国或地区、美国、加拿大、澳大利亚、新西兰",
+      "countries": ["US", "CA", "AU", "NZ"],
+      "mappingStatus": "partial"
+    },
+    {
+      "id": "AIR_LETTER_ZONE_4",
+      "nameZh": "第四组",
+      "ruleZh": "美洲其他国家或地区、非洲各国或地区、大洋洲其他国家或地区",
+      "countries": [],
+      "mappingStatus": "rule-only"
+    }
+  ],
+  "notes": [
+    "第一组国家来自资费表中的明确列举。",
+    "第二至第四组原表主要按地域描述；逐国 ISO 映射尚未完全展开，避免在缺少官方逐国清单时引入错误。",
+    "国际数据不包含中国大陆、香港、澳门、台湾。"
+  ]
+}
