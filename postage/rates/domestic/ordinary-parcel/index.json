@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "delivery",
@@ -10,49 +10,4 @@
   "regionRegistry": "../../../domestic/provinces.json",
   "pricingType": "weight_band_base_plus_increment_by_route_group",
   "weightBands": [
-    {"id":"UP_TO_10KG","minWeightExclusive":0,"maxWeight":10000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"},
-    {"id":"OVER_10_TO_20KG","minWeightExclusive":10000,"maxWeight":20000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"},
-    {"id":"OVER_20_TO_50KG","minWeightExclusive":20000,"maxWeight":50000,"baseWeight":1000,"incrementWeight":1000,"rounding":"ceil"}
-  ],
-  "volumetricWeight": {
-    "optional": true,
-    "dimensionUnit": "cm",
-    "resultUnit": "kg",
-    "divisor": 6000,
-    "formula": "lengthCm * widthCm * heightCm / 6000",
-    "comparisonRule": "higher-postage",
-    "consumerBehavior": "若用户输入完整长宽高，分别使用实际重量和体积重量按同一路向规则计算资费，展示两项结果，并以较高资费作为应计寄递资费；若未输入完整尺寸则仅按实际重量计算。"
-  },
-  "serviceCapabilities": {
-    "insurance": {"available": true, "pricingStatus": "not-provided", "conflictsWith": []},
-    "adviceOfDelivery": {"available": true, "rateId": "ADVICE_OF_DELIVERY_FEE", "requiresRateIds": ["REGISTRATION_FEE"], "conflictsWith": []}
-  },
-  "originFiles": {"CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"},
-  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
-  "availableSpecialRateIds": ["REGISTRATION_FEE","ADVICE_OF_DELIVERY_FEE"],
-  "discounts": {
-    "appliesToServiceIds":["DOMESTIC_ORDINARY_PARCEL"],
-    "excludedServiceIds":["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
-    "applyTo":"calculatedDeliveryPostage",
-    "combinationPolicy":"single",
-    "maxCredentialsPerShipment":1,
-    "credentials":[
-      {"id":"STUDENT_ID","nameZh":"学生证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
-      {"id":"TEACHER_ID","nameZh":"教师证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
-      {"id":"DISCOUNT_CARD","nameZh":"优惠卡","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
-      {"id":"DISABILITY_CERTIFICATE","nameZh":"残疾证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
-      {"id":"MILITARY_OFFICER_ID","nameZh":"军官证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
-      {"id":"POLICE_OFFICER_ID","nameZh":"警官证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
-      {"id":"CIVILIAN_PERSONNEL_ID","nameZh":"文职人员证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
-      {"id":"SOLDIER_ID","nameZh":"士兵证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
-      {"id":"VETERAN_PREFERENCE_CERTIFICATE","nameZh":"退役军人优待证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}}
-    ]
-  },
-  "notes":[
-    "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
-    "输入完整长宽高时，体积重量=长×宽×高÷6000（cm→kg），实际重量和体积重量分别计算并采用较高资费。",
-    "普通包裹可办理保价和回执，二者不互斥；回执依赖挂号。",
-    "当前数据未提供国内普通包裹保价费率，因此保价能力仅公示，消费者不得套用函件保价费率自动计算。",
-    "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。"
-  ]
-}
+    {"
