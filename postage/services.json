@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "transportMethods": [
+    {
+      "id": "AIR",
+      "nameZh": "航空",
+      "nameEn": "Air"
+    },
+    {
+      "id": "SAL",
+      "nameZh": "空运水陆路（SAL）",
+      "nameEn": "Surface Air Lifted"
+    },
+    {
+      "id": "SURFACE",
+      "nameZh": "水陆路",
+      "nameEn": "Surface"
+    }
+  ],
+  "mailTypes": [
+    {
+      "id": "LETTER",
+      "nameZh": "信函",
+      "nameEn": "Letter"
+    }
+  ],
+  "services": [
+    {
+      "id": "INTL_AIR_LETTER",
+      "scope": "international",
+      "transport": "AIR",
+      "mailType": "LETTER",
+      "zoneFile": "./zones/air-letter.json",
+      "rateFile": "./rates/air-letter.json"
+    }
+  ]
+}
