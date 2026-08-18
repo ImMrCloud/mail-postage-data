@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "dataset": "China Post postage data",
   "scope": "international",
   "origin": "CN",
@@ -19,7 +19,8 @@
     "surfaceLetterZones": "./zones/surface-letter.json",
     "surfaceLetterRates": "./rates/surface-letter.json",
     "surfaceOtherMailZones": "./zones/surface-other-mail.json",
-    "surfaceOtherMailRates": "./rates/surface-other-mail.json"
+    "surfaceOtherMailRates": "./rates/surface-other-mail.json",
+    "specialRates": "./special-rates/index.json"
   },
   "currentServices": [
     "INTL_AIR_LETTER",
