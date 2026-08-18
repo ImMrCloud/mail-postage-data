@@ -12,7 +12,7 @@
       "status": "placeholder",
       "letterPost": "./domestic-letter.json"
     },
-    "hongKongMacauTaiwan": {
+    "HongKongMacauTaiwan": {
       "status": "placeholder",
       "destinations": ["HK", "MO", "TW"],
       "letterPost": "./hong-kong-macau-taiwan-letter.json"
