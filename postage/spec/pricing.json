@@ -1,28 +1,34 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "standardVersion": "1.4.0",
   "currency": "CNY",
   "defaultWeightUnit": "g",
   "roundingValues": {"ceil":"不足一个计费单位按一个完整计费单位计算。"},
   "supportedTypes": {
-    "flat": {"required":["price"],"formula":"total = price"},
-    "flat_by_locality": {"required":["prices"],"formula":"total = prices[locality]"},
-    "free": {"required":["price"],"formula":"total = 0","constraints":["price 必须为0。"]},
-    "base_plus_increment": {"required":["baseWeight","basePrice","incrementWeight","incrementPrice","rounding"],"formula":"weight <= baseWeight ? basePrice : basePrice + ceil((weight-baseWeight)/incrementWeight)*incrementPrice"},
-    "surcharge_per_increment": {"required":["incrementWeight","incrementPrice","rounding"],"formula":"ceil(weight/incrementWeight)*incrementPrice"},
-    "air_surcharge_only": {"required":["basicPostageExempt","incrementWeight","rounding"],"formula":"ceil(weight/incrementWeight)*zones[zoneId].incrementPrice"},
-    "weight_tiers": {"required":["tiers"],"formula":"选择唯一满足上下界的 tier，total=tier.price。"},
-    "tiered_incremental": {"required":["tiers","rounding"],"formula":"各阶段按实际覆盖重量向上取整后累计。"},
+    "flat": {"description":"固定资费。","required":["price"],"formula":"total = price"},
+    "flat_by_locality": {"description":"按本埠/外埠选择固定价格。","required":["prices"],"formula":"total = prices[locality]"},
+    "free": {"description":"免费。","required":["price"],"formula":"total = 0","constraints":["price 必须为0。"]},
+    "base_plus_increment": {"description":"首重加续重。","required":["baseWeight","basePrice","incrementWeight","incrementPrice","rounding"],"formula":"weight <= baseWeight ? basePrice : basePrice + ceil((weight-baseWeight)/incrementWeight)*incrementPrice"},
+    "surcharge_per_increment": {"description":"按重量单位收附加费。","required":["incrementWeight","incrementPrice","rounding"],"formula":"ceil(weight/incrementWeight)*incrementPrice"},
+    "air_surcharge_only": {"description":"仅收航空附加费。","required":["basicPostageExempt","incrementWeight","rounding"],"formula":"ceil(weight/incrementWeight)*zones[zoneId].incrementPrice"},
+    "weight_tiers": {"description":"按重量落入唯一阶梯。","required":["tiers"],"formula":"选择唯一满足上下界的 tier，total=tier.price。"},
+    "tiered_incremental": {"description":"分阶段累计计费。","required":["tiers","rounding"],"formula":"各阶段按实际覆盖重量向上取整后累计。"},
     "weight_band_base_plus_increment_by_route": {"status":"legacy-compatible","formula":"先按总重量选 band，再按 origin/destination 路由计费。"},
     "weight_band_base_plus_increment_by_route_group": {
+      "description":"普通包裹按重量档与路向组计费。",
       "requiredTopLevel":["weightBands","originFiles","regionRegistry"],
       "formula":"band=唯一匹配总重量的 weightBand; group=唯一包含 destinationRegionId 的 routeGroup; total=weight<=band.baseWeight ? basePrice : basePrice + ceil((weight-band.baseWeight)/band.incrementWeight)*incrementPrice",
       "constraints":["重量档之间不得累计。","缺失起寄省或路向不得回退猜测。"]
     },
-    "multiplier": {"required":["multiplier"],"formula":"discountedTotal = originalTotal * multiplier","constraints":["普通包裹优惠不得叠加。"]},
-    "value_increment": {"required":["valueIncrement","incrementPrice","rounding"],"formula":"ceil(declaredValue/valueIncrement)*incrementPrice"},
-    "value_increment_with_minimum": {"required":["valueIncrement","incrementPrice","rounding","minimumPrice"],"formula":"max(minimumPrice,ceil(declaredValue/valueIncrement)*incrementPrice)"},
-    "external_rule": {"required":["ruleRefZh"],"formula":null,"consumerBehavior":"不得自行猜测金额，只展示规则。"}
+    "multiplier": {
+      "description":"对允许折扣的基础金额应用乘数。",
+      "required":["multiplier"],
+      "formula":"discountedTotal = originalTotal * multiplier",
+      "constraints":["普通包裹优惠不得叠加。","若 discounts.applyTo=baseDeliveryPostageOnly，则 multiplier 只能作用于基础寄递资费，不得作用于任何 special 费用。"]
+    },
+    "value_increment": {"description":"按声明价值单位计费。","required":["valueIncrement","incrementPrice","rounding"],"formula":"ceil(declaredValue/valueIncrement)*incrementPrice"},
+    "value_increment_with_minimum": {"description":"按声明价值计费并设最低收费。","required":["valueIncrement","incrementPrice","rounding","minimumPrice"],"formula":"max(minimumPrice,ceil(declaredValue/valueIncrement)*incrementPrice)"},
+    "external_rule": {"description":"依赖外部规则，不能自动计算。","required":["ruleRefZh"],"formula":null,"consumerBehavior":"不得自行猜测金额，只展示规则。"}
   },
   "ordinaryParcelVolumetricWeight": {
     "optional": true,
@@ -34,20 +40,30 @@
       "若长宽高任一未提供，则仅按实际重量计算。",
       "若长宽高全部提供且均大于0，则分别以 actualWeightKg 和 volumetricWeightKg 按同一普通包裹路向规则计算。",
       "展示 actualWeightPostage 与 volumetricWeightPostage。",
-      "chargeableDeliveryPostage = max(actualWeightPostage, volumetricWeightPostage)。",
-      "普通包裹优惠 multiplier 应作用于最终采用的较高基础寄递资费。"
+      "baseDeliveryPostage = max(actualWeightPostage, volumetricWeightPostage)。",
+      "若使用优惠凭证，discountedBaseDeliveryPostage = baseDeliveryPostage * multiplier。",
+      "最后再把回执费、保价费等 special 费用按原价加入；special 费用不得参与8折/7折。"
     ]
   },
+  "ordinaryParcelSpecialChargeOrder": [
+    "1. 计算实际重量基础资费。",
+    "2. 若提供尺寸，计算体积重量基础资费。",
+    "3. 选择两者中较高的基础寄递资费。",
+    "4. 仅对该基础寄递资费应用一个允许的8折/7折优惠。",
+    "5. 原价加入可选特别业务费用；回执费、保价费不得折扣。",
+    "6. 普通包裹基础资费已包含挂号属性，不再另加挂号费。"
+  ],
   "specialServiceCombination": {
-    "requiresRateIds": "选择当前项目时必须同时满足的特别业务。",
-    "includesRateIds": "当前费用已包含这些业务费用，禁止重复计收。",
-    "excludesRateIds": "与当前项目互斥，同时选择必须拒绝。",
-    "displayOnly": "selection.mode=display-only 不参与寄件计算。"
+    "requiresRateIds":"选择当前项目时必须满足的特别业务。",
+    "includesRateIds":"当前费用已包含这些业务费用，禁止重复计收。",
+    "excludesRateIds":"与当前项目互斥，同时选择必须拒绝。",
+    "serviceCapabilitySatisfaction":"若基础寄递服务自身声明已满足某依赖能力（例如普通包裹已含挂号），该依赖不另收费。",
+    "displayOnly":"selection.mode=display-only 不参与寄件计算。"
   },
   "inputValidation": {
-    "weight": "必须大于0。",
-    "declaredValue": "涉及保价时必须大于0，且不得超过 maximumInsuredValue。",
-    "dimensions": "体积重计算时 lengthCm、widthCm、heightCm 必须全部存在且均大于0；否则按未提供体积尺寸处理。",
-    "discountCredential": "普通包裹最多一个有效优惠凭证。"
+    "weight":"必须大于0。",
+    "declaredValue":"涉及可自动计算的保价时必须大于0，且不得超过 maximumInsuredValue。",
+    "dimensions":"体积重计算时 lengthCm、widthCm、heightCm 必须全部存在且均大于0；否则按未提供体积尺寸处理。",
+    "discountCredential":"普通包裹最多一个有效优惠凭证。"
   }
 }
