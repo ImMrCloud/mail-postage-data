@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "serviceId": "INTL_SURFACE_LETTER",
+  "excludedDestinations": ["CN", "HK", "MO", "TW"],
+  "zones": [
+    {
+      "id": "SURFACE_LETTER_ZONE_1",
+      "nameZh": "27个特定路向",
+      "ruleZh": "资费表明确列出的水陆路信函优惠路向",
+      "countries": ["AF", "AU", "BT", "BD", "BN", "KH", "FJ", "IN", "ID", "IR", "JP", "KR", "LA", "MY", "MV", "MM", "NR", "NP", "NZ", "PK", "PG", "PH", "SG", "SB", "LK", "TH", "VN"],
+      "mappingStatus": "explicit"
+    },
+    {
+      "id": "SURFACE_LETTER_ZONE_2",
+      "nameZh": "其他国际路向",
+      "ruleZh": "除27个特定优惠路向外，适用普通国际水陆路函件资费的其他目的地",
+      "isDefault": true,
+      "mappingStatus": "default-except-explicit"
+    }
+  ],
+  "notes": [
+    "分组按用户提供的中国邮政水陆路函件资费表录入。",
+    "27个特定路向按资费表逐项映射为正式 ISO 3166-1 alpha-2 代码。",
+    "第二组为普通国际资费兜底组，不据此表示所有目的地当前均可实际寄达。",
+    "国际数据不包含中国大陆、香港、澳门、台湾。"
+  ]
+}
