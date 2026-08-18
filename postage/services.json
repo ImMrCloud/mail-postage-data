@@ -30,6 +30,11 @@
     {"id":"INTL_SAL_SMALL_PACKET","scope":"international","transport":"SAL","mailType":"SMALL_PACKET","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
     {"id":"INTL_SAL_PRINTED_MATTER_BAG","scope":"international","transport":"SAL","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/sal-other-mail.json","rateFile":"./rates/sal-other-mail.json"},
 
-    {"id":"INTL_SURFACE_LETTER","scope":"international","transport":"SURFACE","mailType":"LETTER","zoneFile":"./zones/surface-letter.json","rateFile":"./rates/surface-letter.json"}
+    {"id":"INTL_SURFACE_LETTER","scope":"international","transport":"SURFACE","mailType":"LETTER","zoneFile":"./zones/surface-letter.json","rateFile":"./rates/surface-letter.json"},
+    {"id":"INTL_SURFACE_POSTCARD","scope":"international","transport":"SURFACE","mailType":"POSTCARD","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_PRINTED_MATTER","scope":"international","transport":"SURFACE","mailType":"PRINTED_MATTER","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_LITERATURE_FOR_BLIND","scope":"international","transport":"SURFACE","mailType":"LITERATURE_FOR_BLIND","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_SMALL_PACKET","scope":"international","transport":"SURFACE","mailType":"SMALL_PACKET","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/surface-other-mail.json"},
+    {"id":"INTL_SURFACE_PRINTED_MATTER_BAG","scope":"international","transport":"SURFACE","mailType":"PRINTED_MATTER_BAG","zoneFile":"./zones/surface-other-mail.json","rateFile":"./rates/surface-other-mail.json"}
   ]
 }
