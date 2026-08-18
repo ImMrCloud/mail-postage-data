@@ -1,13 +1,53 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "domestic",
+  "rateCategory": "special",
   "category": "special-business-rates",
   "currency": "CNY",
   "destinationIndependent": true,
-  "status": "placeholder",
-  "rates": [],
+  "rates": [
+    {
+      "id": "REGISTRATION_FEE",
+      "nameZh": "挂号费",
+      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+    },
+    {
+      "id": "APPOINTED_DELIVERY_FEE",
+      "nameZh": "约投服务费",
+      "pricing": {"type": "flat", "unit": "item", "price": 2.0}
+    },
+    {
+      "id": "ADVICE_OF_DELIVERY_FEE",
+      "nameZh": "回执",
+      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+    },
+    {
+      "id": "INSURANCE_FEE_RECORDED_LETTER",
+      "nameZh": "保价费（给据信函）",
+      "applicableCategories": ["LETTER_POST"],
+      "pricing": {
+        "type": "value_increment_with_minimum",
+        "valueIncrement": 1,
+        "incrementPrice": 0.01,
+        "rounding": "ceil",
+        "minimumPrice": 1.0,
+        "maximumInsuredValue": 100000.0
+      },
+      "noteZh": "每保1元或其零数收0.01元；每件最低保价费1.00元；每件最高保价金额100000.00元。"
+    },
+    {
+      "id": "POSTE_RESTANTE_HANDLING_FEE",
+      "nameZh": "存局候领手续费",
+      "pricing": {"type": "flat", "unit": "item", "price": 1.0}
+    },
+    {
+      "id": "WITHDRAW_OR_CHANGE_ADDRESSEE_FEE",
+      "nameZh": "撤回邮件或更改收件人名址手续费",
+      "pricing": {"type": "flat", "unit": "item", "price": 3.0}
+    }
+  ],
   "notes": [
-    "预留给国内特别业务资费，包含函件、包裹及其他可叠加特殊业务费用。",
-    "待取得对应资费表后按 international.json 的结构补充。"
+    "本文件仅记录国内函件特别业务资费，可在寄递基本资费之外按业务叠加。",
+    "保价费按保价金额向上取整到1元计费单位，每1元或其零数收0.01元，最低1.00元，最高保价金额100000.00元。"
   ]
 }
