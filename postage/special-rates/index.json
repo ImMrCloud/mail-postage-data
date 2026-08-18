@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 11,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 12,
+  "standardVersion": "1.5.0",
   "dataset": "China Post special business rates",
   "currency": "CNY",
   "notices": "./notices.json",
