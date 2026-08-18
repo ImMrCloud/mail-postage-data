@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 6,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 7,
+  "standardVersion": "1.5.0",
   "currency": "CNY",
   "defaultWeightUnit": "g",
   "roundingValues": {"ceil":"不足一个计费单位按一个完整计费单位计算。"},
@@ -24,10 +24,17 @@
       "description":"对允许折扣的基础金额应用乘数。",
       "required":["multiplier"],
       "formula":"discountedTotal = originalTotal * multiplier",
-      "constraints":["普通包裹优惠不得叠加。","若 discounts.applyTo=baseDeliveryPostageOnly，则 multiplier 只能作用于基础寄递资费，不得作用于任何 special 费用。"]
+      "constraints":["普通包裹优惠不得叠加。","若 discounts.applyTo=baseDeliveryPostageOnly，则不得对 special 费用打折。"]
     },
-    "value_increment": {"description":"按声明价值单位计费。","required":["valueIncrement","incrementPrice","rounding"],"formula":"ceil(declaredValue/valueIncrement)*incrementPrice"},
-    "value_increment_with_minimum": {"description":"按声明价值计费并设最低收费。","required":["valueIncrement","incrementPrice","rounding","minimumPrice"],"formula":"max(minimumPrice,ceil(declaredValue/valueIncrement)*incrementPrice)"},
+    "value_increment": {"description":"按声明价值单位计费。","required":["valueIncrement","incrementPrice","rounding"],"optional":["maximumInsuredValue"],"formula":"ceil(declaredValue/valueIncrement)*incrementPrice"},
+    "value_increment_with_minimum": {"description":"按声明价值计费并设最低收费。","required":["valueIncrement","incrementPrice","rounding","minimumPrice"],"optional":["maximumInsuredValue"],"formula":"max(minimumPrice,ceil(declaredValue/valueIncrement)*incrementPrice)"},
+    "declared_value_percentage": {
+      "description":"按声明价值固定百分比计费。",
+      "required":["percentage"],
+      "optional":["maximumInsuredValue","minimumPrice"],
+      "formula":"raw = declaredValue * percentage; total = minimumPrice == null ? raw : max(minimumPrice, raw)",
+      "constraints":["percentage 必须大于0。","若提供 maximumInsuredValue，声明价值不得超过该值。"]
+    },
     "external_rule": {"description":"依赖外部规则，不能自动计算。","required":["ruleRefZh"],"formula":null,"consumerBehavior":"不得自行猜测金额，只展示规则。"}
   },
   "ordinaryParcelVolumetricWeight": {
@@ -37,33 +44,21 @@
     "divisor": 6000,
     "formula": "volumetricWeightKg = lengthCm * widthCm * heightCm / 6000",
     "calculation": [
-      "若长宽高任一未提供，则仅按实际重量计算。",
-      "若长宽高全部提供且均大于0，则分别以 actualWeightKg 和 volumetricWeightKg 按同一普通包裹路向规则计算。",
-      "展示 actualWeightPostage 与 volumetricWeightPostage。",
+      "尺寸完整时分别计算实重资费与体积重资费。",
       "baseDeliveryPostage = max(actualWeightPostage, volumetricWeightPostage)。",
-      "若使用优惠凭证，discountedBaseDeliveryPostage = baseDeliveryPostage * multiplier。",
-      "最后再把回执费、保价费等 special 费用按原价加入；special 费用不得参与8折/7折。"
+      "优惠只作用于 baseDeliveryPostage。",
+      "回执费、保价费等 special 费用按原价另加。"
     ]
   },
-  "ordinaryParcelSpecialChargeOrder": [
-    "1. 计算实际重量基础资费。",
-    "2. 若提供尺寸，计算体积重量基础资费。",
-    "3. 选择两者中较高的基础寄递资费。",
-    "4. 仅对该基础寄递资费应用一个允许的8折/7折优惠。",
-    "5. 原价加入可选特别业务费用；回执费、保价费不得折扣。",
-    "6. 普通包裹基础资费已包含挂号属性，不再另加挂号费。"
-  ],
-  "specialServiceCombination": {
-    "requiresRateIds":"选择当前项目时必须满足的特别业务。",
-    "includesRateIds":"当前费用已包含这些业务费用，禁止重复计收。",
-    "excludesRateIds":"与当前项目互斥，同时选择必须拒绝。",
-    "serviceCapabilitySatisfaction":"若基础寄递服务自身声明已满足某依赖能力（例如普通包裹已含挂号），该依赖不另收费。",
-    "displayOnly":"selection.mode=display-only 不参与寄件计算。"
+  "insuranceRules": {
+    "domesticLetter": "INSURANCE_FEE_RECORDED_LETTER 只允许 LETTER，最高保价金额20000元。",
+    "domesticParcel": "DOMESTIC_PARCEL_INSURANCE_FEE 使用 declared_value_percentage，percentage=0.01，最高保价金额100000元。",
+    "internationalAndHmtLetter": "INSURED_LETTER_INSURANCE_FEE 只允许 LETTER，最高保价金额20000元，并要求 INSURED_LETTER_HANDLING_FEE。"
   },
   "inputValidation": {
     "weight":"必须大于0。",
-    "declaredValue":"涉及可自动计算的保价时必须大于0，且不得超过 maximumInsuredValue。",
-    "dimensions":"体积重计算时 lengthCm、widthCm、heightCm 必须全部存在且均大于0；否则按未提供体积尺寸处理。",
+    "declaredValue":"涉及保价时必须大于0，且不得超过对应 maximumInsuredValue。",
+    "dimensions":"体积重计算时长宽高必须全部存在且均大于0。",
     "discountCredential":"普通包裹最多一个有效优惠凭证。"
   }
 }
