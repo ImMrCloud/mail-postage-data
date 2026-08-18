@@ -1,6 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "international",
+  "rateCategory": "special",
   "category": "special-business-rates",
   "currency": "CNY",
   "destinationIndependent": true,
