@@ -16,46 +16,71 @@ mail-postage-data/
     ├── services.json
     ├── notices.json
     ├── zones/
-    │   └── air-letter.json
+    │   ├── air-letter.json
+    │   └── air-other-mail.json
     └── rates/
-        └── air-letter.json
+        ├── air-letter.json
+        └── air-other-mail.json
 ```
 
 ## 设计原则
 
 - 国家/地区使用 ISO 3166-1 alpha-2 两位代码，例如 `JP`、`US`、`GB`。
 - 运输方式、函件种类、国家分组、计费规则、目的地提示分离，避免重复数据。
-- 同一国家在不同运输方式或函件种类中可以属于不同资费组。
+- **同一国家在不同函件类型中允许属于不同资费组。** 因此“航空信函”和“其他航空函件”分别维护自己的 zone 文件。
 - 国际数据排除 `CN`、`HK`、`MO`、`TW`。
 - 价格统一使用人民币 `CNY`。
-- 续重采用向上取整，例如信函超过 20g 后，每 10g 或其零数按一个续重单位计费。
-- 地域型资费分组使用联合国统计司 UN M49 地理分区展开为 ISO 国家/地区代码；这只用于数据映射，不等于逐国确认当前可寄达。
+- “每续重 X 克或其零数”统一以 `rounding: "ceil"` 表示向上取整。
 
-## 当前数据
+## 当前已录入的航空函件
 
-目前已加入：
+### 1. 信函
 
-- 航空函件
-  - 信函
-    - 第一组：20g 以内 5.00 元；超过 20g 每续重 10g 或其零数 1.00 元
-    - 第二组：20g 以内 5.50 元；超过 20g 每续重 10g 或其零数 1.50 元
-    - 第三组：20g 以内 6.00 元；超过 20g 每续重 10g 或其零数 1.80 元
-    - 第四组：20g 以内 7.00 元；超过 20g 每续重 10g 或其零数 2.30 元
+使用独立的四组分组：`postage/zones/air-letter.json`。
 
-### 航空信函国家分组
+- 第一组：20g 以内 5.00 元；超过 20g 每续重 10g 或其零数 1.00 元
+- 第二组：20g 以内 5.50 元；超过 20g 每续重 10g 或其零数 1.50 元
+- 第三组：20g 以内 6.00 元；超过 20g 每续重 10g 或其零数 1.80 元
+- 第四组：20g 以内 7.00 元；超过 20g 每续重 10g 或其零数 2.30 元
 
-`postage/zones/air-letter.json` 已把资费表的地域规则展开为 ISO 3166-1 alpha-2 列表。
+### 2. 其他航空函件
 
-分组方法：
+以下类别共用另一套三组分组：`postage/zones/air-other-mail.json`。
 
-1. 第一组直接采用资费表明确列出的国家：朝鲜、蒙古、越南、日本、韩国、哈萨克斯坦、吉尔吉斯斯坦、塔吉克斯坦、乌兹别克斯坦、土库曼斯坦。
-2. 第二组为其余亚洲国家或地区。
-3. 第三组为欧洲国家或地区，以及美国、加拿大、澳大利亚、新西兰。
-4. 第四组为美洲其他国家或地区、非洲国家或地区、大洋洲其他国家或地区。
-5. 中国大陆、香港、澳门、台湾不进入国际分组。
-6. 南极洲 `AQ` 不属于原资费表列出的五大地域范围，因此暂放在 `unassignedDestinations`，不自动猜测资费组。
+- 明信片：每件 5.00 元，三组同价
+- 航空邮简：每件 5.50 元，三组同价
+- 印刷品：
+  - 第一组：20g 内 4.50 元；续 10g 2.20 元
+  - 第二组：20g 内 5.00 元；续 10g 2.50 元
+  - 第三组：20g 内 6.00 元；续 10g 2.80 元
+- 盲人邮件：基本资费免收，仅收航空运费；每 10g 分别为 0.60 / 0.80 / 1.00 元
+- 小包：
+  - 第一组：100g 内 25.00 元；续 100g 23.00 元
+  - 第二组：100g 内 30.00 元；续 100g 27.00 元
+  - 第三组：100g 内 35.00 元；续 100g 33.00 元
+- 印刷品专袋：
+  - 第一组：5000g 内 485.00 元；续 1000g 100.00 元
+  - 第二组：5000g 内 610.00 元；续 1000g 120.00 元
+  - 第三组：5000g 内 730.00 元；续 1000g 145.00 元
 
-`mappingBasis.postalAvailabilityVerified` 当前为 `false`，表示这里完成的是 **资费地域映射**，不是逐国邮路可用性确认。
+对应价格文件：`postage/rates/air-other-mail.json`。
+
+## 三组国家分配
+
+`air-other-mail.json` 按资费表逐项转成 ISO 国家/地区代码。
+
+- 第一组和第二组：按原表明确列出的国家逐项映射。
+- 第三组：原表写作“其他国家和地区”，因此本仓库把除第一、第二组及 `CN/HK/MO/TW` 外的其余 ISO 3166-1 目的地展开到第三组。
+- 这只是资费分组映射，不代表某个目的地当前一定可以收寄。
+
+因此，同一个目的地可能出现：
+
+```text
+JP + LETTER        → air-letter.json 的信函分组
+JP + SMALL_PACKET  → air-other-mail.json 的三组分组
+```
+
+App 不应只按国家缓存一个全局 `zoneId`，而应按 **serviceId + destination** 查询。
 
 ## App 读取方式
 
@@ -65,124 +90,89 @@ mail-postage-data/
 postage/index.json
 ```
 
-然后根据其中的 `files` 加载：
+然后根据 `services.json` 中对应服务找到该服务的：
 
-- `services`：运输方式 / 函件类型
-- `airLetterZones`：目的地属于哪个资费组
-- `airLetterRates`：各资费组价格
-- `notices`：目的地、服务、函件类型相关提示
+```json
+{
+  "zoneFile": "./zones/...",
+  "rateFile": "./rates/..."
+}
+```
 
 典型流程：
 
 ```text
-目的地 JP
-  ↓
-zones/air-letter.json → AIR_LETTER_ZONE_1
-  ↓
-rates/air-letter.json → 首重/续重价格
-  ↓
-notices.json → 查询 JP + INTL_AIR_LETTER + LETTER 的附加提示
-  ↓
-App 展示最终资费和提示
+用户选择：JP + 航空 + 小包 + 180g
+        ↓
+services.json → INTL_AIR_SMALL_PACKET
+        ↓
+zones/air-other-mail.json → 找 JP 所属组
+        ↓
+rates/air-other-mail.json → SMALL_PACKET 对应组价格
+        ↓
+notices.json → 查询 JP / 该 service / SMALL_PACKET 的提示
+        ↓
+显示最终价格与寄件提醒
 ```
 
-### 计算示例
-
-第一组航空信函，重量 37g：
-
-```text
-5.00 + ceil((37 - 20) / 10) × 1.00 = 7.00 元
-```
-
-JavaScript 示例：
+### 通用首重 + 续重计算
 
 ```js
-function calculatePostage(weight, pricing) {
-  if (weight <= pricing.baseWeight) {
-    return pricing.basePrice;
-  }
+function calculatePostage(weight, baseWeight, basePrice, incrementWeight, incrementPrice) {
+  if (weight <= baseWeight) return basePrice;
 
-  const extraWeight = weight - pricing.baseWeight;
-  const increments = Math.ceil(extraWeight / pricing.incrementWeight);
-
-  return pricing.basePrice + increments * pricing.incrementPrice;
+  return basePrice +
+    Math.ceil((weight - baseWeight) / incrementWeight) * incrementPrice;
 }
 ```
 
+明信片、航空邮简属于 `flat` 固定价格，不需要重量计算。
+
+盲人邮件使用 `air_surcharge_only`：基本资费免收，从实际重量开始按每 10g 或其零数收取航空运费。
+
 ## 目的地提示 / 禁限寄说明
 
-`postage/notices.json` 用来维护不属于“价格”的信息，例如：
+`postage/notices.json` 用来维护所有不属于“价格”的信息，例如：
 
-- 某个国家的某类函件禁止寄某种物品
-- 某种物品允许寄，但存在数量、包装或申报限制
-- 某国家某种运输方式暂停或暂不可用
-- 海关申报提醒
-- 地址格式提醒
-- 你自己希望显示给 App 用户的任意文字
+- 某国家某类函件禁止寄某种物品
+- 限寄数量、包装或申报要求
+- 暂停收寄或某运输方式不可用
+- 海关、地址、时效等提醒
+- App 自定义提示
 
-建议提示记录采用以下结构：
+示例：
 
 ```json
 {
   "enabled": true,
-  "id": "JP-AIR-LETTER-001",
+  "id": "JP-AIR-SMALL-PACKET-001",
   "scope": {
     "destination": "JP",
-    "serviceId": "INTL_AIR_LETTER",
-    "mailType": "LETTER"
+    "serviceId": "INTL_AIR_SMALL_PACKET",
+    "mailType": "SMALL_PACKET"
   },
   "type": "restriction",
   "severity": "warning",
   "title": "寄件提醒",
-  "message": "这里填写你希望显示给用户的说明。",
-  "prohibitedItems": ["示例物品 A"],
-  "restrictedItems": ["示例物品 B"],
+  "message": "这里填写提示。",
+  "prohibitedItems": [],
+  "restrictedItems": [],
   "source": null,
   "effectiveFrom": null,
   "effectiveTo": null,
   "tags": ["custom"],
-  "metadata": {
-    "anyCustomField": "这里也可以放你自己的扩展内容"
-  }
+  "metadata": {}
 }
 ```
 
-### Scope 可以逐级放宽
+`metadata` 可放任何项目自定义字段，而无需改变资费 JSON 结构。
 
-只针对“日本 + 航空函件 + 信函”：
+## 数据维护原则
 
-```json
-{
-  "destination": "JP",
-  "serviceId": "INTL_AIR_LETTER",
-  "mailType": "LETTER"
-}
-```
+1. 新运输方式：增加 transport/service。
+2. 新函件类型：增加 mailType/service。
+3. 如果使用新的国家分组：新增独立 zone 文件，不复用不相同的旧分组。
+4. 新价格表：新增或更新对应 rate 文件。
+5. 禁限寄、服务暂停、特殊提示：写入 `notices.json`，不要混入价格文件。
 
-针对日本的所有国际业务：
-
-```json
-{
-  "destination": "JP",
-  "serviceId": null,
-  "mailType": null
-}
-```
-
-针对全部国际目的地的航空函件：
-
-```json
-{
-  "destination": null,
-  "serviceId": "INTL_AIR_LETTER",
-  "mailType": null
-}
-```
-
-因此以后不需要为了添加一句提示去修改资费文件。
-
-## 数据来源与维护
-
-航空信函资费来自现有国际函件资费表。第一组为原表逐国明确列举；第二至第四组为地域描述，本仓库依据 UN M49 地理分区展开为 ISO 国家/地区代码。
-
-地域归属和实际邮政服务可用性是两件不同的事。后续如取得中国邮政官方逐国禁限寄、暂停收寄、特殊海关要求等资料，应写入 `notices.json` 或进一步拆分专门的数据文件，而不修改基础资费组逻辑。
+这样可以保证 App 长期兼容，同时允许后续继续加入 SAL、水陆路、中国大陆境内以及港澳台地区资费。
