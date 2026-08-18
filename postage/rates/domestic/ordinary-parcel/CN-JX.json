@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.3.0",
+  "originRegionId": "CN-JX",
+  "originNameZh": "江西",
+  "routeGroups": [
+    {
+      "id": "JX-G1",
+      "destinations": ["CN-JX"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 5.0, "incrementPrice": 1.0},
+        "OVER_10_TO_20KG": {"basePrice": 5.0, "incrementPrice": 2.0},
+        "OVER_20_TO_50KG": {"basePrice": 5.0, "incrementPrice": 3.0}
+      }
+    },
+    {
+      "id": "JX-G2",
+      "destinations": ["CN-AH", "CN-FJ", "CN-GD", "CN-HB", "CN-HN", "CN-ZJ"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 6.0, "incrementPrice": 1.5},
+        "OVER_10_TO_20KG": {"basePrice": 6.0, "incrementPrice": 2.0},
+        "OVER_20_TO_50KG": {"basePrice": 6.0, "incrementPrice": 3.0}
+      }
+    },
+    {
+      "id": "JX-G3",
+      "destinations": ["CN-HA", "CN-JS", "CN-SH"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 7.0, "incrementPrice": 2.0},
+        "OVER_10_TO_20KG": {"basePrice": 7.0, "incrementPrice": 2.0},
+        "OVER_20_TO_50KG": {"basePrice": 7.0, "incrementPrice": 3.0}
+      }
+    },
+    {
+      "id": "JX-G4",
+      "destinations": ["CN-BJ", "CN-CQ", "CN-GS", "CN-GX", "CN-GZ", "CN-HI", "CN-HE", "CN-NM", "CN-NX", "CN-QH", "CN-SD", "CN-SX", "CN-SN", "CN-SC", "CN-TJ", "CN-YN"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 8.0, "incrementPrice": 3.0},
+        "OVER_10_TO_20KG": {"basePrice": 8.0, "incrementPrice": 3.0},
+        "OVER_20_TO_50KG": {"basePrice": 8.0, "incrementPrice": 4.0}
+      }
+    },
+    {
+      "id": "JX-G5",
+      "destinations": ["CN-HL", "CN-JL", "CN-LN"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 9.0, "incrementPrice": 4.0},
+        "OVER_10_TO_20KG": {"basePrice": 9.0, "incrementPrice": 4.0},
+        "OVER_20_TO_50KG": {"basePrice": 9.0, "incrementPrice": 5.0}
+      }
+    },
+    {
+      "id": "JX-G6",
+      "destinations": ["CN-XZ", "CN-XJ"],
+      "prices": {
+        "UP_TO_10KG": {"basePrice": 10.0, "incrementPrice": 5.0},
+        "OVER_10_TO_20KG": {"basePrice": 10.0, "incrementPrice": 7.0},
+        "OVER_20_TO_50KG": {"basePrice": 10.0, "incrementPrice": 8.0}
+      }
+    }
+  ],
+  "notes": [
+    "原表首重仅列一列，表示同一路向在三个总重量档中的首重1千克价格相同；本文件因此在三个重量档中重复写入相同 basePrice。"
+  ]
+}
