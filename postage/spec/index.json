@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "standardVersion": "1.0.0",
+  "schemaVersion": 2,
+  "standardVersion": "1.1.0",
   "dataset": "China Post postage data specification",
   "status": "active",
   "appliesTo": ["domestic", "hong-kong-macau-taiwan", "international"],
@@ -15,8 +15,18 @@
     "services.json 是寄递服务注册表。",
     "rateCategory=delivery 表示基础寄递资费；rateCategory=special 表示可叠加的特别业务资费。",
     "scope 统一使用 domestic、hong-kong-macau-taiwan、international。",
+    "国内存在省际差异的寄递服务必须通过 province region registry 使用 originRegionId + destinationRegionId 路由。",
     "国际目的地优先使用 ISO 3166-1 alpha-2；特殊邮政目的地使用 countryData.json 中的自定义 locale。",
     "所有不足计费单位按一个完整计费单位计算时使用 rounding=ceil。",
     "App 必须忽略 enabled=false 的 notice 示例记录。"
-  ]
+  ],
+  "changes": {
+    "1.1.0": [
+      "新增中国大陆省级行政区注册表规则。",
+      "新增按起寄省+寄达省路由的普通包裹资费结构。",
+      "新增 weight_band_base_plus_increment_by_route 计费类型。",
+      "weight_tiers 支持 maxWeightExclusive/minWeight，用于严格重量边界。",
+      "家乡包裹贴定义为独立 delivery service，而非 special rate。"
+    ]
+  }
 }
