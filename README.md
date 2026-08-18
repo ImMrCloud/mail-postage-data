@@ -23,6 +23,7 @@ mail-postage-data/
     │   ├── core.json
     │   ├── pricing.json
     │   ├── notices.json
+    │   ├── special-services.json
     │   └── validation.json
     ├── rates/
     │   ├── domestic/
@@ -36,7 +37,8 @@ mail-postage-data/
     │   │       ├── CN-GD.json
     │   │       ├── CN-HE.json
     │   │       ├── CN-SD.json
-    │   │       └── CN-BJ.json
+    │   │       ├── CN-BJ.json
+    │   │       └── CN-JX.json
     │   ├── hong-kong-macau-taiwan/
     │   │   └── basic.json
     │   └── international/
@@ -62,14 +64,15 @@ App 或维护脚本应首先读取 `postage/index.json`，其中 `files.specific
 当前规范版本：
 
 ```text
-standardVersion = 1.3.0
+standardVersion = 1.4.0
 ```
 
 规范分为：
 
-- `spec/core.json`：scope、rateCategory、service、mailType、路径、省级路由和索引规则。
-- `spec/pricing.json`：所有支持的计价类型、字段、计算公式和折扣模型。
-- `spec/notices.json`：通用 notice 与特别业务 notice 的匹配和优先级规则。
+- `spec/core.json`：scope、service、mailType、省级路由和服务能力规则。
+- `spec/pricing.json`：支持的计价类型、体积重、折扣顺序和计算公式。
+- `spec/notices.json`：通用 notice 与特别业务 notice 的匹配规则。
+- `spec/special-services.json`：特别业务可选性、适用服务、依赖、包含和互斥关系。
 - `spec/validation.json`：App / CI 应执行的跨文件一致性校验。
 
 ## Scope 与资费分类
@@ -89,29 +92,42 @@ delivery
 special
 ```
 
-`delivery` 是基础寄递方式；`special` 是挂号、回执、保价等特别业务附加资费。
+`delivery` 是基础寄递方式；`special` 是挂号、回执、保价等特别业务资费。
+
+## 特别业务选择语义
+
+特别业务使用机器可读字段区分寄件时可选项目和只公示项目：
+
+```text
+selection.mode = selectable | display-only
+selection.phase = acceptance | post-acceptance | delivery | inbound | other
+selection.chargedTo = sender | recipient | customer
+```
+
+依赖关系：
+
+```text
+dependencies.requiresRateIds
+dependencies.includesRateIds
+dependencies.excludesRateIds
+```
+
+适用对象可使用：
+
+```text
+applicableCategories
+applicableMailTypes
+applicableServiceIds
+excludedServiceIds
+```
+
+`applicableCategories`、`applicableMailTypes`、`applicableServiceIds` 按 OR 判断；`excludedServiceIds` 优先排除。
+
+存局候领、撤回/修改收件人名址、进口欠资、逾期保管、海关验关等非交寄时费用使用 `display-only`，只公示，不加入寄件总价。存局候领费用由收件人承担。
 
 ## 国内省级行政区
 
-中国大陆 31 个省级行政区统一维护在：
-
-```text
-postage/domestic/provinces.json
-```
-
-使用 ISO 3166-2:CN 风格 ID，例如：
-
-```text
-CN-SC 四川
-CN-ZJ 浙江
-CN-JS 江苏
-CN-GD 广东
-CN-HE 河北
-CN-SD 山东
-CN-BJ 北京
-```
-
-省际差异资费统一通过：
+中国大陆 31 个省级行政区统一维护在 `postage/domestic/provinces.json`，使用 ISO 3166-2:CN 风格 ID。省际差异资费通过：
 
 ```text
 originRegionId + destinationRegionId
@@ -133,7 +149,7 @@ DOMESTIC_ORDINARY_PARCEL
 postage/rates/domestic/ordinary-parcel/index.json
 ```
 
-普通包裹有三个总重量档：
+普通包裹三个总重量档：
 
 ```text
 <=10kg
@@ -141,11 +157,9 @@ postage/rates/domestic/ordinary-parcel/index.json
 >20kg 且 <=50kg
 ```
 
-每一档均按该档对应的 **首重 1kg + 每续重 1kg** 价格计算。先按整件总重量选择唯一重量档，三个档位之间不累计。
+每一档按该档对应的 **首重 1kg + 每续重 1kg** 计算。先按整件总重量选择唯一重量档，三个档位之间不累计。
 
-### 分省文件
-
-每个已录入起寄省/市单独一个文件。当前已录入：
+当前已录入起寄省/市：
 
 ```text
 CN-SC 四川
@@ -155,64 +169,79 @@ CN-GD 广东
 CN-HE 河北
 CN-SD 山东
 CN-BJ 北京
+CN-JX 江西
 ```
 
-每个文件使用 `routeGroups[]` 聚合同价寄达省。消费者流程：
+其他起寄省仍位于 `unpopulatedOrigins`，没有价格时必须返回“暂无资费数据”，不得套用其他省份价格。
 
-1. 根据 `originRegionId` 从 `originFiles` 找到分省文件。
-2. 根据 `destinationRegionId` 匹配唯一 `routeGroup`。
-3. 根据总重量匹配唯一 `weightBand`。
-4. 读取该组该重量档的 `basePrice` / `incrementPrice` 计算。
+### 普通包裹体积重
 
-其他起寄省仍位于 `unpopulatedOrigins`，没有价格时必须返回“暂无资费数据”，不得套用四川或其他省份价格。
+长、宽、高均为可选输入，单位 cm：
+
+```text
+volumetricWeightKg = lengthCm * widthCm * heightCm / 6000
+```
+
+尺寸完整时必须分别计算：
+
+```text
+actualWeightPostage
+volumetricWeightPostage
+```
+
+并以**资费较高者**作为基础寄递资费。消费者应同时展示两项结果，而不是只比较两个重量数值后计算一次。
+
+### 普通包裹挂号、回执与保价
+
+普通包裹基础寄递资费本身已包含挂号属性：
+
+```text
+serviceCapabilities.registrationIncludedInDeliveryPostage = true
+```
+
+因此普通包裹附回执时：
+
+- 可以办理回执；
+- 不需要额外选择挂号；
+- 不另收 `REGISTRATION_FEE`。
+
+普通包裹可以办理保价，也可以同时办理回执，二者不冲突。
+
+当前数据**没有提供国内普通包裹保价费率**，因此只记录“可保价”能力；消费者不得把国内给据信函保价费率套用于普通包裹。
 
 ### 普通包裹优惠凭证
 
-优惠规则仅保存在普通包裹 `index.json` 中，**只适用于 `DOMESTIC_ORDINARY_PARCEL`**，并明确排除 `DOMESTIC_HOMETOWN_PARCEL_STICKER`。
+8 折：学生证、教师证、优惠卡。
 
-8 折凭证：
+7 折：残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证。
 
-```text
-学生证
-教师证
-优惠卡
-```
-
-7 折凭证：
-
-```text
-残疾证
-军官证
-警官证
-文职人员证
-士兵证
-退役军人优待证
-```
-
-优惠在普通包裹基础寄递资费计算完成后应用。规则为：
+规则：
 
 ```text
 combinationPolicy = single
 maxCredentialsPerShipment = 1
+applyTo = baseDeliveryPostageOnly
 ```
 
-即**每件普通包裹最多使用一种优惠凭证，所有优惠不得叠加**。即使寄件人同时持有多个符合条件的证件，也只能选择其中一种用于该件包裹。
+即每件最多使用一种优惠凭证，不允许叠加。**8折/7折只作用于普通包裹基础寄递资费**；回执费、保价费及其他 `special` 费用按原价另加，不参与折扣。
+
+推荐计算顺序：
+
+1. 计算实重基础资费。
+2. 尺寸完整时计算泡重基础资费。
+3. 取两项基础资费中的较高者。
+4. 对该基础资费应用一个允许的优惠凭证。
+5. 再按原价加入回执、保价等特别业务费。
 
 ## 家乡包裹贴
 
-家乡包裹贴是独立的基础寄递方式，而不是特别业务：
+服务 ID：
 
 ```text
 DOMESTIC_HOMETOWN_PARCEL_STICKER
 ```
 
-资费文件：
-
-```text
-postage/rates/domestic/hometown-parcel-sticker.json
-```
-
-不区分地区，重量档为：
+重量档：
 
 ```text
 <=1kg                 4元/件
@@ -221,33 +250,36 @@ postage/rates/domestic/hometown-parcel-sticker.json
 >5kg 且 <=10kg       19元/件
 ```
 
-10kg 以上当前没有资费数据。
+家乡包裹贴：
 
-普通包裹的学生证、教师证、优惠卡、残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证优惠均**不得用于家乡包裹贴**。
+- 可办理保价；
+- **不可办理回执**；
+- 当前保价费率未提供，只公示保价能力；
+- 不使用普通包裹优惠；
+- 不使用普通包裹体积重规则。
 
-## 国内函件
+## 国内函件特别业务
 
 基础资费：`postage/rates/domestic/basic.json`。
 
-目前包括信函、明信片、印刷品、邮简、义务兵免费信函、盲人读物。
-
 特别业务：`postage/special-rates/domestic.json`。
 
-## 港澳台
+主要规则：
 
-基础资费：`postage/rates/hong-kong-macau-taiwan/basic.json`。
+- 国内函件回执必须挂号；
+- 国内保价给据信函必须挂号；
+- 国内约投服务费只对 `LETTER` 生效；
+- 约投与保价给据信函互斥；
+- 存局候领由收件人承担，只公示；
+- 撤回邮件或更改收件人名址属于交寄后申请，只公示。
 
-特别业务：`postage/special-rates/hong-kong-macau-taiwan.json`。
+## 港澳台与国际特别业务
+
+国际和港澳台保价函件保价费要求同时使用 `INSURED_LETTER_HANDLING_FEE`。该手续费已经包含挂号费，因此不得重复计收 `REGISTRATION_FEE`。
+
+撤回/改址、进口欠资、存局候领、逾期保管、海关验关等费用只公示，不作为寄件时可选项目。
 
 寄往台湾的附回执函件暂不收寄，真实限制记录在 `postage/special-rates/notices.json`，消费者必须执行该 notice。
-
-## 国际资费
-
-国际基础寄递按 AIR / SAL / SURFACE 分开维护在 `postage/rates/international/`，需要目的地分区的服务通过 `postage/zones/` 解析。
-
-国际国家/地区优先使用 ISO 3166-1 alpha-2；特殊邮政路向可使用 `countryData.json` 中的自定义 locale，例如 `PT-AZORES`。
-
-国际特别业务统一位于 `postage/special-rates/international.json`。
 
 ## Pricing 类型
 
@@ -270,31 +302,30 @@ value_increment_with_minimum
 external_rule
 ```
 
-`weight_band_base_plus_increment_by_route` 仅保留旧版兼容语义；新普通包裹数据使用 `weight_band_base_plus_increment_by_route_group`。
-
 ## App 推荐读取顺序
 
 1. 读取 `postage/index.json`。
 2. 读取 `postage/spec/index.json`，确认支持 `standardVersion`。
-3. 读取 `services.json` 选择 service。
-4. 若 service 有 `regionRegistry`，先解析国内省级行政区。
-5. 对普通包裹，加载 `ordinary-parcel/index.json` 后再加载对应起寄省文件。
-6. 加载基础寄递资费并计算。
-7. 若普通包裹选择优惠凭证，只允许选择一个有效凭证，再按 multiplier 应用折扣。
-8. 若 service 为 `DOMESTIC_HOMETOWN_PARCEL_STICKER`，不得应用任何普通包裹优惠凭证。
-9. 根据 scope 加载 `special-rates`。
-10. 加载通用 notices 与 special-rates notices。
-11. 按 `spec/validation.json` 校验；出现 error 级问题时不得静默计算错误邮资。
+3. 读取 `services.json` 选择基础寄递 service。
+4. 按 service 加载行政区、zone 和基础 rate 文件。
+5. 普通包裹尺寸完整时同时计算实重和泡重基础资费，取资费较高者。
+6. 普通包裹如选择优惠，只对基础寄递资费应用一个 multiplier。
+7. 加载 `special-rates`，只把 `selection.mode=selectable` 且适用于当前 service 的项目作为寄件选项。
+8. 递归解析 `requiresRateIds`，去除 `includesRateIds` 已包含的重复费用，并检查 `excludesRateIds`。
+9. 若基础 service 自身已满足某依赖能力（如普通包裹已含挂号），不得重复收费。
+10. `display-only` 项目只公示，不进入寄件总价。
+11. 加载 notices 并执行限制。
+12. 按 `spec/validation.json` 校验；error 级问题不得静默忽略。
 
 ## 数据维护原则
 
 1. 新数据先确认属于 `delivery` 还是 `special`。
-2. 新 service 必须在 `services.json` 注册，mailType 先加入 `mailTypes`。
+2. 新 service 必须在 `services.json` 注册。
 3. 新增普通包裹起寄省时，新建 `ordinary-parcel/CN-XX.json` 并在 `originFiles` 注册。
 4. 一个起寄省文件内同一寄达省只能出现在一个 `routeGroup`。
 5. 未录入起寄省不得回退到其他省价格。
-6. 普通包裹优惠必须声明 `appliesToServiceIds` / `excludedServiceIds`；禁止叠加时使用 `combinationPolicy=single` 和 `maxCredentialsPerShipment=1`。
-7. 新 pricing 类型必须先写入 `spec/pricing.json`。
-8. 新增或修改数据后按 `spec/validation.json` 做跨文件校验。
-9. 国际、港澳台、国内三个 scope 互不混用。
+6. 新特别业务必须明确可选性与适用对象；非交寄费用应使用 `display-only`。
+7. 普通包裹优惠只能作用于基础寄递资费，不得折扣特别业务费用。
+8. 新 pricing 类型必须先写入 `spec/pricing.json`。
+9. 新增或修改数据后按 `spec/validation.json` 做跨文件校验。
 10. `schemaVersion` 表示单个文件结构版本；`standardVersion` 表示整体规范版本。
