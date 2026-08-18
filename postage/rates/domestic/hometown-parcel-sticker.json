@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 5,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 6,
+  "standardVersion": "1.5.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
@@ -16,15 +16,16 @@
     {"minWeightExclusive":5000,"maxWeight":10000,"price":19.0}
   ],
   "serviceCapabilities": {
-    "insurance": {"available": true, "pricingStatus": "not-provided"},
+    "insurance": {"available": true, "rateId":"DOMESTIC_PARCEL_INSURANCE_FEE", "maximumInsuredValue":100000.0},
     "adviceOfDelivery": {"available": false}
   },
+  "availableSpecialRateIds": ["DOMESTIC_PARCEL_INSURANCE_FEE"],
   "notes": [
     "家乡包裹贴作为独立国内寄件方式维护。",
     "资费不区分地区。",
     "重量边界：≤1kg 4元；>1kg且≤3kg 6元；>3kg且≤5kg 11元；>5kg且≤10kg 19元。",
-    "家乡包裹贴可办理保价，但不能办理回执。",
-    "当前数据未提供国内家乡包裹贴保价费率，因此保价能力仅公示，不参与自动计算。",
+    "家乡包裹贴可办理保价，保价费为保价金额1%，最高保价金额10万元。",
+    "家乡包裹贴不能办理回执。",
     "普通包裹优惠和普通包裹体积重规则均不适用于家乡包裹贴。"
   ]
 }
