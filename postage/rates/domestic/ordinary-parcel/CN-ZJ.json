@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.2.0",
+  "originRegionId": "CN-ZJ",
+  "originNameZh": "浙江",
+  "routeGroups": [
+    {"id":"ZJ-G1","destinations":["CN-ZJ"],"prices":{"UP_TO_10KG":{"basePrice":5.0,"incrementPrice":1.0},"OVER_10_TO_20KG":{"basePrice":5.0,"incrementPrice":2.0},"OVER_20_TO_50KG":{"basePrice":5.0,"incrementPrice":3.0}}},
+    {"id":"ZJ-G2","destinations":["CN-AH","CN-FJ","CN-JS","CN-JX","CN-SH"],"prices":{"UP_TO_10KG":{"basePrice":6.0,"incrementPrice":1.5},"OVER_10_TO_20KG":{"basePrice":6.0,"incrementPrice":2.0},"OVER_20_TO_50KG":{"basePrice":6.0,"incrementPrice":3.0}}},
+    {"id":"ZJ-G3","destinations":["CN-HA","CN-HB","CN-HN","CN-SD"],"prices":{"UP_TO_10KG":{"basePrice":7.0,"incrementPrice":2.0},"OVER_10_TO_20KG":{"basePrice":7.0,"incrementPrice":2.0},"OVER_20_TO_50KG":{"basePrice":7.0,"incrementPrice":3.0}}},
+    {"id":"ZJ-G4","destinations":["CN-CQ","CN-BJ","CN-GS","CN-GD","CN-GX","CN-GZ","CN-HI","CN-HE","CN-LN","CN-NM","CN-NX","CN-SX","CN-SN","CN-SC","CN-TJ"],"prices":{"UP_TO_10KG":{"basePrice":8.0,"incrementPrice":3.0},"OVER_10_TO_20KG":{"basePrice":8.0,"incrementPrice":3.0},"OVER_20_TO_50KG":{"basePrice":8.0,"incrementPrice":4.0}}},
+    {"id":"ZJ-G5","destinations":["CN-HL","CN-JL","CN-QH","CN-YN"],"prices":{"UP_TO_10KG":{"basePrice":9.0,"incrementPrice":4.0},"OVER_10_TO_20KG":{"basePrice":9.0,"incrementPrice":4.0},"OVER_20_TO_50KG":{"basePrice":9.0,"incrementPrice":5.0}}},
+    {"id":"ZJ-G6","destinations":["CN-XZ","CN-XJ"],"prices":{"UP_TO_10KG":{"basePrice":10.0,"incrementPrice":5.0},"OVER_10_TO_20KG":{"basePrice":10.0,"incrementPrice":7.0},"OVER_20_TO_50KG":{"basePrice":10.0,"incrementPrice":8.0}}}
+  ]
+}
