@@ -1,128 +1,37 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "standardVersion": "1.0.0",
   "purpose": "定义 App、脚本或 CI 在读取邮资数据前应执行的跨文件一致性检查。",
   "checks": [
-    {
-      "id": "INDEX-FILE-EXISTS",
-      "severity": "error",
-      "rule": "postage/index.json files 中的每个相对路径必须存在且可解析为 JSON。"
-    },
-    {
-      "id": "SERVICE-ID-UNIQUE",
-      "severity": "error",
-      "rule": "services.json services[].id 必须唯一。"
-    },
-    {
-      "id": "MAIL-TYPE-REGISTERED",
-      "severity": "error",
-      "rule": "每个 services[].mailType 必须存在于 services.json mailTypes[].id。"
-    },
-    {
-      "id": "CURRENT-SERVICE-EXISTS",
-      "severity": "error",
-      "rule": "postage/index.json currentServices 的每个 id 必须存在于 services.json services[].id。"
-    },
-    {
-      "id": "ACTIVE-SERVICE-LISTED",
-      "severity": "warning",
-      "rule": "services.json 中 intended-active 的寄递服务应出现在 currentServices；若故意不启用，应有明确状态字段或 notice。"
-    },
-    {
-      "id": "SCOPE-CANONICAL",
-      "severity": "error",
-      "rule": "scope 只能使用 domestic、hong-kong-macau-taiwan、international。"
-    },
-    {
-      "id": "RATE-CATEGORY-CANONICAL",
-      "severity": "error",
-      "rule": "rateCategory 只能使用 delivery 或 special；寄递 services 必须为 delivery，special-rates/*.json 必须为 special。"
-    },
-    {
-      "id": "SERVICE-RATE-FILE-EXISTS",
-      "severity": "error",
-      "rule": "services[].rateFile 必须存在；路径相对于 postage/services.json 所在目录解析。"
-    },
-    {
-      "id": "SERVICE-ZONE-FILE-EXISTS",
-      "severity": "error",
-      "rule": "存在 services[].zoneFile 时，该文件必须存在且可解析。"
-    },
-    {
-      "id": "ZONE-ID-RESOLVABLE",
-      "severity": "error",
-      "rule": "所有 rate 文件引用的 zoneId 或 zones 对象 key 必须存在于对应 zoneFile。"
-    },
-    {
-      "id": "INTERNATIONAL-EXCLUSIONS",
-      "severity": "error",
-      "rule": "国际基础资费和 zone 数据不得把 CN、HK、MO、TW 作为普通国际目的地。"
-    },
-    {
-      "id": "HMT-DESTINATIONS",
-      "severity": "error",
-      "rule": "hong-kong-macau-taiwan 基础资费 destinations 必须为 HK、MO、TW 的有效集合，不得混入其他国际代码。"
-    },
-    {
-      "id": "SPECIAL-SCOPE-KEY",
-      "severity": "error",
-      "rule": "special-rates/index.json scopes 的 key 必须与对应 rateFile 内 scope 完全一致。"
-    },
-    {
-      "id": "SPECIAL-DESTINATION-INDEPENDENCE",
-      "severity": "error",
-      "rule": "若某 special scope 存在 destination-specific rate、serviceRestriction 或启用 notice，则 destinationIndependent 不得为 true。"
-    },
-    {
-      "id": "SPECIAL-RATE-ID-UNIQUE",
-      "severity": "error",
-      "rule": "同一个 special rate 文件内 rates[].id 必须唯一。"
-    },
-    {
-      "id": "SPECIAL-NOTICE-RATE-ID",
-      "severity": "error",
-      "rule": "启用的 special-rates/notices.json scope.specialRateId 非 null 时，必须能在对应 scope rateFile 的 rates[].id 中找到。"
-    },
-    {
-      "id": "NOTICE-EXAMPLE-DISABLED",
-      "severity": "error",
-      "rule": "所有 example/examples 中的示例 notice 必须 enabled=false。"
-    },
-    {
-      "id": "PRICING-TYPE-SUPPORTED",
-      "severity": "error",
-      "rule": "所有 pricing.type 或 pricingType 必须存在于 spec/pricing.json supportedTypes。"
-    },
-    {
-      "id": "ROUNDING-EXPLICIT",
-      "severity": "error",
-      "rule": "凡原规则包含‘不足X按X计算’或‘零数’的增量计费必须显式 rounding=ceil。"
-    },
-    {
-      "id": "FREE-EXPLICIT",
-      "severity": "error",
-      "rule": "免费项目必须显式 type/pricingType=free 且 price=0，不得仅依赖 noteZh。"
-    },
-    {
-      "id": "VALUE-MAXIMUM",
-      "severity": "error",
-      "rule": "存在 maximumInsuredValue 时，消费者必须拒绝超过上限的 declaredValue。"
-    },
-    {
-      "id": "WEIGHT-TIER-NONOVERLAP",
-      "severity": "error",
-      "rule": "weight_tiers 的 tiers 不得重叠；有效重量范围内不得存在无法匹配的空档。"
-    },
-    {
-      "id": "TIERED-INCREMENTAL-CONTIGUOUS",
-      "severity": "error",
-      "rule": "tiered_incremental 的阶段边界必须连续且按重量递增，不得重叠。"
-    },
-    {
-      "id": "README-PATHS-CURRENT",
-      "severity": "warning",
-      "rule": "README 中展示的主要目录和读取入口应与 postage/index.json、services.json 当前结构一致。"
-    }
+    {"id":"INDEX-FILE-EXISTS","severity":"error","rule":"postage/index.json files 中的每个相对路径必须存在且可解析为 JSON。"},
+    {"id":"STANDARD-VERSION-MATCH","severity":"error","rule":"postage/index.json standardVersion 必须与 postage/spec/index.json standardVersion 一致；声明 standardVersion 的其他核心入口也必须一致。"},
+    {"id":"SERVICE-ID-UNIQUE","severity":"error","rule":"services.json services[].id 必须唯一。"},
+    {"id":"MAIL-TYPE-REGISTERED","severity":"error","rule":"每个 services[].mailType 必须存在于 services.json mailTypes[].id。"},
+    {"id":"CURRENT-SERVICE-EXISTS","severity":"error","rule":"postage/index.json currentServices 的每个 id 必须存在于 services.json services[].id。"},
+    {"id":"ACTIVE-SERVICE-LISTED","severity":"warning","rule":"services.json 中 intended-active 的寄递服务应出现在 currentServices；若故意不启用，应有明确状态字段或 notice。"},
+    {"id":"SCOPE-CANONICAL","severity":"error","rule":"scope 只能使用 domestic、hong-kong-macau-taiwan、international。"},
+    {"id":"RATE-CATEGORY-CANONICAL","severity":"error","rule":"rateCategory 只能使用 delivery 或 special；寄递 services 必须为 delivery，special-rates/*.json 必须为 special。"},
+    {"id":"SERVICE-RATE-FILE-EXISTS","severity":"error","rule":"services[].rateFile 必须存在；路径相对于 postage/services.json 所在目录解析。"},
+    {"id":"SERVICE-ZONE-FILE-EXISTS","severity":"error","rule":"存在 services[].zoneFile 时，该文件必须存在且可解析。"},
+    {"id":"ZONE-ID-RESOLVABLE","severity":"error","rule":"所有 rate 文件引用的 zoneId 或 zones 对象 key 必须存在于对应 zoneFile。"},
+    {"id":"INTERNATIONAL-EXCLUSIONS","severity":"error","rule":"国际基础资费和 zone 数据不得把 CN、HK、MO、TW 作为普通国际目的地。"},
+    {"id":"HMT-DESTINATIONS","severity":"error","rule":"hong-kong-macau-taiwan 基础资费 destinations 必须为 HK、MO、TW 的有效集合，不得混入其他国际代码。"},
+    {"id":"SPECIAL-SCOPE-KEY","severity":"error","rule":"special-rates/index.json scopes 的 key 必须与对应 rateFile 内 scope 完全一致。"},
+    {"id":"SPECIAL-DESTINATION-INDEPENDENCE","severity":"error","rule":"若某 special scope 存在 destination-specific rate、serviceRestriction 或启用 notice，则 destinationIndependent 不得为 true。"},
+    {"id":"SPECIAL-RATE-ID-UNIQUE","severity":"error","rule":"同一个 special rate 文件内 rates[].id 必须唯一。"},
+    {"id":"SPECIAL-NOTICE-RATE-ID","severity":"error","rule":"启用的 special-rates/notices.json scope.specialRateId 非 null 时，必须能在对应 scope rateFile 的 rates[].id 中找到。"},
+    {"id":"SPECIAL-MAIL-TYPE-REGISTERED","severity":"error","rule":"special rate 的 applicableMailTypes 与 special notice metadata.mailTypes 中的值必须存在于 services.json mailTypes[].id。"},
+    {"id":"SPECIAL-CATEGORY-VALID","severity":"error","rule":"applicableCategories 与 special notice metadata.applicableCategories 只能使用 spec/core.json mailTypeRules.specialCategoryIds 中定义的业务大类。"},
+    {"id":"SPECIAL-APPLICABILITY-OR","severity":"error","rule":"同时存在 applicableCategories 与 applicableMailTypes 时，消费者必须按并集 OR 解释，不得按 AND 造成永远无法匹配。"},
+    {"id":"NOTICE-EXAMPLE-DISABLED","severity":"error","rule":"所有 example/examples 中的示例 notice 必须 enabled=false。"},
+    {"id":"NOTICE-EXCLUDED-PRECEDENCE","severity":"error","rule":"目的地同时出现在 applicableDestinations 与 excludedDestinations 时，excludedDestinations 必须优先。"},
+    {"id":"PRICING-TYPE-SUPPORTED","severity":"error","rule":"所有 pricing.type 或 pricingType 必须存在于 spec/pricing.json supportedTypes。"},
+    {"id":"ROUNDING-EXPLICIT","severity":"error","rule":"凡原规则包含‘不足X按X计算’或‘零数’的增量计费必须显式 rounding=ceil。"},
+    {"id":"FREE-EXPLICIT","severity":"error","rule":"免费项目必须显式 type/pricingType=free 且 price=0，不得仅依赖 noteZh。"},
+    {"id":"VALUE-MAXIMUM","severity":"error","rule":"存在 maximumInsuredValue 时，消费者必须拒绝超过上限的 declaredValue。"},
+    {"id":"WEIGHT-TIER-NONOVERLAP","severity":"error","rule":"weight_tiers 的 tiers 不得重叠；有效重量范围内不得存在无法匹配的空档。"},
+    {"id":"TIERED-INCREMENTAL-CONTIGUOUS","severity":"error","rule":"tiered_incremental 的阶段边界必须连续且按重量递增，不得重叠。"},
+    {"id":"README-PATHS-CURRENT","severity":"warning","rule":"README 中展示的主要目录和读取入口应与 postage/index.json、services.json 当前结构一致。"}
   ],
   "recommendedReadOrder": [
     "读取 postage/index.json。",
