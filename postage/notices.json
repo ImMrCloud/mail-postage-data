@@ -1,43 +1,88 @@
 {
-  "schemaVersion": 1,
-  "description": "按目的地、运输方式、函件类型维护禁限寄、服务、海关或自定义提示。App 应忽略 enabled=false 的记录。",
+  "schemaVersion": 2,
+  "standardVersion": "1.0.0",
+  "description": "按目的地、寄递服务和邮件类型维护禁限寄、服务、海关或自定义提示。App 应忽略 enabled=false 的记录。",
   "supportedTypes": ["prohibition", "restriction", "service", "customs", "warning", "info", "custom"],
   "supportedSeverities": ["info", "warning", "error"],
   "notices": [],
   "fieldGuide": {
-    "scope.destination": "ISO 3166-1 alpha-2；为 null 时表示所有国际目的地。",
-    "scope.serviceId": "例如 INTL_AIR_LETTER；为 null 时适用于所有运输方式/服务。",
-    "scope.mailType": "例如 LETTER；为 null 时适用于该服务下所有函件类型。",
+    "enabled": "布尔值。false 表示示例或暂不启用，App 必须忽略。",
+    "id": "notice 的稳定唯一 ID。",
+    "scope.destination": "目的地代码。国际可使用 ISO 3166-1 alpha-2 或 countryData.json 自定义 locale；港澳台使用 HK/MO/TW；国内通常为 null。null 表示不按目的地额外限定，而不是专指所有国际目的地。",
+    "scope.serviceId": "寄递服务 ID，必须对应 services.json services[].id，例如 INTL_AIR_LETTER、HMT_LETTER、DOMESTIC_LETTER；为 null 时不按具体 service 限定。",
+    "scope.mailType": "邮件类型 ID，必须对应 services.json mailTypes[].id；为 null 时不按具体邮件类型限定。",
     "type": "提示类型，可使用 custom 写任意自定义提示。",
-    "severity": "info / warning / error；可用于 App 决定展示样式。",
+    "severity": "info / warning / error；可用于 App 决定展示样式和优先级。",
     "title": "短标题。",
-    "message": "给用户展示的自由文本，可填写任何自定义说明。",
+    "message": "给用户展示的自由文本，可填写禁限寄、服务、海关或其他说明。",
     "prohibitedItems": "可选字符串数组，用于结构化列出禁止物品。",
     "restrictedItems": "可选字符串数组，用于结构化列出限制物品。",
     "source": "可选资料来源说明或 URL。",
     "effectiveFrom": "可选 YYYY-MM-DD。",
     "effectiveTo": "可选 YYYY-MM-DD；null 表示未指定结束日期。",
     "tags": "可选自定义标签数组。",
-    "metadata": "可选自由对象，留给未来或 App 自定义字段。"
+    "metadata": "可选自由对象，留给 App 或未来扩展字段。"
   },
-  "example": {
-    "enabled": false,
-    "id": "EXAMPLE-JP-AIR-LETTER-001",
-    "scope": {
-      "destination": "JP",
-      "serviceId": "INTL_AIR_LETTER",
-      "mailType": "LETTER"
+  "examples": {
+    "international": {
+      "enabled": false,
+      "id": "EXAMPLE-JP-AIR-LETTER-001",
+      "scope": {
+        "destination": "JP",
+        "serviceId": "INTL_AIR_LETTER",
+        "mailType": "LETTER"
+      },
+      "type": "custom",
+      "severity": "warning",
+      "title": "国际示例提示",
+      "message": "这里可以填写寄往日本的航空信函特别提示；此示例不代表真实邮政限制。",
+      "prohibitedItems": [],
+      "restrictedItems": [],
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "international"],
+      "metadata": {}
     },
-    "type": "custom",
-    "severity": "warning",
-    "title": "示例提示",
-    "message": "这里可以填写寄往日本的航空信函特别提示；此示例不代表真实邮政限制。",
-    "prohibitedItems": [],
-    "restrictedItems": [],
-    "source": null,
-    "effectiveFrom": null,
-    "effectiveTo": null,
-    "tags": ["example"],
-    "metadata": {}
+    "hongKongMacauTaiwan": {
+      "enabled": false,
+      "id": "EXAMPLE-HMT-TW-LETTER-001",
+      "scope": {
+        "destination": "TW",
+        "serviceId": "HMT_LETTER",
+        "mailType": "LETTER"
+      },
+      "type": "custom",
+      "severity": "info",
+      "title": "港澳台示例提示",
+      "message": "这里可以填写寄往香港、澳门或台湾的基础寄递服务提示；此示例不代表真实邮政限制。",
+      "prohibitedItems": [],
+      "restrictedItems": [],
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "hong-kong-macau-taiwan"],
+      "metadata": {}
+    },
+    "domestic": {
+      "enabled": false,
+      "id": "EXAMPLE-DOMESTIC-LETTER-001",
+      "scope": {
+        "destination": null,
+        "serviceId": "DOMESTIC_LETTER",
+        "mailType": "LETTER"
+      },
+      "type": "custom",
+      "severity": "info",
+      "title": "国内示例提示",
+      "message": "这里可以填写国内信函寄递提示；此示例不代表真实邮政限制。",
+      "prohibitedItems": [],
+      "restrictedItems": [],
+      "source": null,
+      "effectiveFrom": null,
+      "effectiveTo": null,
+      "tags": ["example", "domestic"],
+      "metadata": {}
+    }
   }
 }
