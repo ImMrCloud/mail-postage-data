@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "serviceId": "INTL_SURFACE_LETTER",
+  "currency": "CNY",
+  "weightUnit": "g",
+  "rates": [
+    {"zoneId":"SURFACE_LETTER_ZONE_1","pricing":{"type":"base_plus_increment","baseWeight":20,"basePrice":3.5,"incrementWeight":10,"incrementPrice":0.4,"rounding":"ceil"}},
+    {"zoneId":"SURFACE_LETTER_ZONE_2","pricing":{"type":"base_plus_increment","baseWeight":20,"basePrice":4.0,"incrementWeight":10,"incrementPrice":0.5,"rounding":"ceil"}}
+  ]
+}
