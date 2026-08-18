@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "standardVersion": "1.4.0",
   "scope": "domestic",
   "rateCategory": "delivery",
@@ -23,9 +23,11 @@
     "comparisonRule": "higher-postage",
     "consumerBehavior": "若用户输入完整长宽高，分别使用实际重量和体积重量按同一路向规则计算资费，展示两项结果，并以较高资费作为应计寄递资费；若未输入完整尺寸则仅按实际重量计算。"
   },
-  "originFiles": {
-    "CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"
+  "serviceCapabilities": {
+    "insurance": {"available": true, "pricingStatus": "not-provided", "conflictsWith": []},
+    "adviceOfDelivery": {"available": true, "rateId": "ADVICE_OF_DELIVERY_FEE", "requiresRateIds": ["REGISTRATION_FEE"], "conflictsWith": []}
   },
+  "originFiles": {"CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"},
   "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
   "availableSpecialRateIds": ["REGISTRATION_FEE","ADVICE_OF_DELIVERY_FEE"],
   "discounts": {
@@ -46,11 +48,11 @@
       {"id":"VETERAN_PREFERENCE_CERTIFICATE","nameZh":"退役军人优待证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}}
     ]
   },
-  "notes": [
+  "notes":[
     "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
     "输入完整长宽高时，体积重量=长×宽×高÷6000（cm→kg），实际重量和体积重量分别计算并采用较高资费。",
-    "邮政普通包裹可选择回执；回执依赖挂号。",
-    "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。",
-    "普通包裹优惠不得用于家乡包裹贴。"
+    "普通包裹可办理保价和回执，二者不互斥；回执依赖挂号。",
+    "当前数据未提供国内普通包裹保价费率，因此保价能力仅公示，消费者不得套用函件保价费率自动计算。",
+    "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。"
   ]
 }
