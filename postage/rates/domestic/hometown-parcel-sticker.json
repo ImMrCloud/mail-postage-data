@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "scope": "domestic",
+  "rateCategory": "delivery",
+  "serviceId": "DOMESTIC_HOMETOWN_PARCEL_STICKER",
+  "mailType": "PARCEL",
+  "currency": "CNY",
+  "weightUnit": "g",
+  "destinationIndependent": true,
+  "pricingType": "weight_tiers",
+  "tiers": [
+    {"maxWeightExclusive": 1000, "price": 4.0},
+    {"minWeight": 1000, "maxWeightExclusive": 3000, "price": 6.0},
+    {"minWeight": 3000, "maxWeightExclusive": 5000, "price": 11.0},
+    {"minWeight": 5000, "maxWeightExclusive": 10000, "price": 19.0}
+  ],
+  "notes": [
+    "家乡包裹贴作为独立国内寄件方式维护，不属于 special-rates。",
+    "资费不区分地区。",
+    "重量边界按用户提供的‘小于1kg / 小于3kg / 小于5kg / 小于10kg’原意记录，因此10kg及以上当前无资费。"
+  ]
+}
