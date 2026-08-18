@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 2,
+  "standardVersion": "1.3.0",
   "scope": "domestic",
   "rateCategory": "delivery",
   "serviceId": "DOMESTIC_ORDINARY_PARCEL",
@@ -25,18 +25,29 @@
   },
   "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-JX","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
   "discounts": {
-    "appliesToServiceId": "DOMESTIC_ORDINARY_PARCEL",
+    "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
+    "excludedServiceIds": ["DOMESTIC_HOMETOWN_PARCEL_STICKER"],
     "applyTo": "calculatedDeliveryPostage",
-    "combinationPolicy": "unspecified",
+    "combinationPolicy": "single",
+    "maxCredentialsPerShipment": 1,
     "credentials": [
-      {"id":"DISCOUNT_CARD","nameZh":"优惠卡","status":"active","pricing":{"type":"multiplier","multiplier":0.8},"noteZh":"按普通包裹寄递资费的8折计收。"},
-      {"id":"DISABILITY_CERTIFICATE","nameZh":"残疾证","status":"active","pricing":{"type":"multiplier","multiplier":0.7},"noteZh":"按普通包裹寄递资费的7折计收。"},
-      {"id":"STUDENT_ID","nameZh":"学生证","status":"rate-pending","pricing":null,"noteZh":"已预留学生证优惠凭证类型；当前未提供具体折扣比例，App 不得自行猜测。"}
+      {"id":"STUDENT_ID","nameZh":"学生证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
+      {"id":"TEACHER_ID","nameZh":"教师证","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
+      {"id":"DISCOUNT_CARD","nameZh":"优惠卡","status":"active","pricing":{"type":"multiplier","multiplier":0.8}},
+      {"id":"DISABILITY_CERTIFICATE","nameZh":"残疾证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
+      {"id":"MILITARY_OFFICER_ID","nameZh":"军官证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
+      {"id":"POLICE_OFFICER_ID","nameZh":"警官证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
+      {"id":"CIVILIAN_PERSONNEL_ID","nameZh":"文职人员证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
+      {"id":"SOLDIER_ID","nameZh":"士兵证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}},
+      {"id":"VETERAN_PREFERENCE_CERTIFICATE","nameZh":"退役军人优待证","status":"active","pricing":{"type":"multiplier","multiplier":0.7}}
     ]
   },
   "notes": [
     "普通包裹先按总重量选择唯一重量档，再按起寄省文件中的寄达路向组计算首重和续重。",
-    "折扣仅适用于 DOMESTIC_ORDINARY_PARCEL，不适用于家乡包裹贴或其他寄件方式。",
+    "学生证、教师证、优惠卡按普通包裹寄递资费8折计收。",
+    "残疾证、军官证、警官证、文职人员证、士兵证、退役军人优待证按普通包裹寄递资费7折计收。",
+    "每件普通包裹最多使用一种优惠凭证，所有优惠均不得叠加。",
+    "上述优惠仅适用于 DOMESTIC_ORDINARY_PARCEL，明确不得用于 DOMESTIC_HOMETOWN_PARCEL_STICKER。",
     "其他未录入起寄省不得回退到已录入省份价格。"
   ]
 }
