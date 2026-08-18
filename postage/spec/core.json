@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.0.0",
+  "scopeValues": {
+    "domestic": "中国大陆境内寄递。",
+    "hong-kong-macau-taiwan": "中国大陆寄往香港、澳门、台湾。",
+    "international": "中国大陆寄往国际目的地；排除 CN、HK、MO、TW。"
+  },
+  "rateCategories": {
+    "delivery": "基础寄递资费。计算邮费主体时使用。",
+    "special": "特别业务资费。通常在基础寄递资费之外按所选业务叠加。"
+  },
+  "pathRules": {
+    "datasetIndex": "postage/index.json",
+    "serviceRegistry": "postage/services.json",
+    "generalNotices": "postage/notices.json",
+    "deliveryRates": {
+      "domestic": "postage/rates/domestic/",
+      "hong-kong-macau-taiwan": "postage/rates/hong-kong-macau-taiwan/",
+      "international": "postage/rates/international/"
+    },
+    "internationalZones": "postage/zones/",
+    "specialRates": "postage/special-rates/",
+    "specification": "postage/spec/"
+  },
+  "destinationRules": {
+    "international": {
+      "preferred": "ISO 3166-1 alpha-2",
+      "customPostalDestination": "当 ISO2 无法准确表达独立邮政路向时，使用 countryData.json 中的自定义 locale，例如 PT-AZORES、PT-MADEIRA、SH-ASCENSION。",
+      "excluded": ["CN", "HK", "MO", "TW"]
+    },
+    "hong-kong-macau-taiwan": {
+      "allowed": ["HK", "MO", "TW"]
+    },
+    "domestic": {
+      "destination": null,
+      "note": "国内资费通常不以国家代码区分；如未来需要省市级差异，应新增专门字段，不复用国际 ISO destination。"
+    }
+  },
+  "serviceRules": {
+    "requiredFields": ["id", "scope", "rateCategory", "mailType", "rateFile"],
+    "conditionalFields": {
+      "transport": "国际 AIR / SAL / SURFACE 服务必须提供；国内和港澳台无运输方式分组时可省略。",
+      "zoneFile": "需要按目的地分区的服务必须提供；不分区的国内和港澳台基础资费可省略。"
+    },
+    "idPrefixes": {
+      "domestic": "DOMESTIC_",
+      "hong-kong-macau-taiwan": "HMT_",
+      "international": "INTL_"
+    },
+    "currentServicesRule": "postage/index.json 的 currentServices 必须与 services.json 中当前可用寄递服务 id 一一对应，不得引用不存在的服务。"
+  },
+  "mailTypeRules": {
+    "registry": "所有 services[].mailType 必须先在 services.json 的 mailTypes 中注册。",
+    "currentIds": [
+      "LETTER",
+      "POSTCARD",
+      "AEROGRAMME",
+      "PRINTED_MATTER",
+      "LETTER_SHEET",
+      "MILITARY_FREE_LETTER",
+      "LITERATURE_FOR_BLIND",
+      "SMALL_PACKET",
+      "PRINTED_MATTER_BAG"
+    ],
+    "specialCategoryIds": ["LETTER_POST", "PARCEL"],
+    "note": "specialCategoryIds 用于特别业务 applicableCategories，不等同于 services.json 的 mailType。"
+  },
+  "indexRules": {
+    "postageIndex": [
+      "必须声明 schemaVersion、dataset、scope、origin、currency。",
+      "activeScopes 只列实际已有可用数据的 scope。",
+      "files 中的相对路径均以 postage/index.json 所在目录为基准。",
+      "rateCategories 至少包含 delivery 与 special。"
+    ],
+    "specialRatesIndex": [
+      "scopes 的 key 必须直接使用规范 scope 值，不使用 CamelCase 别名。",
+      "每个 scope 必须声明 status、destinationIndependent、rateFile。",
+      "存在目的地例外时 destinationIndependent 必须为 false。"
+    ]
+  },
+  "versioning": {
+    "schemaVersion": "单个文件结构发生不兼容或显著扩展时递增整数。",
+    "standardVersion": "postage/spec 规范版本，使用 semver。",
+    "compatibility": "消费者不得仅凭 schemaVersion 推断其他文件结构；应以对应 spec 和文件自身字段为准。"
+  }
+}
