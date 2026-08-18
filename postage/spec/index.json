@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 6,
-  "standardVersion": "1.4.0",
+  "schemaVersion": 7,
+  "standardVersion": "1.5.0",
   "dataset": "China Post postage data specification",
   "status": "active",
   "appliesTo": ["domestic", "hong-kong-macau-taiwan", "international"],
@@ -12,31 +12,25 @@
     "specialServices": "./special-services.json"
   },
   "principles": [
-    "postage/index.json 是数据集总入口。",
-    "services.json 是寄递服务注册表。",
-    "rateCategory=delivery 表示基础寄递资费；rateCategory=special 表示特别业务资费。",
-    "scope 统一使用 domestic、hong-kong-macau-taiwan、international。",
-    "国内存在省际差异的寄递服务必须通过 province region registry 使用 originRegionId + destinationRegionId 路由。",
-    "普通包裹按起寄省拆分路向组文件，未录入起寄省不得回退到其他省价格。",
-    "普通包裹优惠一次只能使用一种，不得叠加，也不得用于家乡包裹贴。",
-    "普通包裹8折/7折只作用于基础寄递资费；回执、保价等特别业务费用按原价另加。",
-    "普通包裹基础寄递资费已包含挂号属性，附回执时不另选或另收挂号费。",
-    "特别业务必须区分 selectable 与 display-only，并按 requires/includes/excludes 关系处理依赖、包含与互斥。",
-    "普通包裹可选输入体积尺寸，按长×宽×高÷6000计算体积重量，并分别展示实重资费和泡重资费，以较高资费作为应计基础寄递资费。",
-    "国际目的地优先使用 ISO 3166-1 alpha-2；特殊邮政目的地使用 countryData.json 中的自定义 locale。",
-    "所有不足计费单位按一个完整计费单位计算时使用 rounding=ceil。",
-    "App 必须忽略 enabled=false 的 notice 示例记录。"
+    "postage/index.json 是数据集总入口，services.json 是寄递服务注册表。",
+    "特别业务必须区分 selectable 与 display-only；display-only 只公示、排在列表底部、不参与计算。",
+    "特别业务交互必须执行 requiresRateIds、requiresAnyRateIds、includesRateIds、replacesRateIds、excludesRateIds，并支持反向级联取消。",
+    "普通包裹基础资费自带挂号，附回执不另收挂号费；家乡包裹贴不可回执。",
+    "普通包裹和家乡包裹贴保价费为保价金额1%，最高10万元。",
+    "函件保价只允许 LETTER，最高保价金额2万元。",
+    "普通包裹优惠只作用于基础寄递资费，保价/回执等特别业务费用不参与折扣。",
+    "普通包裹尺寸完整时按长×宽×高÷6000计算泡重，分别计算实重/泡重资费并取较高基础资费。"
   ],
   "changes": {
-    "1.4.0": [
-      "新增特别业务 selection.mode/phase/chargedTo 字段。",
-      "新增 applicableServiceIds/excludedServiceIds 与 dependencies.requiresRateIds/includesRateIds/excludesRateIds。",
-      "存局候领、撤回改址、进口欠资、逾期保管和海关验关等非交寄费用改为 display-only。",
-      "回执与保价的挂号依赖、国内约投与保价互斥、国际/港澳台保价手续费包含挂号等规则机器化。",
-      "普通包裹基础寄递资费已含挂号属性，回执不另收挂号费；普通包裹可同时办理保价和回执。",
-      "家乡包裹贴可保价但不可回执；国内包裹保价费率未提供时不得套用函件保价费率。",
-      "普通包裹新增可选体积重量计算规则：长×宽×高÷6000。",
-      "普通包裹优惠仅作用于基础寄递资费，特别业务费用不参与折扣。"
+    "1.5.0": [
+      "新增 declared_value_percentage 计费类型，用于国内包裹保价金额1%。",
+      "国内普通包裹和家乡包裹贴保价上限设为100000元。",
+      "国内、国际、港澳台函件保价限定 LETTER，最高保价金额20000元。",
+      "新增 dependencies.requiresAnyRateIds 与 replacesRateIds。",
+      "规范复选框正向自动勾选、替代项自动取消/禁用，以及取消依赖项时的反向级联取消。",
+      "国际/港澳台保价函件手续费替代独立挂号费；回执可由挂号费或保价函件手续费满足挂号前提。",
+      "仅公示项目统一排在特别业务列表底部且不得渲染为复选框。",
+      "国内普通包裹取消存局候领适用。"
     ]
   }
 }
