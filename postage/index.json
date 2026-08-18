@@ -1,13 +1,15 @@
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "dataset": "China Post postage data",
   "scope": "multi-scope",
   "origin": "CN",
   "currency": "CNY",
+  "standardVersion": "1.0.0",
   "rateCategories": ["delivery", "special"],
   "activeScopes": ["domestic", "hong-kong-macau-taiwan", "international"],
   "internationalExcludedDestinations": ["CN", "HK", "MO", "TW"],
   "files": {
+    "specification": "./spec/index.json",
     "services": "./services.json",
     "notices": "./notices.json",
     "airLetterZones": "./zones/air-letter.json",
