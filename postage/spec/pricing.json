@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "standardVersion": "1.2.0",
+  "schemaVersion": 4,
+  "standardVersion": "1.3.0",
   "currency": "CNY",
   "defaultWeightUnit": "g",
   "roundingValues": {
@@ -83,7 +83,14 @@
       "description": "对已计算出的基础金额应用乘数折扣。",
       "required": ["multiplier"],
       "formula": "discountedTotal = originalTotal * multiplier",
-      "constraints": ["multiplier 必须大于0。", "仅在所属 service 明确声明的 discounts 中应用。", "若 combinationPolicy=unspecified，不得自动叠加多个 multiplier。"]
+      "constraints": [
+        "multiplier 必须大于0。",
+        "仅在所属 service 明确声明的 discounts 中应用。",
+        "若 discounts.appliesToServiceIds 存在，当前 serviceId 必须在其中。",
+        "若当前 serviceId 位于 discounts.excludedServiceIds，则不得应用优惠。",
+        "combinationPolicy=single 时每件只能选择一种优惠凭证。",
+        "maxCredentialsPerShipment=1 时消费者必须拒绝同时提交两个及以上优惠凭证。"
+      ]
     },
     "value_increment": {
       "description": "按声明价值/保价金额向上取整到金额计费单位。",
@@ -110,7 +117,7 @@
     "aggregatePricingType": "mailTypes[mailType].pricingType，例如航空其他函件、港澳台和国内基础资费。",
     "aggregatePricingObject": "ratesByMailType[mailType].pricing.type 或 ratesByMailType[mailType].zones[zoneId].type，例如 SAL 其他函件。",
     "domesticRoutePricing": "普通包裹 index 顶层 pricingType + weightBands + originFiles，分省文件使用 routeGroups。",
-    "discountPricing": "discounts.credentials[].pricing.type=multiplier。",
+    "discountPricing": "discounts.credentials[].pricing.type=multiplier；适用 service、排除 service、叠加策略由 discounts 顶层字段控制。",
     "specialRates": "rates[].pricing.type，特别业务统一使用此布局。"
   },
   "canonicalRulesForNewData": [
@@ -120,7 +127,8 @@
     "按 zone 聚合的新增基础资费可以沿用现有文件布局，但同一文件内部必须保持一致。",
     "不得用字段缺失来暗示免费；免费必须显式 type/pricingType=free 且 price=0。",
     "涉及不足计费单位时必须显式 rounding=ceil。",
-    "优惠折扣必须声明适用 service；未给出折扣值时使用 status=rate-pending 且 pricing=null，不得猜测。"
+    "优惠折扣必须明确声明 appliesToServiceIds；需要排除的寄件方式必须列入 excludedServiceIds。",
+    "优惠禁止叠加时使用 combinationPolicy=single，并建议同时声明 maxCredentialsPerShipment=1。"
   ],
   "inputValidation": {
     "weight": "必须为大于 0 的数值，单位采用文件 weightUnit。",
@@ -129,6 +137,6 @@
     "zoneId": "使用 zoneVariant 时必须先由 serviceId + destination 在对应 zoneFile 中解析。",
     "originRegionId": "使用国内省际路由资费时必须提供且存在于 regionRegistry。",
     "destinationRegionId": "使用国内省际路由资费时必须提供且存在于 regionRegistry。",
-    "discountCredential": "只有 status=active 且 pricing 非 null 的凭证可用于计算。"
+    "discountCredential": "只有 status=active 且 pricing 非 null 的凭证可用于计算；当 combinationPolicy=single 时最多选择一个。"
   }
 }
