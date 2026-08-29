@@ -28,8 +28,18 @@
     "insurance": {"available": true, "rateId":"DOMESTIC_PARCEL_INSURANCE_FEE", "maximumInsuredValue":100000.0, "conflictsWith": []},
     "adviceOfDelivery": {"available": true, "rateId":"ADVICE_OF_DELIVERY_FEE", "registrationRequirementSatisfiedByService": true, "requiresRateIds": [], "conflictsWith": []}
   },
-  "originFiles": {"CN-SC":"./CN-SC.json","CN-ZJ":"./CN-ZJ.json","CN-JS":"./CN-JS.json","CN-GD":"./CN-GD.json","CN-HE":"./CN-HE.json","CN-SD":"./CN-SD.json","CN-BJ":"./CN-BJ.json","CN-JX":"./CN-JX.json"},
-  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-HN","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
+  "originFiles": {
+    "CN-SC":"./CN-SC.json",
+    "CN-ZJ":"./CN-ZJ.json",
+    "CN-JS":"./CN-JS.json",
+    "CN-GD":"./CN-GD.json",
+    "CN-HE":"./CN-HE.json",
+    "CN-SD":"./CN-SD.json",
+    "CN-BJ":"./CN-BJ.json",
+    "CN-JX":"./CN-JX.json",
+    "CN-HN":"./CN-HN.json"
+  },
+  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
   "availableSpecialRateIds": ["ADVICE_OF_DELIVERY_FEE","DOMESTIC_PARCEL_INSURANCE_FEE"],
   "discounts": {
     "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
