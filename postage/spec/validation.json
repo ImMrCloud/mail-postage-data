@@ -8,7 +8,7 @@
     {"id":"DISPLAY-ONLY-NO-CHECKBOX","severity":"error","rule":"selection.mode=display-only 的项目不得渲染为复选框，不得进入寄件计算，且 displayOrder=last 时必须排在可选项目之后。"},
     {"id":"DISPLAY-ONLY-ITEMS","severity":"error","rule":"国内存局候领、撤回/改址；国际/港澳台国际回信券、撤回/改址、进口欠资、存局候领、逾期保管、海关查验必须为 display-only。"},
     {"id":"DOMESTIC-POSTE-RESTANTE-NOT-PARCEL","severity":"error","rule":"国内存局候领不得适用于 DOMESTIC_ORDINARY_PARCEL 或 DOMESTIC_HOMETOWN_PARCEL_STICKER。"},
-    {"id":"LETTER-INSURANCE-MAILTYPE","severity":"error","rule":"国内、国际和港澳台函件保价必须仅适用于 mailType=LETTER。"},
+    {"id":"DOMESTIC-LETTER-INSURANCE-MAILTYPE","severity":"error","rule":"国内 INSURANCE_FEE_RECORDED_LETTER 必须适用于 LETTER 和 LITERATURE_FOR_BLIND。"},
     {"id":"LETTER-INSURANCE-MAX","severity":"error","rule":"国内、国际和港澳台函件保价 maximumInsuredValue 必须为20000元。"},
     {"id":"DOMESTIC-PARCEL-INSURANCE","severity":"error","rule":"DOMESTIC_PARCEL_INSURANCE_FEE 必须使用 declared_value_percentage，percentage=0.01，maximumInsuredValue=100000，并适用于普通包裹和家乡包裹贴。"},
     {"id":"ORDINARY-PARCEL-REGISTRATION-INCLUDED","severity":"error","rule":"普通包裹基础资费自带挂号，availableSpecialRateIds 不得包含 REGISTRATION_FEE。"},
@@ -21,6 +21,7 @@
     {"id":"CASCADE-UNSELECT","severity":"error","rule":"取消依赖项时必须反向级联取消所有失去唯一依赖前提的业务；requiresAnyRateIds 必须重新求值。"},
     {"id":"TAIWAN-ADVICE-UNAVAILABLE","severity":"error","rule":"台湾回执保持不可用。"},
     {"id":"DOMESTIC-APPOINTED-LETTER-ONLY","severity":"error","rule":"国内约投仅适用于 LETTER，且与国内函件保价互斥。"},
+    {"id":"DOMESTIC-APPOINTED-REQUIRES-REGISTRATION","severity":"error","rule":"国内 APPOINTED_DELIVERY_FEE 必须 requiresRateIds 包含 REGISTRATION_FEE；取消挂号时约投必须级联取消。"},
     {"id":"VOLUMETRIC-DIVISOR","severity":"error","rule":"普通包裹体积重量 divisor=6000，尺寸完整时必须分别计算实重资费与泡重资费并采用较高基础资费。"},
     {"id":"NO-FALLBACK","severity":"error","rule":"普通包裹未录入起寄省不得回退到其他省资费。"}
   ],
