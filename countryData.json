@@ -910,6 +910,14 @@
     "emoji": "🇷🇺"
   },
   {
+    "code": 65,
+    "tw": "新加坡",
+    "en": "Singapore",
+    "locale": "SG",
+    "zh": "新加坡",
+    "emoji": "🇸🇬"
+  },
+  {
     "code": 221,
     "tw": "塞內加爾",
     "en": "Senegal",
