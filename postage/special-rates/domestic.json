@@ -19,9 +19,9 @@
       "nameZh": "约投服务费",
       "applicableMailTypes": ["LETTER"],
       "selection": {"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
-      "dependencies": {"excludesRateIds":["INSURANCE_FEE_RECORDED_LETTER"]},
+      "dependencies": {"requiresRateIds":["REGISTRATION_FEE"],"excludesRateIds":["INSURANCE_FEE_RECORDED_LETTER"]},
       "pricing": {"type":"flat","unit":"item","price":2.0},
-      "noteZh": "仅适用于国内信函；不能与保价同时使用。"
+      "noteZh": "仅适用于国内信函；办理约投必须挂号；不能与保价同时使用。"
     },
     {
       "id": "ADVICE_OF_DELIVERY_FEE",
@@ -79,10 +79,10 @@
   ],
   "notes": [
     "selection.mode=display-only 的项目只公示，必须排在可选业务之后，且不得渲染为复选框。",
+    "国内约投仅适用于信函；必须挂号；与保价互斥。取消挂号时，约投必须级联取消。",
     "国内信函和盲人读物均可办理保价；保价必须挂号，最高保价金额2万元。",
     "盲人读物在其业务允许重量范围内基本资费为0元；挂号、回执、保价等特别业务按规则另计。",
-    "约投仅适用于信函，并与保价互斥。",
-    "取消挂号时，依赖挂号的回执和保价必须级联取消。",
+    "取消挂号时，依赖挂号的回执、保价和约投必须级联取消。",
     "普通包裹基础资费已包含挂号属性；普通包裹附回执不另选、不另收挂号费。",
     "普通包裹和家乡包裹贴保价费均为保价金额1%，最高保价金额10万元。"
   ]
