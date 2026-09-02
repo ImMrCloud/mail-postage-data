@@ -18,17 +18,20 @@
     "勾选带 replacesRateIds 的项目时，自动取消被替代项目，并在替代项目有效期间禁用其复选框。",
     "取消某项目时，递归取消所有以它作为唯一 requiresRateIds 依赖的项目。",
     "取消某项目时，对 requiresAnyRateIds 依赖重新求值；若没有任何替代依赖仍被选中，则取消依赖该条件的项目。",
+    "国内：勾选 APPOINTED_DELIVERY_FEE 必须自动勾选 REGISTRATION_FEE；取消 REGISTRATION_FEE 时必须级联取消约投。",
     "国际/港澳台：勾选 INSURED_LETTER_INSURANCE_FEE 自动勾选 INSURED_LETTER_HANDLING_FEE，并取消 REGISTRATION_FEE。",
     "国际/港澳台：取消 INSURED_LETTER_HANDLING_FEE 必须取消 INSURED_LETTER_INSURANCE_FEE；若 ADVICE_OF_DELIVERY_FEE 同时存在且没有 REGISTRATION_FEE，则回执也取消。",
     "国际/港澳台：已选回执+挂号后再选保价，自动取消挂号，勾选保价手续费，保留回执。",
-    "函件：取消 REGISTRATION_FEE 时，所有仅靠独立挂号满足前提的回执/保价业务级联取消。",
+    "函件：取消 REGISTRATION_FEE 时，所有仅靠独立挂号满足前提的回执/保价/约投业务级联取消。",
     "普通包裹：基础资费自带挂号，因此回执无需 REGISTRATION_FEE。"
   ],
   "requiredRules": [
     "国内 display-only：存局候领、撤回/修改收件人名址。",
     "国际/港澳台 display-only：出售国际回信券、撤回/修改收件人名址、进口欠资、存局候领、逾期保管、海关查验。",
     "display-only 项目必须置于列表底部且没有 checkbox。",
-    "保价函件只允许 mailType=LETTER，最高保价金额20000元。",
+    "国内约投只适用于 LETTER，必须要求 REGISTRATION_FEE，且与国内函件保价互斥。",
+    "国内信函和盲人读物可办理保价，必须挂号，最高保价金额20000元。",
+    "国际/港澳台保价函件只允许 mailType=LETTER，最高保价金额20000元。",
     "普通包裹和家乡包裹贴保价费为保价金额1%，最高100000元。",
     "普通包裹不提供存局候领；家乡包裹贴不可回执。"
   ]
