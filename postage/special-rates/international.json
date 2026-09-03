@@ -11,18 +11,18 @@
     {"id":"REGISTRATION_FEE","nameZh":"挂号费","selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"item","price":16.0}},
     {"id":"PRINTED_MATTER_BAG_REGISTRATION_FEE","nameZh":"印刷品专袋挂号费","applicableMailTypes":["PRINTED_MATTER_BAG"],"selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},"pricing":{"type":"flat","unit":"bag","price":80.0}},
     {
-      "id":"INSURED_LETTER_INSURANCE_FEE","nameZh":"保价函件保价费","applicableMailTypes":["LETTER"],
+      "id":"INSURED_LETTER_INSURANCE_FEE","nameZh":"保价函件保价费","applicableMailTypes":["LETTER","LITERATURE_FOR_BLIND"],
       "selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "dependencies":{"requiresRateIds":["INSURED_LETTER_HANDLING_FEE"]},
       "pricing":{"type":"value_increment","valueIncrement":100,"incrementPrice":1.0,"rounding":"ceil","maximumInsuredValue":20000.0},
-      "noteZh":"只允许信函办理保价；选择本项必须同时选择保价函件手续费；最高保价金额20000元。"
+      "noteZh":"适用于国际信函和盲人邮件；选择本项必须同时选择保价函件手续费；最高保价金额20000元。"
     },
     {
-      "id":"INSURED_LETTER_HANDLING_FEE","nameZh":"保价函件手续费","applicableMailTypes":["LETTER"],
+      "id":"INSURED_LETTER_HANDLING_FEE","nameZh":"保价函件手续费","applicableMailTypes":["LETTER","LITERATURE_FOR_BLIND"],
       "selection":{"mode":"selectable","phase":"acceptance","chargedTo":"sender"},
       "dependencies":{"includesRateIds":["REGISTRATION_FEE"],"replacesRateIds":["REGISTRATION_FEE"]},
       "pricing":{"type":"flat","unit":"item","price":18.0},
-      "noteZh":"18元手续费中包括16元挂号费和2元保价手续费；勾选本项后必须取消独立挂号费且禁止重复选择。"
+      "noteZh":"18元手续费中包括16元挂号费和2元保价手续费；适用于国际信函和盲人邮件；勾选本项后必须取消独立挂号费且禁止重复选择。"
     },
     {
       "id":"ADVICE_OF_DELIVERY_FEE","nameZh":"回执费",
@@ -43,7 +43,7 @@
   ],
   "notes":[
     "selection.mode=display-only 的项目仅公示，排在所有可选项目之后且不得渲染为复选框。",
-    "保价函件仅限 LETTER，最高保价金额2万元；勾选保价费必须自动勾选保价函件手续费。",
+    "国际信函和盲人邮件均可办理保价，最高保价金额2万元；勾选保价费必须自动勾选保价函件手续费。",
     "保价函件手续费已经包含挂号费；勾选手续费时自动取消并禁用独立挂号费。",
     "回执需要挂号前提，可由独立挂号费或保价函件手续费满足。",
     "取消挂号或保价函件手续费时，依赖该前提且无其他满足方式的业务必须级联取消。"
