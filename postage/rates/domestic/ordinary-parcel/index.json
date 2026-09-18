@@ -37,9 +37,10 @@
     "CN-SD":"./CN-SD.json",
     "CN-BJ":"./CN-BJ.json",
     "CN-JX":"./CN-JX.json",
-    "CN-HN":"./CN-HN.json"
+    "CN-HN":"./CN-HN.json",
+    "CN-LN":"./CN-LN.json"
   },
-  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-LN","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
+  "unpopulatedOrigins": ["CN-TJ","CN-SX","CN-NM","CN-JL","CN-HL","CN-SH","CN-AH","CN-FJ","CN-HA","CN-HB","CN-GX","CN-HI","CN-CQ","CN-GZ","CN-YN","CN-XZ","CN-SN","CN-GS","CN-QH","CN-NX","CN-XJ"],
   "availableSpecialRateIds": ["ADVICE_OF_DELIVERY_FEE","DOMESTIC_PARCEL_INSURANCE_FEE"],
   "discounts": {
     "appliesToServiceIds": ["DOMESTIC_ORDINARY_PARCEL"],
